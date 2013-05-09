@@ -1,44 +1,77 @@
-/*
- * Single Window Application Template:
- * A basic starting point for your application.  Mostly a blank canvas.
- * 
- * In app.js, we generally take care of a few things:
- * - Bootstrap the application with any data we need
- * - Check for dependencies like device type, platform version or network connection
- * - Require and open our top-level UI component
- *  
+/**
+ * device display capacity in pixel
+ * galaxy s2: 800x480
+ * galaxy s3: 1280x720
+ * galaxy s4: 1920x1080
+ * galaxy note2:1280x720
+ * iphone 4s: 960x640 (480x320 dip)
+ * iphone 5: 1136x640 (480x320 dip)
  */
+var Cloud = require('ti.cloud');
+var Util = require('Util');
+var MainView = require('ui/MainView').MainView;
+var RegisterView = require('ui/RegisterSimple');
+var LoginViewNoPass = require('ui/LoginNoPass');
+var Walkthrough = require('ui/Walkthrough');
+var Zookee = require('Zookee');
 
-//bootstrap and check dependencies
-if (Ti.version < 1.8 ) {
-	alert('Sorry - this application template requires Titanium Mobile SDK 1.8 or later');	  	
+var mainView;
+Zookee.CurrentPage = 0;
+if (Ti.App.Properties.hasProperty('email')) {
+	var sid = Ti.App.Properties.getString('sessionid');	
+	if(sid) {
+    		Cloud.sessionId = sid;
+	}	
+	
+    if (!Ti.App.Properties.hasProperty('password')) {
+        var win = Ti.UI.createWindow({
+            windowSoftInputMode : Zookee.Soft_Input.SOFT_INPUT_STATE_HIDDEN | Zookee.Soft_Input.SOFT_INPUT_ADJUST_PAN,
+            navBarHidden : true,
+            exitOnClose : true,
+            backgroundImage:Zookee.ImageURL.Background
+        })
+        win.addEventListener('android:back', function() {
+            win.close();
+        })
+        var loginView = new LoginViewNoPass(win);
+
+        win.add(loginView);
+        win.open();
+    } else {
+        Zookee.User.initUser();
+        var win1 = Ti.UI.createWindow({
+            windowSoftInputMode : Zookee.Soft_Input.SOFT_INPUT_STATE_HIDDEN | Zookee.Soft_Input.SOFT_INPUT_ADJUST_PAN,
+            navBarHidden : true,
+            fullscreen : false,
+            exitOnClose : true,
+            backClicked : 0,
+            backgroundImage:Zookee.ImageURL.Background
+        });
+        mainView = new MainView(win1);
+        win1.add(mainView.view);
+        win1.addEventListener('android:back', function() {
+            Util.showExitInfo(win1);
+        })
+        Zookee.currentWindow = win1;
+        win1.open();
+        mainView.getCurrentView().refresh();
+    }
+} else {
+    var win = Ti.UI.createWindow({
+        windowSoftInputMode:Zookee.Soft_Input.SOFT_INPUT_STATE_HIDDEN | Zookee.Soft_Input.SOFT_INPUT_ADJUST_PAN,
+        navBarHidden : true,
+        exitOnClose : true,
+        backgroundImage:Zookee.ImageURL.Background
+    });
+    win.addEventListener('android:back', function() {
+        Util.showExitInfo(win);
+    })
+    var walkThrough = new Walkthrough(win);
+    win.add(walkThrough);
+    win.open();
 }
 
-// This is a single context application with multiple windows in a stack
-(function() {
-	//render appropriate components based on the platform and form factor
-	var osname = Ti.Platform.osname,
-		version = Ti.Platform.version,
-		height = Ti.Platform.displayCaps.platformHeight,
-		width = Ti.Platform.displayCaps.platformWidth;
-	
-	//considering tablet to have one dimension over 900px - this is imperfect, so you should feel free to decide
-	//yourself what you consider a tablet form factor for android
-	var isTablet = osname === 'ipad' || (osname === 'android' && (width > 899 || height > 899));
-	
-	var Window;
-	if (isTablet) {
-		Window = require('ui/tablet/ApplicationWindow');
-	}
-	else {
-		// Android uses platform-specific properties to create windows.
-		// All other platforms follow a similar UI pattern.
-		if (osname === 'android') {
-			Window = require('ui/handheld/android/ApplicationWindow');
-		}
-		else {
-			Window = require('ui/handheld/ApplicationWindow');
-		}
-	}
-	new Window().open();
-})();
+
+
+// check if network connection exists
+//if(Ti.Network.online)

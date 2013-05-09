@@ -1,0 +1,155 @@
+/**
+ * @author Angela Deng
+ */
+
+function PopUp(okCB, opType,win) {
+	var scrollView = Ti.UI.createScrollView({
+		width : Ti.UI.FILL,
+		height : Ti.UI.FILL,
+		backgroundColor:'black',
+		disableBounce:true,
+		opacity:0.8
+	})
+
+	var container = Ti.UI.createView({
+		center : {
+			x : '50%',
+			y : '50%'
+		},
+		//top:'20%',
+		width : '90%',
+		height : Ti.UI.SIZE,
+		backgroundColor : 'white',
+		borderRadius:Zookee.UI.Border_Radius_Normal,
+		layout : 'vertical',
+		tag:'s'
+	})
+
+	scrollView.addEventListener('singletap', function(e) {
+		if(!e.source.tag)
+			win.remove(scrollView);
+	})
+	var headerView = Ti.UI.createView({
+		layout : 'vertical',
+		height : Ti.UI.SIZE,
+		width : Ti.UI.FILL,
+		backgroundColor : Zookee.UI.COLOR.MYPAD_BACKGROUND,
+		tag:'s'
+	});
+	headerView.add(Ti.UI.createLabel({
+		textid : 'passcode',
+		left : Zookee[20],
+		top : Zookee[20],
+		bottom : Zookee[20],
+		height : Zookee[40],
+		color : 'white',
+		font : Zookee.FONT.NORMAL_FONT,
+		tag:'s'
+	}));
+	headerView.add(Ti.UI.createView({
+		left : 0,
+		right : 0,
+		top : 0,
+		height : Zookee[4],
+		backgroundColor : Zookee.UI.COLOR.CONTROL_BACKGROUND,
+		tag:'s'
+	}))
+	container.add(headerView);
+
+	var pass_container = Ti.UI.createView({
+		top:Zookee[10],
+		width : Ti.UI.FILL,
+		height : Ti.UI.SIZE,
+		layout:'horizontal',
+		bubbleParent:false,
+		tag:'s'
+	})
+	var pass_field = Ti.UI.createTextField({
+		left:Zookee[10],
+		height:Zookee[60],
+		passwordMask:true,
+		width:'60%',
+		borderStyle:Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
+		tag:'s'
+	})
+	var pass_okBtn = Ti.UI.createButton({
+		left:Zookee[30],
+		width:Zookee[80],
+		height:Zookee[40],
+		titleid : 'ok',
+		color:'white',
+		backgroundColor:Zookee.UI.COLOR.MYPAD_BACKGROUND,
+		style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
+		tag:'s'
+	})
+	pass_container.add(pass_field);
+	pass_container.add(pass_okBtn)
+	container.add(pass_container);
+
+	var disable_pass_mask = Ti.UI.createView({
+		layout:'horizontal',
+		top:Zookee[10],
+		height:Ti.UI.SIZE,
+		width:Ti.UI.FILL,
+		tag:'s'
+	})
+	
+	var checkbox= Ti.UI.createView({
+		left:Zookee[10],
+		width:Zookee[20],
+		height:Zookee[20],
+		backgroundColor:'white',
+		borderWidth:Zookee[2],
+		borderColor:Zookee.UI.COLOR.CONTROL_BACKGROUND,
+		tag:'s'
+	})
+	
+	disable_pass_mask.add(checkbox);
+	
+	disable_pass_mask.add(Ti.UI.createLabel({
+		left:Zookee[10],
+		textid:'show_char',
+		tag:'s'
+	}))
+	
+	checkbox.addEventListener('click',function(){
+		if(checkbox.backgroundColor == 'white'){
+			checkbox.backgroundColor = Zookee.UI.COLOR.MYPAD_BACKGROUND;
+			pass_field.passwordMask = false;
+		}else{
+			checkbox.backgroundColor = 'white';
+			pass_field.passwordMask = true;
+		}
+	})
+	
+	container.add(disable_pass_mask);
+	
+	var errorLabel = Ti.UI.createLabel({
+		textid : 'passcode_err',
+		color:'red',
+		opacity : 0,
+		tag:'s'
+	})
+	container.add(errorLabel);
+
+	scrollView.add(container);
+
+	pass_okBtn.addEventListener('click', function() {
+		if (opType === 'login') {
+			if (pass_field.value === Ti.App.Properties.getString('passcode')) {
+				win.remove(scrollView);
+				okCB();
+			} else {
+				errorLabel.opacity = 1;
+				Ti.Media.vibrate();
+			}
+		} else if (opType === 'logout') {
+			Ti.App.Properties.setString('passcode', pass_field.value);
+			win.remove(scrollView);
+			okCB();
+		}
+	})
+	return scrollView;
+}
+
+module.exports = PopUp; 
