@@ -54,7 +54,7 @@ if (Ti.App.Properties.hasProperty('email')) {
         })
         Zookee.currentWindow = win1;
         win1.open();
-        mainView.getCurrentView().refresh();
+        mainView.refresh();
     }
 } else {
     var win = Ti.UI.createWindow({

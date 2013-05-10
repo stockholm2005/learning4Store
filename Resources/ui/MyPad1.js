@@ -192,7 +192,7 @@ function MyPad1(mainView) {
     })
 
     refresh_icon.addEventListener('click', function() {
-        mainView.getCurrentView().refresh();
+        mainView.refresh();
     })
     //rightView.add(request_icon);
     //rightView.add(add_icon);

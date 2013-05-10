@@ -40,8 +40,6 @@ exports.createUser = function(user, callback, failCallback) {
 
 			});
 			initializeUser(e.users[0]);
-			if (Zookee.Notification.Enabled)
-				exports.subscribe(Zookee.Notification.Friend_Channel);
 			if (user.photo) {
 				Util.cacheImage(e.users[0].photo.avatarImage, user.photo);
 			}
@@ -566,12 +564,12 @@ exports.queryPost = function(users, callback, failCallback) {
 
 exports.queryParty = function(callback, failCallback, partyFilter) {
 	//TODO: construct query url like
-	var url = baseURL + "/posts/query.json?key=" + togetherKey + "&where={%22coordinates%22:{%22$nearSphere%22:[" + partyFilter.join(',') + "],%22$maxDistance%22%20:%200.00126}}";
+	var url = baseURL + "/posts/query.json?key=" + togetherKey + "&where={\"coordinates\":{\"$nearSphere\":[" + partyFilter.join(',') + "],\"$maxDistance\":0.00126}}";
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(Zookee.AJAX.TIME_OUT);
 
 	xhr.onload = function() {
-		var e = JSON.parse(this.responseData).response;
+		var e = JSON.parse(this.responseText).response;
 		currentPartyPage = currentPartyPage + 1;
 		if (e.posts != null && e.posts.length > 0) {
 			for (var i = 0; i < e.posts.length; i++) {
@@ -650,42 +648,35 @@ function queryComment(posts, callback, failCallback) {
 	for (var i = 0; i < posts.length; i++) {
 		postIds.push(posts[i].id);
 	}
-	Cloud.Reviews.query({
-		// post_id: {
-		// '$in':postIds
-		// },
-		//default value of page and per_page is 1 and 10
-		skip : 0,
-		limit : 100,
-		order : '-updated_at',
-		where : {
-			"postid" : {
-				'$in' : postIds
-			}
-		}	}, function(e) {
-		if (e.success) {
+	var url = baseURL + "/reviews/query.json?key=" + togetherKey + "&where={\"postid\":{\"$in\":[" + postIds.join(',') + "],\"tags_array\":{\"$in\":[\"join\"]}}}";
+	var xhr = Ti.Network.createHTTPClient();
+	xhr.setTimeout(Zookee.AJAX.TIME_OUT);
+
+	xhr.onload = function() {
+		var e = JSON.parse(this.responseText).response;
+		if (e.reviews != null && e.reviews.length > 0) {
 			for (var i = 0; i < e.reviews.length; i++) {
-				initializeUser(e.reviews[i].user);
 				for (var j = 0; j < posts.length; j++) {
 					if (e.reviews[i].custom_fields && e.reviews[i].custom_fields.postid == posts[j].id) {
-
-						if (e.reviews[i].tags == 'join') {
 							posts[j].attenders.push(e.reviews[i].user);
-						} else {
-							posts[j].comments.push(e.reviews[i]);
-						}
 						break;
 					}
 				}
 			}
+		}
+		callback();
+	}
 
-			//Ti.API.info(JSON.stringify(posts[0]));
-			callback();
-		} else {
+	xhr.onerror = function(e) {
+		//it's not a better way, increase in api call.
+		//TODO store the voiceurl in somewhere
 			Util.handleError(e);
 			failCallback(posts);
-		}
-	});
+	}
+
+	xhr.open("GET", url);
+
+	xhr.send();
 };
 
 exports.showComment = function(post) {
@@ -944,6 +935,48 @@ var queryPhotoes = function(parties, callback, failCallback) {
 			failCallback();
 		}
 	})
+}
+var initializeUser = function(user) {
+	if (user.photo) {
+		if (!user.photo.urls) {
+			user.photo.urls = {};
+			user.photo.urls.avatar = Zookee.ImageURL.AvatarCache;
+		}
+		var fileNames = user.photo.filename.split('.');
+		user.photo.avatarImage = user.photo.id + '_' + fileNames[0] + '_avatar.' + fileNames[1];
+	} else if (!user.photo) {
+		user.photo = {};
+		user.photo.urls = {};
+		user.photo.urls.avatar = 's';
+		user.photo.avatarImage = 's';
+	}
+
+	user.friends = [];
+	user.requests = [];
+	user.myRequests = [];
+	if (!user.custom_fields)
+		user.custom_fields = {};
+	if (user.custom_fields.phone) {
+		user.phone = user.custom_fields.phone;
+	}
+	if (user.first_name) {
+		user.username = user.first_name;
+	}
+}
+var initializePhoto = function(photo) {
+	if (!photo.custom_fields) {
+		photo.cutom_fields = {};
+	}
+	if (!photo.urls) {
+		photo.urls = {};
+	}
+
+	var fileNames = photo.filename.split('.');
+	photo.partyImage = photo.id + '_' + fileNames[0] + '_party.' + fileNames[1];
+	photo.thumbImage = photo.id + '_' + fileNames[0] + '_thumb.' + fileNames[1];
+	photo.avatarImage = photo.id + '_' + fileNames[0] + '_avatar.' + fileNames[1];
+	photo.originImage = photo.id + '_' + fileNames[0] + '_original.' + fileNames[1];
+	initializeUser(photo.user);
 }
 var initializePost = function(post) {
 	if (post.custom_fields) {

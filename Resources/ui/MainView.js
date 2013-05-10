@@ -35,6 +35,10 @@ function MainView(win) {
         backgroundColor : 'black',
         opacity : 0.85
     })    
+    
+    this.refresh = function(){
+    		partyView.refresh();
+    }
 };
 
 exports.MainView = MainView;
