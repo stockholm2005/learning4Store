@@ -31,6 +31,7 @@ exports.createUser = function(user, callback, failCallback) {
 	}
 	Cloud.Users.create(obj, function(e) {
 		if (e.success) {
+			Ti.App.Properties.setString('sessionid',e.meta.session_id);
 			Cloud.Emails.send({
 				template : 'Register',
 				recipients : user.email,
@@ -332,21 +333,19 @@ exports.approveRequest = function(friend, callback, failCallback) {
 	});
 };
 
-exports.createParty = function(post, parties,callback, failCallback) {
+exports.createAd = function(post, parties,callback, failCallback) {
 	var tags = [];
 	for(var i=0;i<parties.length;i++){
 		tags.push(parties[i].id);
 	}
 	var obj = {
+		title:post.title,
 		content : post.content,
 		//title: post.title,
-		tags : tags,
+		tags : tags.join(','),
 		custom_fields : {
-			coordinates : post.location,
 			location : post.location,
-			placeName : post.placeName,
-			address : post.address,
-			category : post.category
+			address : post.address
 		}
 	};
 
@@ -517,54 +516,9 @@ exports.setNearPartyPage = function(index) {
 	currentNearPartyPage = index;
 }
 
-exports.queryPost = function(users, callback, failCallback) {
-	var userFilter = [];
-	for (var i = 0; i < users.length; i++) {
-		userFilter.push(users[i].id);
-		// if(i == 0)
-		// userFilter = userFilter + users[i].id;
-		// else
-		// userFilter = userFilter+','+users[i].id;
-	}
-	Cloud.Posts.query({
-		page : currentPage,
-		order : '-created_at',
-		//response_json_depth: Zookee.AJAX.RESPONSE_DEPTH,
-		where : {
-			user_id : {
-				'$in' : userFilter
-			},
-			tags_array : {
-				'$nin' : ['party', 'invitation']
-			}
-		}
-	}, function(e) {
-		if (e.success) {
-			currentPage = currentPage + 1;
-			if (e.posts && e.posts.length > 0) {
-				for (var i = 0; i < e.posts.length; i++) {
-					initializePost(e.posts[i]);
-				}
-				queryComment(e.posts, function() {
-					callback(e.posts);
-				}, function() {
-					failCallback();
-				});
-			} else {
-				callback([]);
-			}
-			//alert('Success:'+e.posts.length+' '+e.posts[0].id+':'+e.posts[0].content);
-
-		} else {
-			Util.handleError(e);
-			failCallback();
-		}
-	});
-};
-
-exports.queryParty = function(callback, failCallback, partyFilter) {
+exports.queryParty = function(callback, failCallback, location) {
 	//TODO: construct query url like
-	var url = baseURL + "/posts/query.json?key=" + togetherKey + "&where={\"coordinates\":{\"$nearSphere\":[" + partyFilter.join(',') + "],\"$maxDistance\":0.00126}}";
+	var url = baseURL + "/posts/query.json?key=" + togetherKey + "&page="+currentPartyPage+"&per_page=10&order=-created_at&where={\"coordinates\":{\"$nearSphere\":[" + location.join(',') + "],\"$maxDistance\":0.00126}}&response_json_depth=1";
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(Zookee.AJAX.TIME_OUT);
 
@@ -594,29 +548,6 @@ exports.queryParty = function(callback, failCallback, partyFilter) {
 
 	xhr.send();
 };
-
-exports.queryPartyById = function(id, callback, failCallback) {
-	Cloud.Posts.show({
-		post_id : id
-	}, function(e) {
-		if (e.success) {
-			initializePost(e.posts[0]);
-
-			queryComment(e.posts, function() {
-				queryPhotoes(e.posts, function() {
-					callback(e.posts[0]);
-				}, function() {
-					callback(e.posts[0]);
-				});
-			}, function() {
-				callback(e.posts[0]);
-			});
-		} else {
-			Util.handleError(e);
-			failCallback();
-		}
-	});
-}
 
 exports.createComment = function(post, comment, callback, failCallback) {
 	Cloud.Reviews.create({
@@ -648,7 +579,7 @@ function queryComment(posts, callback, failCallback) {
 	for (var i = 0; i < posts.length; i++) {
 		postIds.push(posts[i].id);
 	}
-	var url = baseURL + "/reviews/query.json?key=" + togetherKey + "&where={\"postid\":{\"$in\":[" + postIds.join(',') + "],\"tags_array\":{\"$in\":[\"join\"]}}}";
+	var url = baseURL + "/reviews/query.json?key=" + togetherKey + "&where={\"rating\":{\"$gt\":1.0},\"postid\":{\"$in\":[\"" + postIds.join('\",\"') + "\"]}}";
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(Zookee.AJAX.TIME_OUT);
 
@@ -677,19 +608,6 @@ function queryComment(posts, callback, failCallback) {
 	xhr.open("GET", url);
 
 	xhr.send();
-};
-
-exports.showComment = function(post) {
-	Cloud.Reviews.show({
-		post_id : post.id
-	}, function(e) {
-		if (e.success) {
-			var review = e.reviews[0];
-			alert('Success:\\n' + 'id: ' + review.id + '\\n' + 'rating: ' + review.rating + '\\n' + 'content: ' + review.content + '\\n' + 'updated_at: ' + review.updated_at);
-		} else {
-			Util.handleError(e);
-		}
-	});
 };
 
 exports.createAudio = function(audio) {
@@ -983,6 +901,7 @@ var initializePost = function(post) {
 		post.longitude = post.custom_fields.location ? post.custom_fields.location[0] : null;
 		post.latitude = post.custom_fields.location ? post.custom_fields.location[1] : null;
 	}
+	post.attenders=[post.user];
 }
 
 exports.subscribe = function(channel) {

@@ -91,89 +91,6 @@ function MyPad1(mainView) {
         // bottom : 10,        width : '50%',
         height : Ti.UI.FILL
     });
-
-    var request_icon = Ti.UI.createButton({
-        center : {
-            x : '17%',
-            y : '50%'
-        },
-        width:Zookee.SystemWidth*0.1,
-        height:Zookee.SystemWidth*0.1,
-        backgroundImage : Zookee.ImageURL.Request,
-        backgroundSelectedColor : Zookee.UI.COLOR.CONTROL_BACKGROUND,
-        // borderWidth:1,
-        // borderColor:Zookee.UI.COLOR.PARTY_CONTENT,
-        //backgroundGradient:Zookee.UI.BackgroundGradient,
-        style:Ti.UI.iPhone.SystemButtonStyle.BORDERED
-    })
-    var num_icon = Ti.UI.createLabel({
-        text : user.requests.length,
-        center : {
-            x : '24%',
-            y : '28%'
-        },
-        textAlign : 'center',
-        width : Zookee.SystemWidth*0.06,
-        height : Zookee.SystemWidth*0.06,
-        borderRadius : Zookee.SystemWidth*0.03,
-        borderWidth:3,
-        borderColor:'white',
-        backgroundColor : 'red',
-        color : 'white',
-        opacity:0
-    })
-    rightView.add(num_icon);
-    delegate.showRequests(user, function() {
-        if (user.requests.length > 0) {
-            num_icon.text = user.requests.length;
-            num_icon.opacity = 1;
-        }
-    }, function() {
-    })
-
-	Ti.App.addEventListener('new_request',function(e){
-		that.requestUpdate();
-	})
-	this.requestUpdate = function(){        
-        if(Zookee.User.CurrentUser.requests.length>0){
-        		num_icon.opacity = 1;
-        		num_icon.text = Zookee.User.CurrentUser.requests.length;
-        }
-        else{
-        		num_icon.opacity =0;
-        }		
-	}
-
-    request_icon.addEventListener('click', function() {
-        new PeoplePad(that,0).open({
-            windowSoftInputMode : Zookee.Soft_Input.SOFT_INPUT_ADJUST_PAN,
-            modal : true,
-            navBarHidden : true
-            //animated : true
-        })
-    })
-    var add_icon = Ti.UI.createButton({
-        center : {
-            x : '50%',
-            y : '50%'
-        },
-        width:Zookee.SystemWidth*0.1,
-        height:Zookee.SystemWidth*0.1,
-        backgroundImage : Zookee.ImageURL.Add,
-        backgroundSelectedColor : Zookee.UI.COLOR.CONTROL_BACKGROUND,
-        //backgroundColor:Zookee.UI.COLOR.MYPAD_BACKGROUND_END,
-        //borderWidth:1,
-        //borderColor:Zookee.UI.COLOR.PARTY_CONTENT,
-        //backgroundGradient:Zookee.UI.BackgroundGradient,
-        style:Ti.UI.iPhone.SystemButtonStyle.BORDERED
-    })
-    add_icon.addEventListener('click', function() {
-    		var win = new NewPostWin(mainView);
-        
-        win.open({
-        		modal:true
-        });
-    })
     
     var refresh_icon = Ti.UI.createButton({
         center : {
@@ -197,21 +114,6 @@ function MyPad1(mainView) {
     //rightView.add(request_icon);
     //rightView.add(add_icon);
     rightView.add(refresh_icon);
-
-    this.showAddIcon = function(show){
-        if(show){
-            add_icon.opacity=1;
-            add_icon.touchEnabled=true;
-        }
-        else{
-            add_icon.opacity=0;
-            add_icon.touchEnabled=false;
-        }
-    }
-    
-    this.updateUserName = function(){
-    		username_lb.text = user.username;
-    }
 
     avatar.addEventListener('click', function() {
         //avatar.animate(a);

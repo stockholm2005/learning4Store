@@ -3,6 +3,16 @@
  */
 Zookee = {
 	isAndroid:true,
+	sentParties:{
+		arr:Ti.App.Properties.getList('sentParties')||[],
+		push:function(partyId){
+			this.arr.push(partyId);
+			Ti.App.Properties.setList('sentParties',this.arr);
+		},
+		indexOf:function(partyId){
+			return this.arr.indexOf(partyId);
+		}
+	},
 	User : {
 		CurrentUser : {},
 		setUser : function(_user) {
@@ -109,6 +119,7 @@ Zookee = {
 		Left_Arrow : '/images/icon_arrow_left.png',
 		Right_Arrow : '/images/icon_arrow_right.png',
 		Party : '/images/party.png',
+		Party1 :'/images/party1.png',
 		Party_White:'/images/party_white.png',
 		Audio : '/images/record.png',
 		Audio_White:'/images/audio_white.png',

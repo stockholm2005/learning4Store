@@ -209,7 +209,7 @@ function LoginView(win) {
 			})
 			win1.open();
 			actInd.hide();
-			mainView.getCurrentView().refresh();
+			mainView.refresh();
 
 		}, function() {
 			actInd.hide();

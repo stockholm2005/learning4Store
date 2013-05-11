@@ -328,7 +328,7 @@ function RegisterView() {
             win1.addEventListener('android:back', function() {
                 Util.showExitInfo(win1);
             })
-            mainView.getCurrentView().refresh();
+            mainView.refresh();
         }, function() {
             actInd.hide();
             registerBtn_bg.remove(actInd);

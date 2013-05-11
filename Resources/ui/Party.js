@@ -27,142 +27,50 @@ function PartyRow(post, mainView, move2Last, location) {
 	var user = Zookee.User.CurrentUser
 	var joined = false;
 
-	for(var i=0;i<post.attenders.length;i++){
-		if(user.id === post.attenders[i].id){
-			joined = true;
-			break;
-		}
-	}
-
 	var view = Ti.UI.createTableViewRow({
 		//height : SystemWidth/Zookee.UI.IMAGE.PARTY_IMAGE_RATIO+Zookee[70],
 		//backgroundColor : 'white',
 		className : 'row',
 		post : post,
-		selectionStyle:Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE
+		selectionStyle : Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
 
-	/**
-	 * party photo area:
-	 * 1. party photo, if no photo, use placeholder
-	 * 2. location
-	 *      1. maskview
-	 *      2. location category/location name/location address
-	 */
-	var url = null;
-	var imageFile = 's';
-	if (post.hasPhoto) {
-		var _idx=0;
-		if(move2Last) _idx=post.photos.length-1;
-		url=post.photos[_idx].urls.party;
-		imageFile=post.photos[_idx].partyImage;
-	}
-	var photoArea = new ImageView({
-		top:0,
-		width:Ti.UI.FILL,
-		height : SystemWidth/Zookee.UI.IMAGE.PARTY_IMAGE_RATIO,
-		defaultImage:Zookee.ImageURL.Empty_Photo,
-		tag:'show_detail',
-		backgroundImage:imageFile,
-		url:url,
-		loadStatus:'starting'
-	});	
-	view.add(photoArea);
-	
-	var locationArea = Ti.UI.createView({
-		left:0,
-		bottom:Zookee[69],
-		width:Zookee[280],
-		height:Zookee[50],
-		backgroundColor:Zookee.UI.COLOR.MYPAD_BACKGROUND,
-		opacity:0.7
+	var avatar = Ti.UI.createImageView({
+		left : Zookee[10],
+		bottom : Zookee[10],
+		top : Zookee[10],
+		width : Zookee[50],
+		height : Zookee[50],
+		image : Zookee.ImageURL.Party
 	})
-	view.add(locationArea);
+	if (post.attenders.length >= 5)
+		avatar.image = Zookee.ImageURL.Party;
+	else if (post.attenders.length >= 2)
+		avatar.image = Zookee.ImageURL.Party1;
+	else
+		avatar.image = Zookee.ImageURL.No_Avatar;
+	view.add(avatar);
+	var text = Util.postTime(post.created_at);
 
-	var categoryName='s';
-	if (post.locationCategory) {
-		categoryName = post.locationCategory.split('/').pop();
-	}
-
-	var locationIcon = new ImageView({
-		left:Zookee[10],
-		bottom:Zookee[80],
-		width:Zookee[30],
-		height:Zookee[30],
-		defaultImage : Zookee.ImageURL.Location_White,
-		image : categoryName,
-		url : post.locationCategory,
-		loadStatus : 'starting',
-		tag:'location'
+	var peopleLabel = Ti.UI.createLabel({
+		left : Zookee[70],
+		top : Zookee[10],
+		width : Ti.UI.SIZE,
+		height : Ti.UI.SIZE,
+		color : Zookee.UI.COLOR.MYPAD_BACKGROUND,
+		font : Zookee.FONT.NORMAL_FONT_BOLD,
+		text : post.attenders.length + L('people', ' people')
 	})
-	view.add(locationIcon);
+	view.add(peopleLabel);
+
 	var whereLabel = Ti.UI.createLabel({
-		left : Zookee[50],
-		width : Zookee[230],
-		height : Zookee[20],
-		bottom : Zookee[95],
-		text : post.placeName,
-		font : Zookee.FONT.SMALL_FONT,
-		color : 'white',
-		tag : 'location'
-	});
-	view.add(whereLabel);
-
-	var addressLabel = Ti.UI.createLabel({
-		left : Zookee[50],
-		bottom : Zookee[75],
-		width:Zookee[230],
-		height:Zookee[20],
-		color : 'white',
-		text : post.address,
-		font : Zookee.FONT.SMALL_FONT,
-		tag:'location'
-	});
-	view.add(addressLabel);
-
-	var attenderArea = Ti.UI.createView({
-		top:SystemWidth/Zookee.UI.IMAGE.PARTY_IMAGE_RATIO,
-		left:0,
-		width:'70%',
-		backgroundColor:'white',
-		height:Zookee[50],
-		layout:'horizontal'
+		left : Zookee[70],
+		bottom : Zookee[10],
+		width : Ti.UI.SIZE,
+		height : Ti.UI.SIZE,
+		color : Zookee.UI.COLOR.PARTY_CONTENT,
+		font : Zookee.FONT.SMALL_FONT
 	})
-	
-	var opArea = Ti.UI.createView({
-		left:'70%',
-		width:'30%',
-		top:SystemWidth/Zookee.UI.IMAGE.PARTY_IMAGE_RATIO,
-		height:Zookee[50],
-		backgroundGradient:Zookee.UI.BackgroundGradient
-	})
-	view.add(attenderArea);
-	view.add(opArea);
-	for (var i = 0; i < 5; i++) {
-		var image='s';
-		var opacity = 0;
-		var url='';
-		if(post.attenders[i]){
-			opacity = 1;
-			image = post.attenders[i].photo.avatarImage;
-			url = post.attenders[i].photo.urls.avatar;
-		}
-		var attendee = new ImageView({
-			left : Zookee[10],
-			top:Zookee[5],
-			bottom : Zookee[5],
-			width : Zookee[40],
-			height : Zookee[40],
-			borderRadius:Zookee.UI.Border_Radius_Small,
-			opacity : opacity,
-			tag : 'attender',
-			defaultImage : Zookee.ImageURL.No_Avatar,
-			url:url,
-			image : image,
-			loadStatus:'starting'
-		});
-		attenderArea.add(attendee);
-	}
 
 	// here also, compare the location to see if it's possible to join.
 	// if less than 100 meters , then you can join.
@@ -172,75 +80,73 @@ function PartyRow(post, mainView, move2Last, location) {
 	};
 	var distance = Util.getDistance(location, postLoc);
 	if (distance < 500) {
-		whereLabel.text = whereLabel.text + '(' + distance.toFixed(0) + L('m') + ')';
+		whereLabel.text = '(' + distance.toFixed(0) + L('m') + ')' + text;
 	} else {
-		whereLabel.text = whereLabel.text + '(' + (distance / 1000).toFixed(1) + L('km') + ')';
+		whereLabel.text = '(' + (distance / 1000).toFixed(1) + L('km') + ')' + text;
 	}
+	view.add(whereLabel);
 
-	var text = Util.postTime(post.created_at);
-
-	var currentTime = new Date();
-	if (!joined) {
-		if (!Util.isPartyHappening(post)) {
-			opArea.add(Ti.UI.createLabel({
-				width:Ti.UI.FILL,
-				height:Ti.UI.FILL,
-				text:text,
-				textAlign:'center',
-				verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_CENTER,
-				color:'white',
-				font:Zookee.FONT.SMALL_FONT
-			}))
-		} else if (distance > Zookee.Distance_Party) {
-			opArea.add(Ti.UI.createLabel({
-				width:Ti.UI.FILL,
-				height:Ti.UI.FILL,
-				textid:'right_now',
-				textAlign:'center',
-				verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_CENTER,
-				color:'white',
-				font:Zookee.FONT.NORMAL_FONT_BOLD
-			}));
-		} else {
-			opArea.add(Ti.UI.createLabel({
-				width:Ti.UI.FILL,
-				height:Ti.UI.FILL,
-				textid:'join',
-				textAlign:'center',
-				verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_CENTER,
-				color:'white',
-				font:Zookee.FONT.NORMAL_FONT_BOLD,
-				tag:'join',
-				control:opArea
-			}));
-			opArea.tag = 'join';	
-		}
-	}else{
-		opArea.add(Ti.UI.createLabel({
-				width:Ti.UI.FILL,
-				height:Ti.UI.FILL,
-				text:text,
-				textAlign:'center',
-				verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_CENTER,
-				color:'white',
-				font:Zookee.FONT.SMALL_FONT
-			}))
-	}
-	var emptySpace = Ti.UI.createView({
-		width:Ti.UI.FILL,
-		top:SystemWidth/Zookee.UI.IMAGE.PARTY_IMAGE_RATIO+Zookee[50],
-		height:Zookee[20],
+	var adsBtn_bg = Ti.UI.createView({
+		right : Zookee[10],
+		backgroundColor : 'transparent',
+		height : Ti.UI.SIZE,
+		width : Zookee[120]
 	})
-	view.add(emptySpace);
+	if (Zookee.sentParties.indexOf(post.id)>=0) {
+		adsBtn_bg.add(Ti.UI.createLabel({
+			text : L('ads_sent', 'ads sent'),
+			color : Zookee.UI.COLOR.PARTY_CONTENT,
+			font : Zookee.FONT.NORMAL_FONT_ITALIC
+		}));
+	} else {
+		var adsBtn = Ti.UI.createButton({
+			title : L('send_ad', 'send ad'),
+			color : 'white',
+			backgroundGradient : Zookee.UI.BackgroundGradient,
+			borderWidth : 0,
+			borderRadius : Zookee.UI.Border_Radius_Small,
+			style : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
+			center : {
+				x : '50%',
+				y : '50%'
+			},
+			width : Ti.UI.SIZE,
+			party : post,
+			font : Zookee.FONT.SMALL_FONT
+		})
+		adsBtn_bg.add(adsBtn);
+		adsBtn.addEventListener('click', function(e) {
+			var actInd = Util.actIndicator('', adsBtn_bg,false,Zookee.isAndroid?Ti.UI.ActivityIndicatorStyle.DARK:Ti.UI.iPhone.ActivityIndicatorStyle.DARK);
+			adsBtn_bg.remove(adsBtn);
+			actInd.show();
+			var obj = {
+				title : 'Sheraton Welcomes You',
+				content : 'Now we have deluxe room with ocean view by 50% discount.',
+				location : [121.50318908691406, 31.176334381103516],
+				address : 'No.1068 Westin Road, Bali'
+			};
+			delegate.createAd(obj, [e.source.party], function() {
+				Zookee.sentParties.push(e.source.party.id)
+				actInd.hide();
+				adsBtn_bg.add(Ti.UI.createLabel({
+					text : L('ads_sent', 'ads sent'),
+					color : Zookee.UI.COLOR.PARTY_CONTENT,
+					font : Zookee.FONT.NORMAL_FONT_ITALIC
+				}));
+			}, function() {
+				actInd.hide();
+				adsBtn_bg.add(adsBtn);
+			})
+		})
+	}
+	view.add(adsBtn_bg);
 	view.release = function() {
-		photoArea = null;
-		opArea = null;
-		locationArea = null;
+		peopleLabel = null;
 		whereLabel = null;
-		addressLabel = null;
+		avatar = null;
 		post = null;
 	}
-	
+
 	return view;
 };
 

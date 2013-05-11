@@ -342,6 +342,7 @@ function SettingPad(win, myPad) {
 		delegate.logout(function() {
 			Ti.App.Properties.removeProperty('password');
 			Ti.App.Properties.removeProperty('User');
+			Ti.App.Properties.removeProperty('sentParties');
 			Zookee.User.setUser({});
 			Zookee.isLogin = false;
 
@@ -376,7 +377,7 @@ function SettingPad(win, myPad) {
 			backgroundColor : 'transparent'
 		});
 		buttons.remove(logoutBtn);
-		var actInd = Util.actIndicator('', actIndView);
+		var actInd = Util.actIndicator('', actIndView,false,Zookee.isAndroid?Ti.UI.ActivityIndicatorStyle.DARK:Ti.UI.iPhone.ActivityIndicatorStyle.DARK);
 		buttons.add(actIndView);
 
 		actInd.show();
