@@ -6,7 +6,6 @@ var Util = require('Util');
 var Geo = require('GeoLocation');
 var ImageDelegate = require('backend/ImageDelegate');
 var imageDelegate = new ImageDelegate();
-var Recorder = require('ui/Recorder');
 var delegate = require('backend/Delegate');
 var PlaceTable = require('ui/PlaceTable');
 var ImageView = require('ui/ImageView');
@@ -40,9 +39,6 @@ function NewPostWin(_mainView) {
 		locationIcon.image = null;
 		locationIcon = null;
 		locationLabel = null;
-		recorderView = null;
-		_recorder.reset();
-		_recorder = null;
 		win = null;
 	})
 	// iphone keyboard height: 234dip
@@ -249,17 +245,7 @@ function NewPostWin(_mainView) {
 		opacity : 0.85,
 		zIndex : 1
 	})
-	var _recorderView = Ti.UI.createImageView({
-		center : {
-			x : '50%',
-			y : '50%'
-		},
-		height : Zookee[40],
-		width : Zookee[40],
-		image : Zookee.ImageURL.Record_White
-	})
-	recordView.add(_recorderView);
-	iconArea.add(recordView);
+
 	iconArea.add(locationView);
 	iconArea.add(galleryView);
 	iconArea.add(cameraView);
@@ -374,30 +360,6 @@ function NewPostWin(_mainView) {
 				}
 			}
 		});
-	})
-
-	win.voiceRecordedCB = function() {
-		post.voiceurl = 'recorded';
-		_recorderView.image = Zookee.ImageURL.Audio_White;
-		view.remove(_recorder);
-		view.remove(mask);
-	}
-
-	win.recordCancelCB = function() {
-		post.voiceurl = null;
-		view.remove(_recorder);
-		view.remove(mask);
-	}
-	var _recorder = new Recorder(win);
-	var mask = Ti.UI.createView({
-		width : Ti.UI.FILL,
-		height : Ti.UI.FILL,
-		backgroundColor : 'black',
-		opacity : 0.6
-	})
-	recordView.addEventListener('click', function() {
-		view.add(mask);
-		view.add(_recorder);
 	})
 
 	win.addEventListener('open', function() {

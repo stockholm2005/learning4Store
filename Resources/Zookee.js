@@ -11,6 +11,10 @@ Zookee = {
 		},
 		indexOf:function(partyId){
 			return this.arr.indexOf(partyId);
+		},
+		release:function(){
+			this.arr = [];
+			Ti.App.Properties.removeProperty('sentParties');
 		}
 	},
 	User : {
@@ -58,20 +62,12 @@ Zookee = {
 	},
 	MaxHttpRequests : 5,
 
-	MaxLoadingRows : 5,
+	MaxLoadingRows : 10,
 	
 	MediaPlayer:null,
 
 	Seperator : {
 		USERNAME_TEXT : ':'
-	},
-
-	VoiceRecorder : {
-		MAX_DURATION : 10000,
-		STATE_RECORDING : 1,
-		STATE_PLAYING : 2,
-		STATE_INITIAL : 0,
-		STATE_STOP : 3
 	},
 
 	Location : {

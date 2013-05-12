@@ -9,6 +9,7 @@ var Util = require('Util');
 Cloud.debug = true;
 var baseURL = "https://api.cloud.appcelerator.com/v1";
 var togetherKey = "yLk03d0Fmkanoi0aQ5tM3OxezbiwAirm";
+var basicParam = "key=" + togetherKey + "&per_page="+Zookee.MaxLoadingRows+"&order=-created_at&response_json_depth=1";
 
 exports.createUser = function(user, callback, failCallback) {
 	var obj = {
@@ -81,24 +82,6 @@ var getInvitations = function(email, callback) {
 			}
 		} else {
 			callback();
-		}
-	});
-};
-
-exports.addFavorite = function(user, favorites, callback, failCallback) {
-	var post_ids = [];
-	for (var i = 0; i < favorites.length; i++) {
-		post_ids.push(favorites[i].id);
-	}
-	Cloud.Users.update({
-		custom_fields : {
-			favorites : post_ids
-		}
-	}, function(e) {
-		if (e.success) {
-			callback();
-		} else {
-			failCallback();
 		}
 	});
 };
@@ -201,67 +184,6 @@ exports.logout = function(callback, failCallback) {
 			callback();
 		} else {
 			Util.handleError(e);
-			failCallback();
-		}
-	});
-};
-
-function updateFavorites(callback, failCallback) {
-	var favorites = Ti.App.Properties.getList('Favorite');
-
-	if (favorites != null) {
-		var postids = [];
-		for (var i = 0; i < favorites.length; i++) {
-			postids.push(favorites[i].id);
-		}
-		Cloud.Users.update({
-			custom_fields : {
-				favorites : postids
-			}
-		}, function(e) {
-			if (e.success) {
-				callback();
-			} else {
-				failCallback();
-				Util.handleError(e);
-			}
-		});
-	} else {
-		callback();
-	}
-
-};
-
-exports.queryFavorites = function(user, callback, failCallback) {
-	var postids = user.custom_fields.favorites.join(',');
-	Cloud.Posts.show({
-		page : 1,
-		per_page : 40,
-		order : '-created_at',
-		post_ids : postids
-		// where : {
-		// post_id : {
-		// '$in' : postids
-		// }
-		// }
-	}, function(e) {
-		if (e.success) {
-			if (e.posts != null && e.posts.length > 0) {
-				queryComment(e.posts, function() {
-					Ti.App.Properties.setList('Favorite', e.posts);
-					callback();
-				}, function() {
-					failCallback();
-				});
-			} else {
-				Ti.App.Properties.setList('Favorite', []);
-				callback();
-			}
-			//alert('Success:'+e.posts.length+' '+e.posts[0].id+':'+e.posts[0].content);
-
-		} else {
-			Util.handleError(e);
-			Ti.App.Properties.setList('Favorite', []);
 			failCallback();
 		}
 	});
@@ -411,39 +333,6 @@ exports.joinParty = function(user, post, callback, failCallback) {
 	});
 };
 
-exports.checkinParty = function(user, post, review, callback, failCallback) {
-	Cloud.Reviews.update({
-		post_id : post.id,
-		review_id : review.id,
-		content : user.username + ' is in the party',
-		tags : 'join',
-		custom_fields : {
-			postid : post.id,
-			location : user.location
-		}
-	}, function(e) {
-		if (e.success) {
-			callback();
-		} else {
-			Util.handleError(e);
-			failCallback();
-		}
-	});
-};
-
-exports.showPost = function() {
-	Cloud.Posts.show({
-		post_id : savedPostId
-	}, function(e) {
-		if (e.success) {
-			var post = e.posts[0];
-			alert('Success:\\n' + 'id: ' + post.id + '\\n' + 'title: ' + post.title + '\\n' + 'content: ' + post.content + '\\n' + 'updated_at: ' + post.updated_at);
-		} else {
-			Util.handleError(e);
-		}
-	});
-};
-
 exports.searchUser = function(keyword, callback, failCallback) {
 	Cloud.Users.search({
 		page : 1,
@@ -455,45 +344,6 @@ exports.searchUser = function(keyword, callback, failCallback) {
 				initializeUser(e.users[i])
 			}
 			callback(e.users);
-		} else {
-			Util.handleError(e);
-			failCallback();
-		}
-	});
-};
-
-exports.queryUser = function(phones, callback, failCallback) {
-	Cloud.Users.query({
-		page : 1,
-		per_page : 100,
-		where : {
-			phone : {
-				'$in' : phones
-			}
-		}
-	}, function(e) {
-		if (e.success) {
-			var possibleUsers = {};
-			for (var i = 0; i < e.users.length; i++) {
-				initializeUser(e.users[i]);
-				if (e.users[i].phone) {
-					possibleUsers[e.users[i].phone] = e.users[i].id;
-				}
-			}
-			callback(possibleUsers);
-		} else {
-			Util.handleError(e);
-			failCallback();
-		}
-	})
-}
-
-exports.deleteFriend = function(user, callback, failCallback) {
-	Cloud.Friends.remove({
-		user_ids : user.id
-	}, function(e) {
-		if (e.success) {
-			callback();
 		} else {
 			Util.handleError(e);
 			failCallback();
@@ -516,9 +366,16 @@ exports.setNearPartyPage = function(index) {
 	currentNearPartyPage = index;
 }
 
-exports.queryParty = function(callback, failCallback, location) {
+exports.queryParty = function(callback, failCallback, location,type) {
 	//TODO: construct query url like
-	var url = baseURL + "/posts/query.json?key=" + togetherKey + "&page="+currentPartyPage+"&per_page=10&order=-created_at&where={\"coordinates\":{\"$nearSphere\":[" + location.join(',') + "],\"$maxDistance\":0.00126}}&response_json_depth=1";
+	var op = "/posts/query.json?";
+	var filter = '';
+	if(type)
+		filter = '"title":"'+type+'",';
+	// be careful, when you combine coordinates with other query conditions like 
+	// title, content, tags_array, make sure put these conditions before coordinates.
+	var where ='&where={'+filter+'"coordinates":{"$nearSphere":[' + location.join(',') + '],"$maxDistance":0.00126}}';
+	var url = baseURL + op +basicParam+"&page="+currentPartyPage+where;
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(Zookee.AJAX.TIME_OUT);
 
@@ -624,20 +481,6 @@ exports.createAudio = function(audio) {
 	});
 };
 
-exports.createVideo = function(video) {
-	Cloud.Files.create({
-		name : 'test.dat',
-		file : video
-	}, function(e) {
-		if (e.success) {
-			var file = e.files[0];
-			alert('Success:\\n' + 'id: ' + file.id + '\\n' + 'name: ' + file.name + '\\n' + 'updated_at: ' + file.updated_at);
-		} else {
-			Util.handleError(e);
-		}
-	});
-};
-
 exports.queryPhoto = function(id, callback, failCallback) {
 	Cloud.Photos.show({
 		photo_id : id
@@ -692,22 +535,6 @@ exports.invite = function(user, callback, failCallback) {
 		if (e.success) {
 			callback();
 			//recordInvite(sender, email, callback, failCallback);
-		} else {
-			Util.handleError(e);
-			failCallback();
-		}
-	});
-};
-
-var recordInvite = function(user, email, callback, failCallback) {
-	Cloud.Posts.create({
-		title : email,
-		content : user.id,
-		tags : 'invitation',
-		acl_name : 'invitation'
-	}, function(e) {
-		if (e.success) {
-			callback();
 		} else {
 			Util.handleError(e);
 			failCallback();

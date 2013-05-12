@@ -342,7 +342,7 @@ function SettingPad(win, myPad) {
 		delegate.logout(function() {
 			Ti.App.Properties.removeProperty('password');
 			Ti.App.Properties.removeProperty('User');
-			Ti.App.Properties.removeProperty('sentParties');
+			Zookee.sentParties.release();
 			Zookee.User.setUser({});
 			Zookee.isLogin = false;
 

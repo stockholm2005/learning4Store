@@ -98,9 +98,10 @@ function PartyRow(post, mainView, move2Last, location) {
 			color : Zookee.UI.COLOR.PARTY_CONTENT,
 			font : Zookee.FONT.NORMAL_FONT_ITALIC
 		}));
+		view.className='label';
 	} else {
 		var adsBtn = Ti.UI.createButton({
-			title : L('send_ad', 'send ad'),
+			title : L('send_ad', ' send ad '),
 			color : 'white',
 			backgroundGradient : Zookee.UI.BackgroundGradient,
 			borderWidth : 0,
@@ -112,32 +113,11 @@ function PartyRow(post, mainView, move2Last, location) {
 			},
 			width : Ti.UI.SIZE,
 			party : post,
-			font : Zookee.FONT.SMALL_FONT
+			font : Zookee.FONT.SMALL_FONT,
+			bg:adsBtn_bg,
+			tag:'send'
 		})
 		adsBtn_bg.add(adsBtn);
-		adsBtn.addEventListener('click', function(e) {
-			var actInd = Util.actIndicator('', adsBtn_bg,false,Zookee.isAndroid?Ti.UI.ActivityIndicatorStyle.DARK:Ti.UI.iPhone.ActivityIndicatorStyle.DARK);
-			adsBtn_bg.remove(adsBtn);
-			actInd.show();
-			var obj = {
-				title : 'Sheraton Welcomes You',
-				content : 'Now we have deluxe room with ocean view by 50% discount.',
-				location : [121.50318908691406, 31.176334381103516],
-				address : 'No.1068 Westin Road, Bali'
-			};
-			delegate.createAd(obj, [e.source.party], function() {
-				Zookee.sentParties.push(e.source.party.id)
-				actInd.hide();
-				adsBtn_bg.add(Ti.UI.createLabel({
-					text : L('ads_sent', 'ads sent'),
-					color : Zookee.UI.COLOR.PARTY_CONTENT,
-					font : Zookee.FONT.NORMAL_FONT_ITALIC
-				}));
-			}, function() {
-				actInd.hide();
-				adsBtn_bg.add(adsBtn);
-			})
-		})
 	}
 	view.add(adsBtn_bg);
 	view.release = function() {

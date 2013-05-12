@@ -281,7 +281,7 @@ exports.handleOffLine = function(view) {
 		var offLine = Ti.UI.createLabel({
 			center : {
 				x : '50%',
-				y : 0
+				y : '50%'
 			},
 			textid : 'offline'
 		})
@@ -499,52 +499,4 @@ exports.removeChildren = function(object) {
 		}
 		child = null;
 	}
-}
-
-exports.createProgressBar = function(param) {
-	var view = Ti.UI.createView();
-	for (var key in param) {
-		view[key] = param[key];
-	}
-
-	var progressBar;
-	var a;
-	view.start = function() {
-		progressBar = Ti.UI.createView({
-			right : param.width,
-			width : param.width,
-			height : Ti.UI.FILL,
-			backgroundColor : param.barColor
-		})
-		view.add(progressBar);
-		view.progressing = true;
-		a = Ti.UI.createAnimation({
-			right : 0,
-			//width : param.width,
-			height : param.height,
-			duration : Zookee.VoiceRecorder.MAX_DURATION + 1000
-		});
-		progressBar.animate(a, function() {
-			view.remove(progressBar);
-		});
-	}
-
-	view.reset = function() {
-		if (view.progressing) {
-			view.progressing = false;
-			progressBar.right = param.width;
-			progressBar.animate(Ti.UI.createAnimation({
-				right : param.width,
-				duration : 0
-			}), function() {
-			})
-		}
-		if (progressBar) {
-			view.remove(progressBar);
-		}
-		progressBar = null;
-		a = null;
-	}
-
-	return view;
 }
