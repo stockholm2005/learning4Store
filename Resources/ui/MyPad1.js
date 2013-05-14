@@ -14,7 +14,6 @@ function MyPad1(mainView) {
         top : 0,
         height : Zookee.UI.HEIGHT_MYPAD,
         width : Ti.UI.FILL,
-        //backgroundColor : Zookee.UI.COLOR.MYPAD_BACKGROUND,
         backgroundImage:Zookee.ImageURL.Title_Bg
     });
     
@@ -40,10 +39,8 @@ function MyPad1(mainView) {
 
     var avatar = new ImageView({
         defaultImage : Zookee.ImageURL.No_Avatar,
-        //left:Zookee.SystemWidth*0.02,
         width : Zookee.SystemWidth*0.12,
         height : Zookee.SystemWidth*0.12,
-        //borderRadius : 40,
         borderColor : 'white',
         borderWidth : Zookee.SystemWidth*0.005,
         borderRadius:Zookee.UI.Border_Radius_Small,
@@ -78,17 +75,10 @@ function MyPad1(mainView) {
     })
 
     leftView.add(avatar);
-    leftView.add(username_lb);
-    //leftView.add(time);
-
-    // setInterval(function(){
-    // time.text = Util.currentTime()
-    // },60000);
+    leftView.add(username_lb);
     var rightView = Ti.UI.createView({
         left : 0,
-        top : 0,
-        // right:0,
-        // bottom : 10,        width : '50%',
+        top : 0,        width : '50%',
         height : Ti.UI.FILL
     });
     
@@ -101,36 +91,24 @@ function MyPad1(mainView) {
         height:Zookee.SystemWidth*0.1,
         backgroundImage : Zookee.ImageURL.Refresh,
         backgroundSelectedColor : Zookee.UI.COLOR.CONTROL_BACKGROUND,
-        //backgroundColor:Zookee.UI.COLOR.MYPAD_BACKGROUND_END,
-        // borderWidth:1,
-        // borderColor:Zookee.UI.COLOR.PARTY_CONTENT,
-        //backgroundGradient:Zookee.UI.BackgroundGradient,
         style:Ti.UI.iPhone.SystemButtonStyle.BORDERED
     })
 
     refresh_icon.addEventListener('click', function() {
         mainView.refresh();
     })
-    //rightView.add(request_icon);
-    //rightView.add(add_icon);
     rightView.add(refresh_icon);
 
     avatar.addEventListener('click', function() {
-        //avatar.animate(a);
         new PeoplePad(that,2).open({
             windowSoftInputMode : Zookee.Soft_Input.SOFT_INPUT_STATE_HIDDEN | Zookee.Soft_Input.SOFT_INPUT_ADJUST_RESIZE,
             modal : true,
             navBarHidden : true
-            //animated : false
         })
     })
 
     this.updateAvatar = function(blob){
     		avatar.image = blob;
-    		// avatar.reloading({
-    			// url:user.photo.urls.avatar,
-    			// image:user.photo.avatarImage
-    		// })
     }
 
     this.view.add(leftView);

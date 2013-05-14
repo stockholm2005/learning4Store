@@ -5,11 +5,9 @@ var Zookee = require('Zookee');
 
 function MainView(win) {
     this.view = Ti.UI.createView({
-        //backgroundColor : Zookee.UI.COLOR.POST_USER_BAR,
         width:Ti.UI.FILL,
         height:Ti.UI.FILL,
         layout : 'vertical'
-        //contentHeight:Ti.UI.SIZE
     });
 
     var that = this;
@@ -19,7 +17,7 @@ function MainView(win) {
     var partyView = new PartyPad();
 
     var MyPad = require('ui/MyPad1').MyPad1;
-    var myPad = new MyPad(this);
+    var myPad = new MyPad(that);
 
     this.getMyPad = function(){
         return myPad;

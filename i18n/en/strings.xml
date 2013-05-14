@@ -132,4 +132,7 @@
 	<string name="walkthrough3">You create the activity, your friends join, then you\'re together</string>
 	<string name="invitation_body">hi friend:\n your friend %1$s is inviting you to join Together to enjoy their great moments</string>
 	<string name="invitation_subject">Invitation from %1$s</string>
+	<string name="ads_sent">ads sent</string>
+	<string name="send_ad">send ad</string>
+	<string name="my_ads">My Ads</string>
 </resources>

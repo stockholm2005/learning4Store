@@ -5,11 +5,10 @@ var ImageDelegate = require('backend/ImageDelegate');
 var imageDelegate = new ImageDelegate();
 var Zookee = require('Zookee');
 var SettingPad = require('ui/Setting');
-var FriendsList = require('ui/FriendsList');
-var LocalContacts = require('ui/LocalContacts');
 var boldStyle = Zookee.FONT.SEGMENT_FONT_SELECTED;
 var normalStyle = Zookee.FONT.SEGMENT_FONT_UNSELECTED;
 var TitleView = require('ui/TitleView');
+var AdsList = require('ui/AdsList');
 
 var refreshInd = Ti.UI.createActivityIndicator({
 	style : Zookee.isAndroid ? Ti.UI.ActivityIndicatorStyle.PLAIN : Ti.UI.iPhone.ActivityIndicatorStyle.PLAIN
@@ -23,8 +22,6 @@ function PeoplePad(myPad, page) {
 	var Lines = require('ui/Lines');
 	var Util = require('Util');
 	var user = Zookee.User.CurrentUser
-	var friends;
-	var requests;
 	var that = this;
 	var titleView = TitleView.buildTitleView(win);
 	win.add(titleView);
@@ -36,8 +33,6 @@ function PeoplePad(myPad, page) {
 	});
 
 	var settingView;
-	var friendsList;
-	var localContacts;
 	var refreshBtn = Ti.UI.createButton({
 		backgroundImage : Zookee.ImageURL.Refresh,
 		backgroundSelectedColor : Zookee.UI.COLOR.CONTROL_BACKGROUND,
@@ -58,17 +53,7 @@ function PeoplePad(myPad, page) {
 		refreshBtn.touchEnabled = false;
 		titleView.addView(refreshInd);
 		refreshInd.show();
-		friendsList.refreshRemoteContacts(function() {
-			refreshInd.hide();
-			titleView.removeView(refreshInd);
-			if (page == 0) {
-				refreshBtn.opacity = 1;
-				refreshBtn.touchEnabled = true;
-			} else {
-				refreshBtn.opacity = 0;
-				refreshBtn.touchEnabled = false;
-			}
-		}, true);
+
 	})
 	var segmentControl = Ti.UI.createView({
 		width : Ti.UI.FILL,
@@ -78,27 +63,19 @@ function PeoplePad(myPad, page) {
 	});
 
 	var segment0 = Ti.UI.createLabel({
-		text : L('Zookee'),
+		text : L('my_ads','My Ads'),
 		textAlign : 'center',
 		verticalAlign : 'center',
-		width : '32%',
-		color : Zookee.UI.COLOR.SEGMENT_FONT,
-		font : normalStyle
-	});
-	var segment1 = Ti.UI.createLabel({
-		text : L('Local'),
-		textAlign : 'center',
-		verticalAlign : 'center',
-		width : '32%',
+		width : '49%',
 		color : Zookee.UI.COLOR.SEGMENT_FONT,
 		font : normalStyle
 	});
 
-	var segment2 = Ti.UI.createLabel({
+	var segment1 = Ti.UI.createLabel({
 		text : L('setting'),
 		textAlign : 'center',
 		verticalAlign : 'center',
-		width : '32%',
+		width : '49%',
 		color : Zookee.UI.COLOR.SEGMENT_FONT,
 		font : normalStyle
 	});
@@ -106,8 +83,6 @@ function PeoplePad(myPad, page) {
 	segmentControl.add(segment0);
 	segmentControl.add(Lines.VerticalLine(Zookee.UI.COLOR.LINE_IN_SEG));
 	segmentControl.add(segment1);
-	segmentControl.add(Lines.VerticalLine(Zookee.UI.COLOR.LINE_IN_SEG));
-	segmentControl.add(segment2);
 
 	view.add(segmentControl);
 
@@ -118,51 +93,28 @@ function PeoplePad(myPad, page) {
 		segment0.font = page == 0 ? boldStyle : normalStyle;
 		segment1.color = page == 1 ? 'white' : Zookee.UI.COLOR.SEGMENT_FONT;
 		segment1.font = page == 1 ? boldStyle : normalStyle;
-		segment2.color = page == 2 ? 'white' : Zookee.UI.COLOR.SEGMENT_FONT;
-		segment2.font = page == 2 ? boldStyle : normalStyle;
 	}
 	win.addEventListener('open', function() {
 		changeTextStyle(page);
 
 		switch(page) {
 			case 0:
-				friendsList = new FriendsList(myPad);
-				friendsList.loaded = true;
+				adsList = new AdsList(myPad);
 				refreshBtn.opacity = 0;
 				refreshBtn.touchEnabled = false;
 				titleView.addView(refreshInd);
 				refreshInd.show();
-				friendsList.refreshRemoteContacts(function() {
-					refreshInd.hide();
-					refreshInd.isShown = false;
-					titleView.removeView(refreshInd);
-					if (page == 0) {
-						refreshBtn.opacity = 1;
-						refreshBtn.touchEnabled = true;
-					} else {
-						refreshBtn.opacity = 0;
-						refreshBtn.touchEnabled = false;
-					}
-				});
-				localContacts = Ti.UI.createView();
 				settingView = Ti.UI.createView();
 				break;
 			case 1:
-				friendsList = Ti.UI.createView();
-				localContacts = new LocalContacts();
+				adsList = Ti.UI.createView();
 				//localContacts.loaded = true;
 				settingView = Ti.UI.createView();
-				break;
-			case 2:
-				friendsList = Ti.UI.createView();
-				localContacts = Ti.UI.createView();
-				settingView = new SettingPad(win, myPad);
-				settingView.loaded = true;
 				break;
 		}
 
 		var scrollView = Ti.UI.createScrollableView({
-			views : [friendsList, localContacts, settingView],
+			views : [adsList, settingView],
 			currentPage : page,
 			disableBounce : true
 		})
@@ -174,42 +126,8 @@ function PeoplePad(myPad, page) {
 
 			switch(e.currentPage) {
 				case 0:
-					if (!friendsList.loaded) {
-						var _friendsList = new FriendsList(myPad);
-						friendsList.add(_friendsList);
-						refreshBtn.opacity = 0;
-						refreshBtn.touchEnabled = false;
-						//titleView.addView(refreshInd);
-						refreshInd.show();
-						_friendsList.refreshRemoteContacts(function() {
-							refreshInd.hide();
-							friendsList.loaded = true;
-							titleView.removeView(refreshInd);
-							refreshBtn.opacity = 1;
-							refreshBtn.touchEnabled = true;
-						});
-					}else{
-						refreshBtn.opacity = 1;
-						refreshBtn.touchEnabled = true;
-					}
 					break;
 				case 1:
-					if (!localContacts.loaded) {
-						localContacts.add(new LocalContacts());
-						//localContacts.loaded = true;
-					}
-					refreshBtn.opacity = 0;
-					refreshBtn.touchEnabled = false;
-					refreshInd.hide();
-					break;
-				case 2:
-					if (!settingView.loaded) {
-						settingView.add(new SettingPad(win, myPad));
-						settingView.loaded = true;
-					}
-					refreshBtn.opacity = 0;
-					refreshBtn.touchEnabled = false;
-					refreshInd.hide();
 					break;
 			}
 		});
