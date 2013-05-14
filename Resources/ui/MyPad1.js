@@ -4,7 +4,6 @@
 var Util = require('Util');
 var delegate = require('backend/Delegate');
 var Zookee = require('Zookee');
-var NewPostWin = require('ui/NewPost');
 var PeoplePad = require('ui/PeopleList');
 var ImageView = require('ui/ImageView');
 

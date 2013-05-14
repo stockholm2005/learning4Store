@@ -26,13 +26,15 @@ function PeoplePad(myPad, page) {
 	var titleView = TitleView.buildTitleView(win);
 	win.add(titleView);
 	view = Ti.UI.createView({
-		top:Zookee.UI.HEIGHT_TITLE,
+		top : Zookee.UI.HEIGHT_TITLE,
 		left : 0,
 		right : 0,
 		layout : 'vertical'
 	});
 
-	var settingView;
+	var settingView = new SettingPad(win, myPad);
+	var adsList = new AdsList(myPad);
+
 	var refreshBtn = Ti.UI.createButton({
 		backgroundImage : Zookee.ImageURL.Refresh,
 		backgroundSelectedColor : Zookee.UI.COLOR.CONTROL_BACKGROUND,
@@ -63,7 +65,7 @@ function PeoplePad(myPad, page) {
 	});
 
 	var segment0 = Ti.UI.createLabel({
-		text : L('my_ads','My Ads'),
+		text : L('my_ads', 'My Ads'),
 		textAlign : 'center',
 		verticalAlign : 'center',
 		width : '49%',
@@ -85,7 +87,12 @@ function PeoplePad(myPad, page) {
 	segmentControl.add(segment1);
 
 	view.add(segmentControl);
-
+	var scrollView = Ti.UI.createScrollableView({
+		views : [adsList, settingView],
+		currentPage : page,
+		disableBounce : true
+	});
+	view.add(scrollView);
 	win.add(view);
 	//
 	var changeTextStyle = function(page) {
@@ -94,44 +101,6 @@ function PeoplePad(myPad, page) {
 		segment1.color = page == 1 ? 'white' : Zookee.UI.COLOR.SEGMENT_FONT;
 		segment1.font = page == 1 ? boldStyle : normalStyle;
 	}
-	win.addEventListener('open', function() {
-		changeTextStyle(page);
-
-		switch(page) {
-			case 0:
-				adsList = new AdsList(myPad);
-				refreshBtn.opacity = 0;
-				refreshBtn.touchEnabled = false;
-				titleView.addView(refreshInd);
-				refreshInd.show();
-				settingView = Ti.UI.createView();
-				break;
-			case 1:
-				adsList = Ti.UI.createView();
-				//localContacts.loaded = true;
-				settingView = Ti.UI.createView();
-				break;
-		}
-
-		var scrollView = Ti.UI.createScrollableView({
-			views : [adsList, settingView],
-			currentPage : page,
-			disableBounce : true
-		})
-		view.add(scrollView);
-
-		scrollView.addEventListener('scrollend', function(e) {
-			//if(e.currentPage == undefined) return;
-			changeTextStyle(e.currentPage);
-
-			switch(e.currentPage) {
-				case 0:
-					break;
-				case 1:
-					break;
-			}
-		});
-	})
 
 	return win;
 };

@@ -2,7 +2,7 @@
  * @author Hao, Kent
  */
 var Zookee = require('Zookee');
-var NewPostWin = require('ui/NewPostWin');
+var NewPostWin = require('ui/NewPost');
 
 function AdsList(){
 	var data = [];
@@ -88,9 +88,10 @@ function AdsList(){
 		image:Zookee.ImageURL.Add
 	}))
 	row.addEventListener('click',function(e){
-		new NewPostWin().open({
+		var win = new NewPostWin(mainView);
+		win.open({
 			modal:true
-		})
+		});
 	});
 	data.push(row);
 	tableView.setData(data);

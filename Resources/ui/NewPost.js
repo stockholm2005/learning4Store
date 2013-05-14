@@ -7,7 +7,6 @@ var Geo = require('GeoLocation');
 var ImageDelegate = require('backend/ImageDelegate');
 var imageDelegate = new ImageDelegate();
 var delegate = require('backend/Delegate');
-var PlaceTable = require('ui/PlaceTable');
 var ImageView = require('ui/ImageView');
 var TitleView = require('ui/TitleView');
 
@@ -97,27 +96,6 @@ function NewPostWin(_mainView) {
 			case Zookee.CurrentView.Things:
 			case Zookee.CurrentView.Together:
 				actInd.show();
-				delegate.createParty(post, function(_post) {
-					if (Zookee.Notification.Enabled) {
-						delegate.notify(Zookee.Notification.Party_Channel, user.friends, Zookee.Notification.MessageType.CREATEPARTY)
-					}
-					if (_mainView.workingViews[Zookee.CurrentView.Things].isAdded)
-						_mainView.workingViews[Zookee.CurrentView.Things].addPost(_post);
-					if (_mainView.workingViews[Zookee.CurrentView.Together].isAdded)
-						_mainView.workingViews[Zookee.CurrentView.Together].addPost(_post);
-					//_mainView.getCurrentView().addPost(_post);
-					if (win) {
-						say_sth_fd.value = L('say_something');
-						//recorder.reset();
-						actInd.hide();
-						win.close();
-					}
-				}, function() {
-					if (win) {
-						actInd.hide();
-						titleView.rightView.add(sendButton);
-					}
-				});
 				break;
 			case Zookee.CurrentView.Album:
 				actInd.hide();
@@ -210,43 +188,6 @@ function NewPostWin(_mainView) {
 		width : Zookee[30],
 		image : Zookee.ImageURL.Gallery
 	}));
-	var locationView = Ti.UI.createView({
-		left : Zookee[12],
-		height : Zookee[50],
-		width : Zookee[50],
-		backgroundColor : 'black',
-		borderRadius : Zookee[25],
-		borderColor : 'white',
-		borderWidth : 2,
-		opacity : 0.85,
-		zIndex : 1
-	})
-
-	var locationIcon = new ImageView({
-		center : {
-			x : '50%',
-			y : '50%'
-		},
-		height : Zookee[40],
-		width : Zookee[40],
-		defaultImage : Zookee.ImageURL.Location_White,
-		image : Zookee.ImageURL.Location
-	})
-	locationView.add(locationIcon);
-
-	var recordView = Ti.UI.createView({
-		left : Zookee[12],
-		height : Zookee[50],
-		width : Zookee[50],
-		backgroundColor : 'black',
-		borderRadius : Zookee[25],
-		borderColor : 'white',
-		borderWidth : 2,
-		opacity : 0.85,
-		zIndex : 1
-	})
-
-	iconArea.add(locationView);
 	iconArea.add(galleryView);
 	iconArea.add(cameraView);
 	view.add(iconArea);
@@ -299,68 +240,6 @@ function NewPostWin(_mainView) {
 			allowImageEditing : false
 		});
 	});
-
-	win.selectPlace = function(venue, myLocation) {
-		say_sth_fd.focus();
-		var categoryName = '';
-		if (venue.image) {
-			categoryName = venue.image.split('/').pop();
-		}
-		locationIcon.reloading({
-			url : venue.image,
-			image : categoryName
-		});
-
-		var longitude;
-		var latitude;
-
-		if (venue) {
-			post.placeName = venue.name;
-			post.address = venue.location.address;
-		}
-
-		longitude = myLocation.longitude;
-		latitude = myLocation.latitude;
-
-		post.location = [longitude, latitude];
-		post.category = venue.image;
-	}
-	locationView.addEventListener('click', function() {
-		locationIcon.opacity = 0;
-
-		Geo.getLocation(function(location) {
-			if (win) {
-				var distance = Util.getDistance(location, Zookee.CurrentLocation);
-				//if just booth around
-				if (distance < 50 && Zookee.CurrentVenues) {
-					//actInd.hide();
-					locationIcon.opacity = 1;
-					PlaceTable.buildTable(Zookee.CurrentVenues, win, location).open({
-						modal : true
-					});
-				} else {
-					var actInd = Util.actIndicator('', locationView);
-					actInd.show();
-					delegate.getPlaces(location, function(venues) {
-						Zookee.CurrentVenues = venues;
-						if (win) {
-							PlaceTable.buildTable(venues, win, location).open({
-								modal : true
-							});
-							actInd.hide();
-							locationIcon.opacity = 1;
-						}
-					}, function() {
-						if (win) {
-							actInd.hide();
-							locationIcon.opacity = 1;
-						}
-					})
-					Zookee.CurrentLocation = location;
-				}
-			}
-		});
-	})
 
 	win.addEventListener('open', function() {
 		say_sth_fd.focus();
