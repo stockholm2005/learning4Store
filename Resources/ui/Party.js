@@ -43,9 +43,9 @@ function PartyRow(post, mainView, move2Last, location) {
 		height : Zookee[50],
 		image : Zookee.ImageURL.Party
 	})
-	if (post.attenders.length >= 5)
+	if (post.attenders.length > 2)
 		avatar.image = Zookee.ImageURL.Party;
-	else if (post.attenders.length >= 2)
+	else if (post.attenders.length == 2)
 		avatar.image = Zookee.ImageURL.Party1;
 	else
 		avatar.image = Zookee.ImageURL.No_Avatar;

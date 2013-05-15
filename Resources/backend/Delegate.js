@@ -9,7 +9,7 @@ var Util = require('Util');
 Cloud.debug = true;
 var baseURL = "https://api.cloud.appcelerator.com/v1";
 var togetherKey = "yLk03d0Fmkanoi0aQ5tM3OxezbiwAirm";
-var basicParam = "key=" + togetherKey + "&per_page="+Zookee.MaxLoadingRows+"&order=-created_at&response_json_depth=1";
+var basicParam = "key=" + togetherKey + "&per_page=" + Zookee.MaxLoadingRows + "&order=-created_at&response_json_depth=1";
 
 exports.createUser = function(user, callback, failCallback) {
 	var obj = {
@@ -32,7 +32,7 @@ exports.createUser = function(user, callback, failCallback) {
 	}
 	Cloud.Users.create(obj, function(e) {
 		if (e.success) {
-			Ti.App.Properties.setString('sessionid',e.meta.session_id);
+			Ti.App.Properties.setString('sessionid', e.meta.session_id);
 			Cloud.Emails.send({
 				template : 'Register',
 				recipients : user.email,
@@ -255,13 +255,13 @@ exports.approveRequest = function(friend, callback, failCallback) {
 	});
 };
 
-exports.createAd = function(post, parties,callback, failCallback) {
+exports.createAd = function(post, parties, callback, failCallback) {
 	var tags = [];
-	for(var i=0;i<parties.length;i++){
+	for (var i = 0; i < parties.length; i++) {
 		tags.push(parties[i].id);
 	}
 	var obj = {
-		title:post.title,
+		title : post.title,
 		content : post.content,
 		//title: post.title,
 		tags : tags.join(','),
@@ -270,25 +270,25 @@ exports.createAd = function(post, parties,callback, failCallback) {
 			address : post.address
 		}
 	};
+	if (post.photo) {
+		obj.photo = Ti.Filesystem.getFile(post.photo).read();
+		var ratio = obj.photo.width / obj.photo.height;
+		var thumbHeight = Zookee.ImageSize.THUMB_CACHE_WIDTH / ratio;
+		var thumbSizeStr = '' + Zookee.ImageSize.THUMB_CACHE_WIDTH + 'x' + thumbHeight + '#';
+		obj[Zookee.ImageSize.THUMB] = thumbSizeStr;
+		obj[Zookee.ImageSize.ORIGIN] = thumbSizeStr;
+	}
 
-		Cloud.Posts.create(obj, function(e) {
-			if (e.success) {
-				//e.posts[0].backgroundPhoto = post.photo == null ? null : post.photo;
-				var _post = e.posts[0];
-				if (post.photo) {
-					exports.createPhoto(post.photo, _post, function() {
-						callback(_post);
-					}, function() {
-						callback(_post);
-					})
-				} else {
-					callback(_post);
-				}
-			} else {
-				failCallback();
-				Util.handleError(e);
-			}
-		});
+	Cloud.Posts.create(obj, function(e) {
+		if (e.success) {
+			//e.posts[0].backgroundPhoto = post.photo == null ? null : post.photo;
+			var _post = e.posts[0];
+			callback(_post);
+		} else {
+			failCallback();
+			Util.handleError(e);
+		}
+	});
 };
 
 exports.updatePhoto = function(photo, post, callback, failCallback) {
@@ -366,16 +366,16 @@ exports.setNearPartyPage = function(index) {
 	currentNearPartyPage = index;
 }
 
-exports.queryParty = function(callback, failCallback, location,type) {
+exports.queryParty = function(callback, failCallback, location, type) {
 	//TODO: construct query url like
 	var op = "/posts/query.json?";
 	var filter = '';
-	if(type)
-		filter = '"title":"'+type+'",';
-	// be careful, when you combine coordinates with other query conditions like 
+	if (type)
+		filter = '"title":"' + type + '",';
+	// be careful, when you combine coordinates with other query conditions like
 	// title, content, tags_array, make sure put these conditions before coordinates.
-	var where ='&where={'+filter+'"coordinates":{"$nearSphere":[' + location.join(',') + '],"$maxDistance":0.00126}}';
-	var url = baseURL + op +basicParam+"&page="+currentPartyPage+where;
+	var where = '&where={' + filter + '"coordinates":{"$nearSphere":[' + location.join(',') + '],"$maxDistance":0.00126}}';
+	var url = baseURL + op + basicParam + "&page=" + currentPartyPage + where;
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(Zookee.AJAX.TIME_OUT);
 
@@ -446,7 +446,7 @@ function queryComment(posts, callback, failCallback) {
 			for (var i = 0; i < e.reviews.length; i++) {
 				for (var j = 0; j < posts.length; j++) {
 					if (e.reviews[i].custom_fields && e.reviews[i].custom_fields.postid == posts[j].id) {
-							posts[j].attenders.push(e.reviews[i].user);
+						posts[j].attenders.push(e.reviews[i].user);
 						break;
 					}
 				}
@@ -458,8 +458,8 @@ function queryComment(posts, callback, failCallback) {
 	xhr.onerror = function(e) {
 		//it's not a better way, increase in api call.
 		//TODO store the voiceurl in somewhere
-			Util.handleError(e);
-			failCallback(posts);
+		Util.handleError(e);
+		failCallback(posts);
 	}
 
 	xhr.open("GET", url);
@@ -728,7 +728,7 @@ var initializePost = function(post) {
 		post.longitude = post.custom_fields.location ? post.custom_fields.location[0] : null;
 		post.latitude = post.custom_fields.location ? post.custom_fields.location[1] : null;
 	}
-	post.attenders=[post.user];
+	post.attenders = [post.user];
 }
 
 exports.subscribe = function(channel) {

@@ -12,7 +12,7 @@ function AdsList(){
 		//bottom:0,
 		left : 0,
 		right : 0,
-		allowsSelection : false,
+		allowsSelection : true,
 		//separatorColor : 'transparent',
 		separatorStyle : Ti.UI.iPhone.TableViewSeparatorStyle.SINGLE_LINE,
 		bubbleParent : false,
@@ -21,42 +21,35 @@ function AdsList(){
 	});
 	
 	var pre_ads = Ti.App.Properties.getList('pre_ads')||[];
-	
-	for(var i=0;i<pre_ads.length;i++){
+
+	var buildRow = function(ad){
 		var row = Ti.UI.createTableViewRow({
 			className:'row'
 		});
-		var url=''
-		var image='s';
-		if(ads[i].photo){
-			url = pre_ads[i].photo.urls.small_240;
-			image = pre_ads[i].photo.partyImage;
-		}
-		var avatar = new ImageView({
+
+		var avatar = Ti.UI.createImageView({
 			left:Zookee[10],
 			top:Zookee[10],
 			bottom:Zookee[10],
 			width:Zookee[100],
 			height:Zookee[100],
-			image:image,
-			url:url,
 			defaultImage:Zookee.ImageURL.Empty_Photo,
-			loadStatus:'starting'
+			image:ad.photo
 		})
 		var title = Ti.UI.createLabel({
 			left:Zookee[120],
 			top:Zookee[10],
-			height:Zookee[20],
+			height:Zookee[30],
 			width:Ti.UI.SIZE,
-			text:pre_ads[i].title,
+			text:ad.title,
 			font:Zookee.FONT.NORMAL_FONT_BOLD
 		})
 		var description = Ti.UI.createLabel({
 			left:Zookee[120],
-			top:Zookee[40],
+			top:Zookee[50],
 			height:Ti.UI.SIZE,
 			width:Ti.UI.SIZE,
-			text:pre_ads[i].content,
+			text:ad.content,
 			color:Zookee.UI.COLOR.PARTY_CONTENT,
 			font:Zookee.FONT.SMALL_FONT_ITALIC
 		})
@@ -65,17 +58,24 @@ function AdsList(){
 			top:Zookee[90],
 			height:Zookee[30],
 			width:Ti.UI.SIZE,
-			text:pre_ads[i].address,
+			text:ad.address,
 			color:Zookee.UI.COLOR.MYPAD_BACKGROUND,
 			font:Zookee.FONT.SMALL_FONT,
-			party:pre_ads[i]
+			party:ad
 		})
 
 		row.add(avatar);
 		row.add(title);
 		row.add(description);
-		row.add(address);
-		data.push(row);
+		row.add(address);	
+		return row;	
+	}	
+	
+	tableView.insertAd = function(ad){
+		tableView.insertRowBefore(0,buildRow(ad));
+	}
+	for(var i=0;i<pre_ads.length;i++){		
+		data.push(buildRow(pre_ads[i]));
 	}
 	
 	// add new adds
@@ -85,10 +85,12 @@ function AdsList(){
 			x:'50%',
 			y:'50%'
 		},
+		width:Zookee[50],
+		height:Zookee[50],
 		image:Zookee.ImageURL.Add
 	}))
 	row.addEventListener('click',function(e){
-		var win = new NewPostWin(mainView);
+		var win = new NewPostWin(tableView);
 		win.open({
 			modal:true
 		});
