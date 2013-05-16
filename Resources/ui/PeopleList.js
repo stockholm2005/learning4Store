@@ -102,6 +102,15 @@ function PeoplePad(myPad, page) {
 		segment1.font = page == 1 ? boldStyle : normalStyle;
 	}
 
+	scrollView.addEventListener('scrollend',function(e){
+		if(e.currentPage == 0){
+			changeTextStyle(0);
+		}else
+			changeTextStyle(1);
+	})
+	win.addEventListener('open',function(e){
+		changeTextStyle(0);
+	})
 	return win;
 };
 

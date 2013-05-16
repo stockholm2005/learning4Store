@@ -84,7 +84,7 @@ function MyPad1(mainView) {
     rightView.add(refresh_icon);
 
     avatar.addEventListener('click', function() {
-        new PeoplePad(that,2).open({
+        new PeoplePad(that,0).open({
             windowSoftInputMode : Zookee.Soft_Input.SOFT_INPUT_STATE_HIDDEN | Zookee.Soft_Input.SOFT_INPUT_ADJUST_RESIZE,
             modal : true,
             navBarHidden : true

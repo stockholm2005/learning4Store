@@ -8,7 +8,7 @@ function AdsList(){
 	var data = [];
 	var tableView = Ti.UI.createTableView({
 		data : data,
-		top : Zookee[60],
+		//top : Zookee[60],
 		//bottom:0,
 		left : 0,
 		right : 0,
