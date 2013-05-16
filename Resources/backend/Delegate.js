@@ -366,39 +366,49 @@ exports.setNearPartyPage = function(index) {
 	currentNearPartyPage = index;
 }
 
+var hasMore = true;
+exports.resetHasMore = function(){
+	hasMore = true;
+};
 exports.queryParty = function(callback, failCallback, location, type) {
 	//TODO: construct query url like
+	if(!hasMore) return;
 	var op = "/posts/query.json?";
 	var filter = '';
 	if (type)
 		filter = '"title":"' + type + '",';
+	var dateString = (new Date()).toISOString().split(/T/)[0]+'T00:00:00+0000';
+	var dateFilter = '"created_at":{"$gt":"'+dateString+'"},'
 	// be careful, when you combine coordinates with other query conditions like
 	// title, content, tags_array, make sure put these conditions before coordinates.
-	var where = '&where={' + filter + '"coordinates":{"$nearSphere":[' + location.join(',') + '],"$maxDistance":0.00126}}';
+	var where = '&where={' + filter + dateFilter + '"coordinates":{"$nearSphere":[' + location.join(',') + '],"$maxDistance":0.00126}}';
 	var url = baseURL + op + basicParam + "&page=" + currentPartyPage + where;
+	Ti.API.info(url);
 	var xhr = Ti.Network.createHTTPClient();
 	xhr.setTimeout(Zookee.AJAX.TIME_OUT);
 
 	xhr.onload = function() {
 		var e = JSON.parse(this.responseText).response;
 		currentPartyPage = currentPartyPage + 1;
+		if(e.posts!=null && e.posts.length<Zookee.MaxLoadingRows) hasMore = false;
 		if (e.posts != null && e.posts.length > 0) {
 			for (var i = 0; i < e.posts.length; i++) {
 				initializePost(e.posts[i]);
+				if(e.posts[i].ratings_summary && e.posts[i].ratings_summary['2'])
+					e.posts[i].attenders = e.posts[i].ratings_summary['2']+1;
+				else
+					e.posts[i].attenders = 1;
 			}
-
-			queryComment(e.posts, function() {
-				callback(e.posts);
-			}, function() {
-				callback(e.posts);
-			});
+			callback(e.posts);
+		}else{
+			failCallback();
 		}
 	}
 
 	xhr.onerror = function(e) {
 		//it's not a better way, increase in api call.
 		//TODO store the voiceurl in somewhere
-
+		failCallback();
 	}
 
 	xhr.open("GET", url);
@@ -728,7 +738,6 @@ var initializePost = function(post) {
 		post.longitude = post.custom_fields.location ? post.custom_fields.location[0] : null;
 		post.latitude = post.custom_fields.location ? post.custom_fields.location[1] : null;
 	}
-	post.attenders = [post.user];
 }
 
 exports.subscribe = function(channel) {

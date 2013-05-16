@@ -14,7 +14,7 @@ function MainView(win) {
 
     var PartyPad = require('ui/PartyPad').PartyPad;
 
-    var partyView = new PartyPad();
+    var partyView = new PartyPad(win);
 
     var MyPad = require('ui/MyPad1').MyPad1;
     var myPad = new MyPad(that);

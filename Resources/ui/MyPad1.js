@@ -58,21 +58,6 @@ function MyPad1(mainView) {
         font : Zookee.FONT.NORMAL_FONT_BOLD
     })
 
-    var time = Ti.UI.createLabel({
-        color : 'white',
-        center : {
-            x : '50%',
-            y : '80%'
-        },
-        width : Ti.UI.SIZE,
-        height : Ti.UI.SIZE,
-        text : Util.currentTime(),
-        font : {
-            fontSize : 20,
-            fontWeight : 'bold'
-        }
-    })
-
     leftView.add(avatar);
     leftView.add(username_lb);
     var rightView = Ti.UI.createView({

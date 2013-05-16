@@ -24,6 +24,7 @@ function AdsList(){
 
 	var buildRow = function(ad){
 		var row = Ti.UI.createTableViewRow({
+			selectionStyle:Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
 			className:'row'
 		});
 

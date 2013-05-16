@@ -49,7 +49,14 @@ function NewPostWin(_mainView) {
 		//contentHeight : Ti.UI.FILL,
 		//layout : 'vertical'
 	})
+	
+	var imageView = Ti.UI.createImageView({
+		width : Ti.UI.FILL,
+		defaultImage : Zookee.ImageURL.Empty_Photo,
+		height : Ti.UI.FILL
+	})
 
+	view.add(imageView);
 	var titleView = TitleView.buildTitleView(win);
 	win.add(titleView);
 
@@ -83,13 +90,14 @@ function NewPostWin(_mainView) {
 		}
 		post.title = title_fd.value;
 		post.content=description_fd.value;
-		if(post.photo){
-			var fileName = Ti.Utils.md5HexDigest(post.photo);
-			var file = Ti.Filesystem.getFile(Zookee.CachePath+fileName+'.png');
-			file.write(post.photo);
-			post.photo = Zookee.CachePath+fileName+'.png';
-		}
 		var pre_ads = Ti.App.Properties.getList('pre_ads')||[];
+
+		if(post.photo){
+			var fileName = 'myads_'+pre_ads.length+'.png';
+			var file = Ti.Filesystem.getFile(Zookee.CachePath+fileName);
+			file.write(post.photo);
+			post.photo = Zookee.CachePath+fileName;
+		}
 		Ti.App.Properties.setList('pre_ads',[post].concat(pre_ads));
 		//TODO: upload ads to cloud.
 		_mainView.insertAd(post);
@@ -108,27 +116,20 @@ function NewPostWin(_mainView) {
 	var title_fd = Ti.UI.createTextField({
 		top:Zookee[40],
 		width : Ti.UI.FILL,
-		//backgroundColor : Zookee.UI.COLOR.CONTROL_BACKGROUND,
-		//color : Zookee.UI.COLOR.MYPAD_BACKGROUND,
 		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
 		returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
-		//borderStyle : Ti.UI.INPUT_BORDERSTYLE_LINE,
 		softKeyboardOnFocus : Zookee.Soft_Input.SOFT_KEYBOARD_SHOW_ON_FOCUS,
-		//opacity : 0.9,
 		verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM,
 		borderStyle : Ti.UI.INPUT_BORDERSTYLE_ROUNDED
 	});
 	
 	var description_fd = Ti.UI.createTextArea({
 		top : Zookee[120],
+		height:Zookee[80],
 		width : Ti.UI.FILL,
-		//backgroundColor : Zookee.UI.COLOR.CONTROL_BACKGROUND,
-		//color : Zookee.UI.COLOR.MYPAD_BACKGROUND,
 		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
 		returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
-		//borderStyle : Ti.UI.INPUT_BORDERSTYLE_LINE,
 		softKeyboardOnFocus : Zookee.Soft_Input.SOFT_KEYBOARD_SHOW_ON_FOCUS,
-		//opacity : 0.9,
 		verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM,
 		borderStyle : Ti.UI.INPUT_BORDERSTYLE_ROUNDED
 	});	
@@ -137,13 +138,14 @@ function NewPostWin(_mainView) {
 		left:0,
 		color:'white',
 		font:Zookee.FONT.NORMAL_FONT,
-		text:L('title','title:')
+		text:L('ad_title','title:')
 	}));
 	textArea.add(Ti.UI.createLabel({
-		top:Zookee[80],
+		top:Zookee[90],
 		left:0,
+		color:'white',
 		font:Zookee.FONT.NORMAL_FONT,
-		text:L('description','description:')
+		text:L('ad_desc','description:')
 	}))
 	textArea.add(title_fd);
 	textArea.add(description_fd);
@@ -207,13 +209,7 @@ function NewPostWin(_mainView) {
 			success : function(event) {
 				title_fd.focus();
 				post.photo = event.media;
-				if (Zookee.isAndroid) {
-					var ratio = event.media.width / event.media.height;
-					var measureHeight = Ti.Platform.displayCaps.platformWidth / ratio;
-
-					view.backgroundImage = event.media.nativePath;
-				} else
-					view.backgroundImage = event.media.imageAsResized(view.rect.width, view.rect.height);
+				imageView.image = event.media.imageAsResized(view.rect.width, view.rect.height);
 			},
 			cancel : function() {
 				title_fd.focus();
@@ -232,13 +228,7 @@ function NewPostWin(_mainView) {
 			success : function(event) {
 				title_fd.focus();
 				post.photo = event.media;
-				if (Zookee.isAndroid) {
-					var ratio = event.media.width / event.media.height;
-					var measureHeight = Ti.Platform.displayCaps.platformWidth / ratio;
-
-					view.backgroundImage = event.media.nativePath;
-				} else
-					view.backgroundImage = event.media.imageAsResized(view.rect.width, view.rect.height);
+				imageView.image = event.media.imageAsResized(view.rect.width, view.rect.height);
 			},
 			cancel : function() {
 				title_fd.focus();

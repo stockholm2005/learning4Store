@@ -23,7 +23,7 @@ var ImageView = require('ui/ImageView');
 var SystemWidth = Ti.Platform.displayCaps.platformWidth;
 var SystemHeight = Ti.Platform.displayCaps.platformHeight;
 
-function PartyRow(post, mainView, move2Last, location) {
+function PartyRow(post, location) {
 	var user = Zookee.User.CurrentUser
 	var joined = false;
 
@@ -43,9 +43,9 @@ function PartyRow(post, mainView, move2Last, location) {
 		height : Zookee[50],
 		image : Zookee.ImageURL.Party
 	})
-	if (post.attenders.length > 2)
+	if (post.attenders > 2)
 		avatar.image = Zookee.ImageURL.Party;
-	else if (post.attenders.length == 2)
+	else if (post.attenders == 2)
 		avatar.image = Zookee.ImageURL.Party1;
 	else
 		avatar.image = Zookee.ImageURL.No_Avatar;
@@ -59,7 +59,7 @@ function PartyRow(post, mainView, move2Last, location) {
 		height : Ti.UI.SIZE,
 		color : Zookee.UI.COLOR.MYPAD_BACKGROUND,
 		font : Zookee.FONT.NORMAL_FONT_BOLD,
-		text : post.attenders.length + L('people', ' people')
+		text : post.attenders+' ' + L('people', ' people')
 	})
 	view.add(peopleLabel);
 

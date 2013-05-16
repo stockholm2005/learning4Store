@@ -347,7 +347,7 @@ Zookee = {
 		// the radius of the party, the distance = 0.00126*n, 0.00126 = 1 mile
 		DISTANCE_NUM:2,
 		// the default duration for a party
-		DURATION:4
+		DURATION:6
 	},
 	PASSCODE_ENABLED:true
 };
