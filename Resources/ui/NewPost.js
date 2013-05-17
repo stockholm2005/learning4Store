@@ -99,6 +99,7 @@ function NewPostWin(_mainView) {
 			post.photo = Zookee.CachePath+fileName;
 		}
 		Ti.App.Properties.setList('pre_ads',[post].concat(pre_ads));
+		Ti.App.fireEvent('update_pre_row');
 		//TODO: upload ads to cloud.
 		_mainView.insertAd(post);
 		win.close();

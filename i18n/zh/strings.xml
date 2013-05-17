@@ -138,4 +138,5 @@
 	<string name="ad_title">广告题头</string>
 	<string name="ad_desc">广告描述</string>
 	<string name="people">人</string>	
+	<string name="error">出错了！请重新尝试</string>
 </resources>

@@ -25,7 +25,8 @@ function AdsList(){
 	var buildRow = function(ad){
 		var row = Ti.UI.createTableViewRow({
 			selectionStyle:Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
-			className:'row'
+			className:'row',
+			ad:ad
 		});
 
 		var avatar = Ti.UI.createImageView({
@@ -35,7 +36,8 @@ function AdsList(){
 			width:Zookee[100],
 			height:Zookee[100],
 			defaultImage:Zookee.ImageURL.Empty_Photo,
-			image:ad.photo
+			image:ad.photo,
+			touchEnabled:false
 		})
 		var title = Ti.UI.createLabel({
 			left:Zookee[120],
@@ -43,7 +45,8 @@ function AdsList(){
 			height:Zookee[30],
 			width:Ti.UI.SIZE,
 			text:ad.title,
-			font:Zookee.FONT.NORMAL_FONT_BOLD
+			font:Zookee.FONT.NORMAL_FONT_BOLD,
+			touchEnabled:false
 		})
 		var description = Ti.UI.createLabel({
 			left:Zookee[120],
@@ -52,7 +55,8 @@ function AdsList(){
 			width:Ti.UI.SIZE,
 			text:ad.content,
 			color:Zookee.UI.COLOR.PARTY_CONTENT,
-			font:Zookee.FONT.SMALL_FONT_ITALIC
+			font:Zookee.FONT.SMALL_FONT_ITALIC,
+			touchEnabled:false
 		})
 		var address = Ti.UI.createLabel({
 			left:Zookee[120],
@@ -62,7 +66,8 @@ function AdsList(){
 			text:ad.address,
 			color:Zookee.UI.COLOR.MYPAD_BACKGROUND,
 			font:Zookee.FONT.SMALL_FONT,
-			party:ad
+			party:ad,
+			touchEnabled:false
 		})
 
 		row.add(avatar);
@@ -73,9 +78,11 @@ function AdsList(){
 	}	
 	
 	tableView.insertAd = function(ad){
+		pre_ads = [ad].concat(pre_ads);
 		tableView.insertRowBefore(0,buildRow(ad));
 	}
-	for(var i=0;i<pre_ads.length;i++){		
+	for(var i=0;i<pre_ads.length;i++){
+		
 		data.push(buildRow(pre_ads[i]));
 	}
 	
@@ -98,7 +105,15 @@ function AdsList(){
 	});
 	data.push(row);
 	tableView.setData(data);
-	
+	tableView.addEventListener('swipe',function(e){
+		if(e.direction == 'right'){
+			//delete the ad.
+			pre_ads.splice(e.index,1);
+			Ti.App.Properties.setList('pre_ads',pre_ads);
+			tableView.deleteRow(e.index,Ti.UI.iPhone.RowAnimationStyle.LEFT);
+			Ti.App.fireEvent('update_pre_row');
+		}
+	})	
 	return tableView;
 };
 

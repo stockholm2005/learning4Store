@@ -92,7 +92,7 @@ function PeoplePad(myPad, page) {
 		currentPage : page,
 		disableBounce : true
 	});
-	view.add(scrollView);
+	view.add(adsList);
 	win.add(view);
 	//
 	var changeTextStyle = function(page) {
