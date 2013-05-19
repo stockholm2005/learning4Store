@@ -5,6 +5,7 @@ var ImageDelegate = require('backend/ImageDelegate');
 var imageDelegate = new ImageDelegate();
 var Zookee = require('Zookee');
 var SettingPad = require('ui/Setting');
+var NewPostWin = require('ui/NewPost');
 var boldStyle = Zookee.FONT.SEGMENT_FONT_SELECTED;
 var normalStyle = Zookee.FONT.SEGMENT_FONT_UNSELECTED;
 var TitleView = require('ui/TitleView');
@@ -36,26 +37,20 @@ function PeoplePad(myPad, page) {
 	var adsList = new AdsList(myPad);
 
 	var refreshBtn = Ti.UI.createButton({
-		backgroundImage : Zookee.ImageURL.Refresh,
 		backgroundSelectedColor : Zookee.UI.COLOR.CONTROL_BACKGROUND,
+		image:Zookee.ImageURL.Add,
 		width : Zookee[40],
 		height : Zookee[40],
-		style : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-		opacity : 0,
-		touchEnabled : false
+		style : Ti.UI.iPhone.SystemButtonStyle.PLAIN
 	})
-	if (page == 0) {
-		refreshBtn.opacity = 1;
-		refreshBtn.touchEnabled = true;
-	}
+
 	titleView.addView(refreshBtn);
 	titleView.addView(refreshInd);
 	refreshBtn.addEventListener('click', function() {
-		refreshBtn.opacity = 0;
-		refreshBtn.touchEnabled = false;
-		titleView.addView(refreshInd);
-		refreshInd.show();
-
+			var win = new NewPostWin(adsList);
+			win.open({
+				modal : true
+			});
 	})
 	var segmentControl = Ti.UI.createView({
 		width : Ti.UI.FILL,
@@ -81,17 +76,22 @@ function PeoplePad(myPad, page) {
 		color : Zookee.UI.COLOR.SEGMENT_FONT,
 		font : normalStyle
 	});
-
+	segment1.addEventListener('click',function(e){
+		changeTextStyle(1);
+		view.remove(adsList);
+		view.add(settingView);
+	})
+	segment0.addEventListener('click',function(e){
+		changeTextStyle(0);
+		view.remove(settingView);
+		view.add(adsList);
+	})
 	segmentControl.add(segment0);
 	segmentControl.add(Lines.VerticalLine(Zookee.UI.COLOR.LINE_IN_SEG));
 	segmentControl.add(segment1);
 
 	view.add(segmentControl);
-	var scrollView = Ti.UI.createScrollableView({
-		views : [adsList, settingView],
-		currentPage : page,
-		disableBounce : true
-	});
+
 	view.add(adsList);
 	win.add(view);
 	//
@@ -100,14 +100,15 @@ function PeoplePad(myPad, page) {
 		segment0.font = page == 0 ? boldStyle : normalStyle;
 		segment1.color = page == 1 ? 'white' : Zookee.UI.COLOR.SEGMENT_FONT;
 		segment1.font = page == 1 ? boldStyle : normalStyle;
+		if (page == 1) {
+			refreshBtn.opacity = 0;
+			refreshBtn.touchEnabled = false;
+		}else{
+			refreshBtn.opacity = 1;
+			refreshBtn.touchEnabled = true;			
+		}
 	}
 
-	scrollView.addEventListener('scrollend',function(e){
-		if(e.currentPage == 0){
-			changeTextStyle(0);
-		}else
-			changeTextStyle(1);
-	})
 	win.addEventListener('open',function(e){
 		changeTextStyle(0);
 	})

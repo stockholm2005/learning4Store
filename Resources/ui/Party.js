@@ -30,7 +30,9 @@ function PartyRow(post, location) {
 	var view = Ti.UI.createTableViewRow({
 		//height : SystemWidth/Zookee.UI.IMAGE.PARTY_IMAGE_RATIO+Zookee[70],
 		//backgroundColor : 'white',
+		height:Zookee[70],
 		className : 'row',
+		backgroundImage:Zookee.ImageURL.Background,
 		post : post,
 		selectionStyle : Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
@@ -48,7 +50,7 @@ function PartyRow(post, location) {
 	else if (post.attenders == 2)
 		avatar.image = Zookee.ImageURL.Party1;
 	else
-		avatar.image = Zookee.ImageURL.No_Avatar;
+		avatar.image = Zookee.ImageURL.Party2;
 	view.add(avatar);
 	var text = Util.postTime(post.created_at);
 
@@ -101,7 +103,7 @@ function PartyRow(post, location) {
 		view.className='label';
 	} else {
 		var adsBtn = Ti.UI.createButton({
-			title : L('send_ad', ' send ad '),
+			title : '  '+L('send_ad', ' send ad ')+'  ',
 			color : 'white',
 			backgroundGradient : Zookee.UI.BackgroundGradient,
 			borderWidth : 0,
@@ -112,6 +114,7 @@ function PartyRow(post, location) {
 				y : '50%'
 			},
 			width : Ti.UI.SIZE,
+			height:Zookee[40],
 			party : post,
 			font : Zookee.FONT.SMALL_FONT,
 			bg:adsBtn_bg,

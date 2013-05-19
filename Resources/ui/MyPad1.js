@@ -57,7 +57,9 @@ function MyPad1(mainView) {
         text : user.username,
         font : Zookee.FONT.NORMAL_FONT_BOLD
     })
-
+    this.updateUserName = function(){
+    		username_lb.text = user.username;
+    }
     leftView.add(avatar);
     leftView.add(username_lb);
     var rightView = Ti.UI.createView({

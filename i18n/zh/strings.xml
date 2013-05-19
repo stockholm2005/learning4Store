@@ -4,7 +4,7 @@
 	<string name="welcome">Welcome to %s!</string>
 	<string name="email">电子邮件</string>
 	<string name="Password">密码</string>
-	<string name="Phone">电话(可选)</string>
+	<string name="Phone">电话</string>
 	<string name="Your_faces_for_different_status">您不同状态的照片</string>
 	<string name="Register">注册</string>
 	<string name="register_implication">还不是Together的用户? 在此注册</string>

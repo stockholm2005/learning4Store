@@ -4,7 +4,7 @@
 	<string name="welcome">Welcome to %s!</string>
 	<string name="email">Email</string>
 	<string name="Password">Password</string>
-	<string name="Phone">Phone(optional)</string>
+	<string name="Phone">Phone</string>
 	<string name="Your_faces_for_different_status">Your faces for different status</string>
 	<string name="Register">Create Account</string>
 	<string name="Login">Login</string>

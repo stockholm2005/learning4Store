@@ -116,6 +116,7 @@ Zookee = {
 		Right_Arrow : '/images/icon_arrow_right.png',
 		Party : '/images/party.png',
 		Party1 :'/images/party1.png',
+		Party2:'/images/party2.png',
 		Party_White:'/images/party_white.png',
 		Audio : '/images/record.png',
 		Audio_White:'/images/audio_white.png',

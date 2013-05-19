@@ -272,6 +272,10 @@ function RegisterView() {
             alert(String.format(L('mandatory_field'),L('email')));
             return;
         }
+        if (!phoneField.value || phoneField.value.trim() == '') {
+            alert(String.format(L('mandatory_field'),L('phone')));
+            return;
+        }
         var tmpUser = {};
         tmpUser.email = emailField.value;
         if (photoChanged) {
@@ -290,10 +294,8 @@ function RegisterView() {
         }else{
         		tmpUser.password = Ti.Platform.id.substr(0,20);
         }
-        if (phoneField.value) {
-            tmpUser.custom_fields = {};
-            tmpUser.custom_fields.phone = phoneField.value;
-        }
+        tmpUser.custom_fields = {};
+        tmpUser.custom_fields.phone = phoneField.value;
 		var actInd = Titanium.UI.createActivityIndicator({
 				center : {
 					x : '50%',

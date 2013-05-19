@@ -163,9 +163,7 @@ exports.updateUser = function(user, callback, failCallback) {
 			}
 			_user.email = e.users[0].email;
 			_user.username = e.users[0].first_name;
-			if (e.users[0].custom_fields) {
-				_user.custom_fields.phone = e.users[0].custom_fields.phone
-			}
+			_user.custom_fields = e.users[0].custom_fields;
 			Zookee.User.setUser(_user);
 			callback(_user);
 		} else {
@@ -189,72 +187,6 @@ exports.logout = function(callback, failCallback) {
 	});
 };
 
-exports.addFriend = function(userid, callback, failCallback) {
-	Cloud.Friends.add({
-		user_ids : userid,
-		// todo:for this app, when distributed, it should be changed to true
-		// note: you need quote false
-		approval_required : 'true'
-	}, function(e) {
-		if (e.success) {
-			callback();
-		} else {
-			Util.handleError(e);
-			failCallback();
-		}
-	});
-};
-
-exports.searchFriend = function(user, callback, failCallback) {
-	Cloud.Friends.search({
-		user_id : user.id
-	}, function(e) {
-		if (e.success) {
-			//e.users.push(user);
-			for (var i = 0; i < e.users.length; i++) {
-				initializeUser(e.users[i]);
-			}
-			user.friends = [].concat(e.users);
-			callback();
-		} else {
-			failCallback();
-		}
-	});
-};
-
-exports.showRequests = function(user, callback, failCallback) {
-	Cloud.Friends.requests(function(e) {
-		if (e.success) {
-			user.requests = [];
-			if (e.friend_requests.length > 0) {
-				for (var i = 0; i < e.friend_requests.length; i++) {
-					initializeUser(e.friend_requests[i].user);
-				}
-				user.requests = user.requests.concat(e.friend_requests);
-			}
-			callback(user);
-		} else {
-			failCallback();
-		}
-	});
-};
-
-exports.approveRequest = function(friend, callback, failCallback) {
-	var user = Zookee.User.CurrentUser;
-	Cloud.Friends.approve({
-		user_ids : friend.id
-	}, function(e) {
-		if (e.success) {
-			user.friends.push(friend);
-			Util.deleteRequest(user, friend);
-			callback();
-		} else {
-			alert('approve fail');
-			failCallback();
-		}
-	});
-};
-
 exports.createAd = function(post, parties, callback, failCallback) {
 	var tags = [];
 	for (var i = 0; i < parties.length; i++) {
@@ -267,7 +199,8 @@ exports.createAd = function(post, parties, callback, failCallback) {
 		tags : tags.join(','),
 		custom_fields : {
 			location : post.location,
-			address : post.address
+			address : post.address,
+			phone:Zookee.User.CurrentUser.custom_fields.phone
 		}
 	};
 	if (post.photo) {
@@ -706,9 +639,6 @@ var initializeUser = function(user) {
 		user.photo.avatarImage = 's';
 	}
 
-	user.friends = [];
-	user.requests = [];
-	user.myRequests = [];
 	if (!user.custom_fields)
 		user.custom_fields = {};
 	if (user.custom_fields.phone) {

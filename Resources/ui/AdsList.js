@@ -2,9 +2,8 @@
  * @author Hao, Kent
  */
 var Zookee = require('Zookee');
-var NewPostWin = require('ui/NewPost');
 
-function AdsList(){
+function AdsList() {
 	var data = [];
 	var tableView = Ti.UI.createTableView({
 		data : data,
@@ -19,102 +18,83 @@ function AdsList(){
 		backgroundColor : 'transparent',
 		showVerticalScrollIndicator : false
 	});
-	
-	var pre_ads = Ti.App.Properties.getList('pre_ads')||[];
 
-	var buildRow = function(ad){
+	var pre_ads = Ti.App.Properties.getList('pre_ads') || [];
+
+	var buildRow = function(ad) {
 		var row = Ti.UI.createTableViewRow({
-			selectionStyle:Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
+			selectionStyle : Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
 			className:'row',
-			ad:ad
+			ad : ad,
+			backgroundImage:Zookee.ImageURL.Background
 		});
 
 		var avatar = Ti.UI.createImageView({
-			left:Zookee[10],
-			top:Zookee[10],
-			bottom:Zookee[10],
-			width:Zookee[100],
-			height:Zookee[100],
-			defaultImage:Zookee.ImageURL.Empty_Photo,
-			image:ad.photo,
-			touchEnabled:false
+			left : Zookee[10],
+			top : Zookee[10],
+			bottom : Zookee[10],
+			width : Zookee[100],
+			height : Zookee[100],
+			defaultImage : Zookee.ImageURL.Empty_Photo,
+			image : ad.photo,
+			touchEnabled : false
 		})
 		var title = Ti.UI.createLabel({
-			left:Zookee[120],
-			top:Zookee[10],
-			height:Zookee[30],
-			width:Ti.UI.SIZE,
-			text:ad.title,
-			font:Zookee.FONT.NORMAL_FONT_BOLD,
-			touchEnabled:false
+			left : Zookee[120],
+			top : Zookee[10],
+			height : Zookee[30],
+			width : Ti.UI.SIZE,
+			text : ad.title,
+			font : Zookee.FONT.NORMAL_FONT_BOLD,
+			touchEnabled : false
 		})
 		var description = Ti.UI.createLabel({
-			left:Zookee[120],
-			top:Zookee[50],
-			height:Ti.UI.SIZE,
-			width:Ti.UI.SIZE,
-			text:ad.content,
-			color:Zookee.UI.COLOR.PARTY_CONTENT,
-			font:Zookee.FONT.SMALL_FONT_ITALIC,
-			touchEnabled:false
+			left : Zookee[120],
+			top : Zookee[50],
+			height : Ti.UI.SIZE,
+			width : Ti.UI.SIZE,
+			text : ad.content,
+			color : Zookee.UI.COLOR.PARTY_CONTENT,
+			font : Zookee.FONT.SMALL_FONT_ITALIC,
+			touchEnabled : false
 		})
 		var address = Ti.UI.createLabel({
-			left:Zookee[120],
-			top:Zookee[90],
-			height:Zookee[30],
-			width:Ti.UI.SIZE,
-			text:ad.address,
-			color:Zookee.UI.COLOR.MYPAD_BACKGROUND,
-			font:Zookee.FONT.SMALL_FONT,
-			party:ad,
-			touchEnabled:false
+			left : Zookee[120],
+			top : Zookee[90],
+			height : Zookee[30],
+			width : Ti.UI.SIZE,
+			text : ad.address,
+			color : Zookee.UI.COLOR.MYPAD_BACKGROUND,
+			font : Zookee.FONT.SMALL_FONT,
+			party : ad,
+			touchEnabled : false
 		})
 
 		row.add(avatar);
 		row.add(title);
 		row.add(description);
-		row.add(address);	
-		return row;	
-	}	
-	
-	tableView.insertAd = function(ad){
-		pre_ads = [ad].concat(pre_ads);
-		tableView.insertRowBefore(0,buildRow(ad));
+		row.add(address);
+		return row;
 	}
-	for(var i=0;i<pre_ads.length;i++){
-		
+
+	tableView.insertAd = function(ad) {
+		pre_ads = [ad].concat(pre_ads);
+		tableView.insertRowBefore(0, buildRow(ad));
+	}
+	for (var i = 0; i < pre_ads.length; i++) {
+
 		data.push(buildRow(pre_ads[i]));
 	}
-	
-	// add new adds
-	var row = Ti.UI.createTableViewRow();
-	row.add(Ti.UI.createImageView({
-		center:{
-			x:'50%',
-			y:'50%'
-		},
-		width:Zookee[50],
-		height:Zookee[50],
-		image:Zookee.ImageURL.Add
-	}))
-	row.addEventListener('click',function(e){
-		var win = new NewPostWin(tableView);
-		win.open({
-			modal:true
-		});
-	});
-	data.push(row);
+
 	tableView.setData(data);
-	tableView.addEventListener('swipe',function(e){
-		if(e.direction == 'right'){
+	tableView.addEventListener('click', function(e) {
 			//delete the ad.
-			pre_ads.splice(e.index,1);
-			Ti.App.Properties.setList('pre_ads',pre_ads);
-			tableView.deleteRow(e.index,Ti.UI.iPhone.RowAnimationStyle.LEFT);
+			pre_ads.splice(e.index, 1);
+			Ti.App.Properties.setList('pre_ads', pre_ads);
+			tableView.deleteRow(e.index, Ti.UI.iPhone.RowAnimationStyle.LEFT);
 			Ti.App.fireEvent('update_pre_row');
-		}
-	})	
+	})
 	return tableView;
 };
 
-module.exports=AdsList;
+module.exports = AdsList;

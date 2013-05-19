@@ -100,7 +100,6 @@ function NewPostWin(_mainView) {
 		}
 		Ti.App.Properties.setList('pre_ads',[post].concat(pre_ads));
 		Ti.App.fireEvent('update_pre_row');
-		//TODO: upload ads to cloud.
 		_mainView.insertAd(post);
 		win.close();
 
@@ -118,6 +117,7 @@ function NewPostWin(_mainView) {
 		top:Zookee[40],
 		width : Ti.UI.FILL,
 		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
+		enableReturnKey:false,
 		returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
 		softKeyboardOnFocus : Zookee.Soft_Input.SOFT_KEYBOARD_SHOW_ON_FOCUS,
 		verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM,
@@ -129,6 +129,7 @@ function NewPostWin(_mainView) {
 		height:Zookee[80],
 		width : Ti.UI.FILL,
 		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
+		enableReturnKey:false,
 		returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
 		softKeyboardOnFocus : Zookee.Soft_Input.SOFT_KEYBOARD_SHOW_ON_FOCUS,
 		verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM,

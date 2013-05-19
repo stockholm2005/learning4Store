@@ -177,7 +177,7 @@ function SettingPad(win, myPad) {
 		left : '5%',
 		backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
 		width : Ti.UI.FILL,
-		hintText : L('Phone'),
+		value:user.custom_fields.phone,
 		font : Zookee.FONT.NORMAL_FONT,
 		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
 		returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
