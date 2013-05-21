@@ -269,11 +269,11 @@ function RegisterView() {
 
     registerBtn.addEventListener('click', function() {
         if (!emailField.value || emailField.value.trim() == '') {
-            alert(String.format(L('mandatory_field'),L('email')));
+            alert(String.format(L('mandatory_field'),L('email','email')));
             return;
         }
         if (!phoneField.value || phoneField.value.trim() == '') {
-            alert(String.format(L('mandatory_field'),L('phone')));
+            alert(String.format(L('mandatory_field'),L('Phone','phone')));
             return;
         }
         var tmpUser = {};
@@ -361,6 +361,12 @@ function RegisterView() {
 	});
 
 	view.add(title);
+	view.add(Ti.UI.createView({
+		width:Ti.UI.FILL,
+		top:0,
+		height:1,
+		backgroundColor:Zookee.UI.COLOR.PARTY_CONTENT
+	}))
 	view.add(scrollView);
 	scrollView.add(background);
 	scrollView.add(shadow);

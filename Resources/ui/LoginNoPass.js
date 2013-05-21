@@ -28,7 +28,13 @@ function LoginView(win) {
 		color : 'white',
 		font : Zookee.FONT.TITLE_FONT
 	})
-
+	
+	view.add(Ti.UI.createView({
+		width:Ti.UI.FILL,
+		top:SystemHeight * 0.075,
+		height:1,
+		backgroundColor:Zookee.UI.COLOR.PARTY_CONTENT
+	}))
 	var scrollView = Ti.UI.createScrollView({
 		left:0,
 		right:0,
