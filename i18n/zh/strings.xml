@@ -139,4 +139,10 @@
 	<string name="ad_desc">广告描述</string>
 	<string name="people">人</string>	
 	<string name="error">出错了！请重新尝试</string>
+	<string name="food">美食</string>
+	<string name="entertain">娱乐</string>
+	<string name="hotel">酒店</string>
+	<string name="shopping">购物</string>
+	<string name="sports">运动</string>
+	<string name="want">寻找</string>
 </resources>

@@ -332,10 +332,8 @@ exports.queryParty = function(callback, failCallback, location, type) {
 				else
 					e.posts[i].attenders = 1;
 			}
-			callback(e.posts);
-		}else{
-			failCallback();
 		}
+		callback(e.posts);
 	}
 
 	xhr.onerror = function(e) {

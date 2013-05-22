@@ -207,7 +207,8 @@ Zookee = {
 			LINE_IN_SETTING_SEG:'#A2CD5A',
 			SETTING_SEG_FONT:'#A2CD5A',
 			SHADOW_START_COLOR:'#B7B7B7',
-			SINGLE_LINE:'#CFCFCF'
+			SINGLE_LINE:'#CFCFCF',
+			PREFERENCE:'#b9b9b9'
 		},
 		BackgroundGradient : {
             type : 'linear',

@@ -139,4 +139,10 @@
 	<string name="ad_desc">Ad's description</string>
 	<string name="people"> people</string>
 	<string name="error">error! please try again</string>
+	<string name="food">food</string>
+	<string name="entertain">entertain</string>
+	<string name="hotel">hotel</string>
+	<string name="shopping">shopping</string>
+	<string name="sports">sports</string>
+	<string name="want">want</string>
 </resources>

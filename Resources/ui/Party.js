@@ -65,6 +65,18 @@ function PartyRow(post, location) {
 	})
 	view.add(peopleLabel);
 
+	if(post.title){
+		view.add(Ti.UI.createLabel({
+			top:Zookee[10],
+			left:Zookee[150],
+			width:Ti.UI.SIZE,
+			height:Ti.UI.SIZE,
+			color:'red',
+			font : Zookee.FONT.NORMAL_FONT,
+			text:L('want',' want ')+post.title
+		}))
+		view.className = 'withtitle';
+	}
 	var whereLabel = Ti.UI.createLabel({
 		left : Zookee[70],
 		bottom : Zookee[10],
@@ -101,6 +113,7 @@ function PartyRow(post, location) {
 			font : Zookee.FONT.NORMAL_FONT_ITALIC
 		}));
 		view.className='label';
+		if(post.title) view.className = 'labelwithtitle';
 	} else {
 		var adsBtn = Ti.UI.createButton({
 			title : '  '+L('send_ad', ' send ad ')+'  ',

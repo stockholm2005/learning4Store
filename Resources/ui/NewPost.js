@@ -132,7 +132,7 @@ function NewPostWin(_mainView) {
 		enableReturnKey:false,
 		returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
 		softKeyboardOnFocus : Zookee.Soft_Input.SOFT_KEYBOARD_SHOW_ON_FOCUS,
-		verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM,
+		verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGNMENT_TOP,
 		borderStyle : Ti.UI.INPUT_BORDERSTYLE_ROUNDED
 	});	
 	textArea.add(Ti.UI.createLabel({
