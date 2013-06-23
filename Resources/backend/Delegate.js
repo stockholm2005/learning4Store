@@ -303,13 +303,21 @@ var hasMore = true;
 exports.resetHasMore = function(){
 	hasMore = true;
 };
-exports.queryParty = function(callback, failCallback, location, type) {
+
+var partyType;
+exports.setPartyType = function(type){
+	partyType = type;
+};
+exports.resetPartyType=function(){
+	partyType=null;
+};
+exports.queryParty = function(callback, failCallback, location) {
 	//TODO: construct query url like
 	if(!hasMore) return;
 	var op = "/posts/query.json?";
 	var filter = '';
-	if (type)
-		filter = '"title":"' + type + '",';
+	if (partyType)
+		filter = '"title":"' + partyType + '",';
 	var dateString = (new Date()).toISOString().split(/T/)[0]+'T00:00:00+0000';
 	var dateFilter = '"created_at":{"$gt":"'+dateString+'"},'
 	// be careful, when you combine coordinates with other query conditions like

@@ -78,8 +78,12 @@ function AdsList() {
 	}
 
 	tableView.insertAd = function(ad) {
+		if(pre_ads.length>0)
+			tableView.insertRowBefore(0, buildRow(ad));
+		else
+			tableView.appendRow(buildRow(ad));
+			
 		pre_ads = [ad].concat(pre_ads);
-		tableView.insertRowBefore(0, buildRow(ad));
 	}
 	for (var i = 0; i < pre_ads.length; i++) {
 

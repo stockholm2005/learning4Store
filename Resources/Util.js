@@ -175,7 +175,7 @@ exports.showStatus = function(win, message) {
 	var maskView = Ti.UI.createView({
 		center : {
 			x : '50%',
-			y : '90%'
+			y : '50%'
 		},
 		width : Ti.UI.SIZE,
 		height : Ti.UI.SIZE,
@@ -189,7 +189,7 @@ exports.showStatus = function(win, message) {
 		bottom : 10,
 		textAlign : 'center',
 		color : 'white',
-		text : message,
+		text : '  '+message+'  ',
 		font : Zookee.FONT.SMALL_FONT
 	});
 	maskView.add(infoLabel);
