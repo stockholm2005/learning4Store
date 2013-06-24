@@ -203,6 +203,9 @@ exports.createAd = function(post, parties, callback, failCallback) {
 			phone:Zookee.User.CurrentUser.custom_fields.phone
 		}
 	};
+	if(post.type){
+		obj.custom_fields.type=post.type;
+	}
 	if (post.photo) {
 		obj.photo = Ti.Filesystem.getFile(post.photo).read();
 		var ratio = obj.photo.width / obj.photo.height;
