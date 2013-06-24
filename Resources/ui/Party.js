@@ -72,8 +72,8 @@ function PartyRow(post, location) {
 			width:Ti.UI.SIZE,
 			height:Ti.UI.SIZE,
 			color:'red',
-			font : Zookee.FONT.NORMAL_FONT,
-			text:L('want',' want ')+post.title
+			font : Zookee.FONT.SMALL_FONT_ITALIC,
+			text:' '+L('want','want')+' '+post.title
 		}))
 		view.className = 'withtitle';
 	}
@@ -116,9 +116,9 @@ function PartyRow(post, location) {
 		if(post.title) view.className = 'labelwithtitle';
 	} else {
 		var adsBtn = Ti.UI.createButton({
-			title : '  '+L('send_ad', ' send ad ')+'  ',
+			title : '  '+L('send_ad', 'send ad')+'  ',
 			color : 'white',
-			backgroundGradient : Zookee.UI.BackgroundGradient,
+			backgroundColor : Zookee.UI.COLOR.MYPAD_BACKGROUND,
 			borderWidth : 0,
 			borderRadius : Zookee.UI.Border_Radius_Small,
 			style : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
