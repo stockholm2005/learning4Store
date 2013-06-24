@@ -17,6 +17,22 @@ Zookee = {
 			Ti.App.Properties.removeProperty('sentParties');
 		}
 	},
+	Priorities:[
+	{
+		title:'list_priority',
+		content:'list_priority_content',
+		photo:''
+	},	
+	{
+		title:'area_priority',
+		content:'area_priority_content',
+		photo:''
+	},
+	{
+		title:'detail_priority',
+		content:'detail_priority_content',
+		photo:''
+	}],
 	User : {
 		CurrentUser : {},
 		setUser : function(_user) {
