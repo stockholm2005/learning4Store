@@ -196,6 +196,19 @@ exports.createAd = function(post, parties, callback, failCallback) {
 	if(post.type){
 		obj.custom_fields.type=post.type;
 	}
+	var listPriority=false;
+	var user=Zookee.User.CurrentUser;
+	for(var i=0,length=user.priority.length;i<length;i++){
+		if(user.priority[i].indexOf('list')>=0 && Util.isPriorityValid(user.priority[i],user.priorityStartTime[i])){
+			listPriority = true;
+			break;
+		}
+	}
+	if(listPriority){
+		obj.custom_fields.listPriority='has';
+	}else{
+		obj.custom_fields.listPriority='';
+	}
 	if (post.photo) {
 		obj.photo = Ti.Filesystem.getFile(post.photo).read();
 		var ratio = obj.photo.width / obj.photo.height;
