@@ -146,4 +146,16 @@
 	<string name="sports">运动</string>
 	<string name="want">寻找</string>
 	<string name="about">关于</string>
+	<string name="buy">购买</string>
+	<string name="buying">正在购买...</string>
+	<string name="month_priority">有效期一个月 10$</string>
+	<string name="quarter_priority">有效期一个季度 25$</string>
+	<string name="year_priority">有效期一年 90$</string>
+	<string name="list_priority">列表优先权</string>
+	<string name="list_priority_content">此优先权让您的广告显示在其它没有购买此优先权的商户的广告的前面</string>
+	<string name="area_priority">区域优先权</string>
+	<string name="area_priority_content">此优先权让您获得更大范围内的聚会信息，而不只是默认的1英里范围内</string>
+	<string name="detail_priority">详细信息优先权</string>
+	<string name="detail_priority_content">此优先权让您可以附加更多的详细信息在您推送给用户的广告中，比如说您的网站地址</string>
+	<string name="have_priority">你已有</string>
 </resources>

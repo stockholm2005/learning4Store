@@ -2,9 +2,10 @@
  * @author Hao, Kent
  */
 var Zookee = require('Zookee');
-var Util=require('Util');
+var Util = require('Util');
 
 function PriorityList(win) {
+	var user = Zookee.User.CurrentUser;
 	var data = [];
 	var tableView = Ti.UI.createTableView({
 		data : data,
@@ -20,14 +21,14 @@ function PriorityList(win) {
 		showVerticalScrollIndicator : false
 	});
 
-	var priorities = Zookee.Priorities||[];
+	var priorities = Zookee.Priorities || [];
 
 	var buildRow = function(priority) {
 		var row = Ti.UI.createTableViewRow({
 			selectionStyle : Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
-			className:'row',
+			className : 'row',
 			priority : priority,
-			backgroundImage:Zookee.ImageURL.Background
+			backgroundImage : Zookee.ImageURL.Background
 		});
 
 		var avatar = Ti.UI.createImageView({
@@ -60,37 +61,87 @@ function PriorityList(win) {
 			touchEnabled : false
 		})
 
-		var buyLabel = Ti.UI.createLabel({
-			right:Zookee[10],
-			height:Ti.UI.SIZE,
-			text:'  '+L('buy','buy')+'  ',
-			color:'white',
-			font:Zookee.FONT.NORMAL_FONT,
-			backgroundColor:Zookee.UI.COLOR.MYPAD_BACKGROUND,
-			borderRadius:Zookee.UI.Border_Radius_Small,
-			tag:'buy'
-		})
+		var showBuy = true;
+		for(var i=0,length=user.priority.length;i<length;i++){
+			if(user.priority[i].indexOf(priority.title)>=0 && Util.isPriorityValid(user.priority[i], user.priorityStartTime[i])){
+				showBuy = false;
+				break;
+			}
+		}
+		// if user doesn't have the priority or the priority is expired, show buy btn.
+		if (showBuy) {
+			var buyLabel = Ti.UI.createLabel({
+				top : Zookee[10],
+				right : Zookee[10],
+				height : Ti.UI.SIZE,
+				text : '  ' + L('buy', 'buy') + '  ',
+				color : 'white',
+				font : Zookee.FONT.NORMAL_FONT,
+				backgroundColor : Zookee.UI.COLOR.MYPAD_BACKGROUND,
+				borderRadius : Zookee.UI.Border_Radius_Small,
+				tag : 'buy'
+			})
+			row.add(buyLabel);
+		}else{
+			var buyLabel = Ti.UI.createLabel({
+				top : Zookee[10],
+				right : Zookee[10],
+				height : Ti.UI.SIZE,
+				text : ' '+L('have_priority','have it')+' ',
+				color : Zookee.UI.COLOR.PARTY_CONTENT,
+				font : Zookee.FONT.NORMAL_FONT,
+				backgroundColor : 'transparent',
+				borderRadius : Zookee.UI.Border_Radius_Small
+			})
+			row.add(buyLabel);			
+		}
 		row.add(avatar);
 		row.add(title);
 		row.add(description);
-		row.add(buyLabel);
 		return row;
 	}
-
 	for (var i = 0; i < priorities.length; i++) {
 
 		data.push(buildRow(priorities[i]));
 	}
 	tableView.setData(data);
 	tableView.addEventListener('click', function(e) {
-			//buy priority
-		if(e.source.tag==='buy'){
-			actInd=Util.actIndicator(L('buying','buying'),win,true);
-			actInd.show();
-			// hide indicator, update user priority
-			setTimeout(function(){
-				actInd.hide();
-			},5000);
+		//buy priority
+		if (e.source.tag === 'buy') {
+			var priorityType = e.row.priority.title;
+			var buyLabel = e.source;
+			var alertDialog = Ti.UI.createAlertDialog({
+				cancel : 3,
+				buttonNames : [L('month_priority'), L('quarter_priority'), L('year_priority'), L('cancel')],
+				title : L('buy') + ' ' + L(e.row.priority.title)
+			});
+			alertDialog.addEventListener('click', function(e) {
+				if (e.index === e.source.cancel) {
+
+				} else {
+					actInd = Util.actIndicator(L('buying', 'buying'), win, true);
+					actInd.show();
+					// hide indicator, update user priority
+					var delegate = require('backend/Delegate');
+					delegate.updateUser({
+						custom_fields : {
+							priority : user.priority.concat([priorityType + e.source.buttonNames[e.index]]),
+							priority_startTime : user.priorityStartTime.concat([(new Date()).toISOString().split(/T/)[0] + 'T00:00:00+0000'])
+						}
+					}, function() {
+						buyLabel.backgroundColor = 'transparent';
+						buyLabel.color=Zookee.UI.COLOR.PARTY_CONTENT;
+						buyLabel.text = ' '+L('have_priority','have it')+' ';
+						actInd.hide();
+					}, function() {
+						actInd.hide();
+					})
+					setTimeout(function() {
+						actInd.hide();
+					}, 5000);
+				}
+			});
+			alertDialog.show();
 		}
 	})
 	return tableView;

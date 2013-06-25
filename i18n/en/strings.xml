@@ -146,4 +146,16 @@
 	<string name="sports">sports</string>
 	<string name="want">want</string>
 	<string name="about">about</string>
+	<string name="buy">buy</string>
+	<string name="buying">buying...</string>
+	<string name="month_priority">For one Month 10$</string>
+	<string name="quarter_priority">For one Quarter 25$</string>
+	<string name="year_priority">For one Year 90$</string>
+	<string name="list_priority">List Priority</string>
+	<string name="list_priority_content">With this priority, your ads will be listed before the other ads which are not prioritized</string>
+	<string name="area_priority">Area Priority</string>
+	<string name="area_priority_content">With this priority, you can find parties in larger area, not only those in 1 mile</string>
+	<string name="detail_priority">Detail Priority</string>
+	<string name="detail_priority_content">With this priority, you can attach more detail information in your ad, e.g, your website. Then the user can click your ad and see more info.</string>
+	<string name="have_priority">you have</string>
 </resources>

@@ -6,6 +6,47 @@ exports.postTimeForTitle = function(dateString) {
 	var nums = dateString.split(/-|T|:/);
 	return nums[0] + '/' + nums[1] + '/' + nums[2];
 }
+
+exports.isPriorityValid = function(priority,startTime){
+	var nums=startTime.split(/-|T|:/);
+	var startYear = parseFloat(nums[0]);
+	var startMonth = parseFloat(nums[1]);
+	var startDate = parseFloat(nums[2]);
+	var currentTime = new Date();
+	var year = currentTime.getUTCFullYear();	
+	var month = currentTime.getUTCMonth() + 1;
+	var date = currentTime.getUTCDate();
+	if(priority.indexOf('Year')>0){
+		if(startYear === year) return true;
+		else if((year-startYear)===1){
+			if(month<startMonth) return true;
+			if(month===startMonth){
+				if(date<startDate) return true;
+			}
+		}
+	}else if(priority.indexOf('Month')>0){
+		if(startYear === year){
+			if(startMonth === month) return true;
+			if(startMonth<month){
+				if(date<startDate) return true;
+			}
+		}
+		else if((year-startYear)===1){
+			//cross year
+			if(startMonth ===12 && month ===1){
+				if(date<startDate) return true;
+			}
+		}
+	}else if(priority.indexOf('Quarter')>0){
+		if(startYear === year){
+			if((month-startMonth)<=2) return true;
+			else if((month-startMonth)===3){
+				if(date<startDate) return true
+			}
+		}
+	}
+	return false;
+};
 exports.postTime = function(dateString) {
 	var nums = dateString.split(/-|T|:/);
 	var currentTime = new Date();

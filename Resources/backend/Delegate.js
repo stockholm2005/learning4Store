@@ -104,10 +104,12 @@ exports.login = function(user, callback, failCallback) {
 			Ti.App.Properties.setString('sessionid', e.meta.session_id);
 			initializeUser(e.users[0]);
 			var user = e.users[0];
+			Zookee.User.setUser(user);
 			var password = Zookee.isAndroid ? Ti.Platform.id : Ti.Platform.id.substr(0, 20);
 			if (Zookee.resetPassword) {
 				Cloud.Users.update({
-					password : password
+					password : password,
+					password_confirmation : password
 				}, function(e) {
 					//TODO: re-send the password email
 					Cloud.Emails.send({
@@ -120,22 +122,8 @@ exports.login = function(user, callback, failCallback) {
 					})
 				})
 			}
-			if (Zookee.Notification.Enabled)
-				exports.subscribe(Zookee.Notification.Friend_Channel);
-			var searchRequests = function() {
-				exports.showRequests(e.users[0], function() {
-					Zookee.User.setUser(e.users[0]);
-					callback();
-				}, function() {
-					Zookee.User.setUser(e.users[0]);
-					callback();
-				})
-			}
-			exports.searchFriend(e.users[0], function() {
-				searchRequests();
-			}, function() {
-				searchRequests();
-			})
+
+			callback();
 			//queryEmotions(e.users[0], callback, failCallback);
 		} else {
 			Util.handleError(e);
@@ -164,6 +152,8 @@ exports.updateUser = function(user, callback, failCallback) {
 			_user.email = e.users[0].email;
 			_user.username = e.users[0].first_name;
 			_user.custom_fields = e.users[0].custom_fields;
+			_user.priority = e.users[0].priority;
+			_user.priorityStartTime=e.users[0].priorityStartTime;
 			Zookee.User.setUser(_user);
 			callback(_user);
 		} else {
@@ -323,6 +313,8 @@ exports.queryParty = function(callback, failCallback, location) {
 		filter = '"title":"' + partyType + '",';
 	var dateString = (new Date()).toISOString().split(/T/)[0]+'T00:00:00+0000';
 	var dateFilter = '"created_at":{"$gt":"'+dateString+'"},'
+	// according to user's priority, increase the search area
+	var areaRatio = 1;
 	// be careful, when you combine coordinates with other query conditions like
 	// title, content, tags_array, make sure put these conditions before coordinates.
 	var where = '&where={' + filter + dateFilter + '"coordinates":{"$nearSphere":[' + location.join(',') + '],"$maxDistance":0.00126}}';
@@ -652,6 +644,13 @@ var initializeUser = function(user) {
 		user.custom_fields = {};
 	if (user.custom_fields.phone) {
 		user.phone = user.custom_fields.phone;
+	}
+	if(user.custom_fields.priority && user.custom_fields.priority_startTime){
+		user.priority=user.custom_fields.priority;
+		user.priorityStartTime = user.custom_fields.priority_startTime;
+	}else{
+		user.priority = [];
+		user.priorityStartTime = [];
 	}
 	if (user.first_name) {
 		user.username = user.first_name;
