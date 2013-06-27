@@ -105,51 +105,87 @@ function NewPostWin(_mainView) {
 
 	})
 	titleView.addView(sendButton);
-
 	var textArea = Ti.UI.createView({
 		top : Zookee[10],
 		left : '5%',
 		right : '5%',
-		height : Ti.UI.SIZE
+		height : Ti.UI.SIZE,
+		layout:'vertical'
+	})
+	var preferenceView = Ti.UI.createView({
+		top:0,
+		backgroundColor:'transparent',
+		width : Ti.UI.FILL,
+		height : Ti.UI.SIZE,
+		layout : 'horizontal'
 	})
 	
+	var preference = ['food', 'entertain', 'hotel', 'shopping', 'sports'];
+	var prefControl;
+	for (var i = 0; i < preference.length; i++) {
+		var label = Ti.UI.createLabel({
+			top : Zookee[10],
+			height:Zookee[30],
+			left : Zookee[10],
+			text : ' ' + L(preference[i], preference[i]) + ' ',
+			backgroundColor : Zookee.UI.COLOR.PREFERENCE,
+			borderRadius : Zookee.UI.Border_Radius_Small,
+			color : 'white',
+			tag : preference[i],
+			font : Zookee.FONT.SMALL_FONT
+		});
+		label.addEventListener('click', function(e) {
+			if(prefControl && prefControl.tag != e.source.tag){
+				prefControl.backgroundColor = Zookee.UI.COLOR.PREFERENCE;
+			}
+			if(prefControl && prefControl.tag === e.source.tag){
+				//click the same type to cancel the type filter
+				e.source.backgroundColor = Zookee.UI.COLOR.PREFERENCE;
+				post.type = null;
+				prefControl = null;
+				return;		
+			}
+			
+			post.type = e.source.tag;
+			e.source.backgroundColor = Zookee.UI.COLOR.MYPAD_BACKGROUND;
+			prefControl = e.source;
+			
+		})
+		preferenceView.add(label);
+	}
+
+	textArea.add(preferenceView);
+	
 	var title_fd = Ti.UI.createTextField({
-		top:Zookee[40],
+		top:Zookee[10],
+		hintText:L('ad_title','title:'),
 		width : Ti.UI.FILL,
 		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
 		enableReturnKey:false,
 		returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
 		softKeyboardOnFocus : Zookee.Soft_Input.SOFT_KEYBOARD_SHOW_ON_FOCUS,
 		verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM,
-		borderStyle : Ti.UI.INPUT_BORDERSTYLE_ROUNDED
+		backgroundColor:'white',
+		borderStyle : Ti.UI.INPUT_BORDERSTYLE_NONE,
+		opacity:0.85
 	});
 	
 	var description_fd = Ti.UI.createTextArea({
-		top : Zookee[120],
-		height:Zookee[80],
+		top : Zookee[10],
+		height:Zookee[100],
 		width : Ti.UI.FILL,
 		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
 		enableReturnKey:false,
 		returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
 		softKeyboardOnFocus : Zookee.Soft_Input.SOFT_KEYBOARD_SHOW_ON_FOCUS,
 		verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGNMENT_TOP,
-		borderStyle : Ti.UI.INPUT_BORDERSTYLE_ROUNDED
+		borderStyle : Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
+		opacity:0.85,
+		hintText:L('ad_desc','description:')
 	});	
-	textArea.add(Ti.UI.createLabel({
-		top:0,
-		left:0,
-		color:'white',
-		font:Zookee.FONT.NORMAL_FONT,
-		text:L('ad_title','title:')
-	}));
-	textArea.add(Ti.UI.createLabel({
-		top:Zookee[90],
-		left:0,
-		color:'white',
-		font:Zookee.FONT.NORMAL_FONT,
-		text:L('ad_desc','description:')
-	}))
+
 	textArea.add(title_fd);
+
 	textArea.add(description_fd);
 	view.add(textArea);
 	var iconArea = Ti.UI.createView({
