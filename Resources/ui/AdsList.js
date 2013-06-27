@@ -24,9 +24,9 @@ function AdsList() {
 	var buildRow = function(ad) {
 		var row = Ti.UI.createTableViewRow({
 			selectionStyle : Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
-			className:'row',
+			className : 'row',
 			ad : ad,
-			backgroundImage:Zookee.ImageURL.Background
+			backgroundImage : Zookee.ImageURL.Background
 		});
 
 		var avatar = Ti.UI.createImageView({
@@ -35,10 +35,12 @@ function AdsList() {
 			bottom : Zookee[10],
 			width : Zookee[100],
 			height : Zookee[100],
-			defaultImage : Zookee.ImageURL.Empty_Photo,
-			image : ad.photo,
 			touchEnabled : false
 		})
+		if (ad.photo)
+			avatar.image = ad.photo;
+		else
+			avatar.image = Zookee.ImageURL.Empty_Photo;
 		var title = Ti.UI.createLabel({
 			left : Zookee[120],
 			top : Zookee[10],
@@ -78,11 +80,11 @@ function AdsList() {
 	}
 
 	tableView.insertAd = function(ad) {
-		if(pre_ads.length>0)
+		if (pre_ads.length > 0)
 			tableView.insertRowBefore(0, buildRow(ad));
 		else
 			tableView.appendRow(buildRow(ad));
-			
+
 		pre_ads = [ad].concat(pre_ads);
 	}
 	for (var i = 0; i < pre_ads.length; i++) {
@@ -92,11 +94,11 @@ function AdsList() {
 
 	tableView.setData(data);
 	tableView.addEventListener('click', function(e) {
-			//delete the ad.
-			pre_ads.splice(e.index, 1);
-			Ti.App.Properties.setList('pre_ads', pre_ads);
-			tableView.deleteRow(e.index, Ti.UI.iPhone.RowAnimationStyle.LEFT);
-			Ti.App.fireEvent('update_pre_row');
+		//delete the ad.
+		pre_ads.splice(e.index, 1);
+		Ti.App.Properties.setList('pre_ads', pre_ads);
+		tableView.deleteRow(e.index, Ti.UI.iPhone.RowAnimationStyle.LEFT);
+		Ti.App.fireEvent('update_pre_row');
 	})
 	return tableView;
 };

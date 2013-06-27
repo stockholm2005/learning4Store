@@ -190,7 +190,7 @@ function NewPostWin(_mainView) {
 	view.add(textArea);
 	var iconArea = Ti.UI.createView({
 		layout : 'horizontal',
-		bottom : Zookee[8],
+		top : Zookee[10],
 		//right:Zookee[10],
 		left : '35%',
 		width : '65%',
@@ -239,7 +239,7 @@ function NewPostWin(_mainView) {
 	}));
 	iconArea.add(galleryView);
 	iconArea.add(cameraView);
-	view.add(iconArea);
+	textArea.add(iconArea);
 
 	cameraView.addEventListener('click', function(e) {
 		Ti.Media.showCamera({
