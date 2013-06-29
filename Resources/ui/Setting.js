@@ -13,7 +13,7 @@ var SystemWidth = Ti.Platform.displayCaps.platformWidth;
 function SettingPad(win, myPad) {
 	var user = Zookee.User.CurrentUser
 	var photoChanged = false;
-	var view = Ti.UI.createView({
+	var view = Ti.UI.createScrollView({
 		top : 0,
 		bottom : 0,
 		layout : 'vertical'
@@ -141,53 +141,57 @@ function SettingPad(win, myPad) {
 		height : Ti.UI.SIZE
 	})
 
-	var emailField = Ti.UI.createTextField({
+	var usernameField = Ti.UI.createTextField({
 		height : '30%',
 		left : '5%',
 		width : Ti.UI.FILL,
 		backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
-		value : user.email,
-		font : Zookee.FONT.NORMAL_FONT,
-		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
-		returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
-		borderStyle : Ti.UI.INPUT_BORDERSTYLE_NONE,
-		verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM
-	});
-	inputArea.add(emailField);
-	inputArea.add(Lines.LineWithSpace('90%'));
-
-	var userName = Ti.UI.createTextField({
-		height : '30%',
 		value : user.username,
-		left : '5%',
-		width : Ti.UI.FILL,
-		backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
-		hintText : L('username_optional'),
 		font : Zookee.FONT.NORMAL_FONT,
 		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
 		returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
 		borderStyle : Ti.UI.INPUT_BORDERSTYLE_NONE,
 		verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM
 	});
-	inputArea.add(userName);
+	inputArea.add(usernameField);
 	inputArea.add(Lines.LineWithSpace('90%'));
 
 	var phoneField = Ti.UI.createTextField({
 		height : '30%',
+		value : user.custom_fields.phone,
 		left : '5%',
-		backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
 		width : Ti.UI.FILL,
-		value:user.custom_fields.phone,
+		backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
+		hintText : L('Phone'),
 		font : Zookee.FONT.NORMAL_FONT,
 		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
 		returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
 		borderStyle : Ti.UI.INPUT_BORDERSTYLE_NONE,
 		verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM
 	});
-	if (user.phone) {
-		phoneField.value = user.phone;
+	if(user.custom_fields.phone){
+		phoneField.value=user.custom_fields.phone;
 	}
 	inputArea.add(phoneField);
+	inputArea.add(Lines.LineWithSpace('90%'));
+
+	var addressField = Ti.UI.createTextField({
+		height : '30%',
+		left : '5%',
+		backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
+		width : Ti.UI.FILL,
+		hintText:L('address','address'),
+		//value:user.custom_fields.address,
+		font : Zookee.FONT.NORMAL_FONT,
+		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
+		returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
+		borderStyle : Ti.UI.INPUT_BORDERSTYLE_NONE,
+		verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM
+	});
+	if (user.custom_fields.address) {
+		addressField.value = user.custom_fields.address;
+	}
+	inputArea.add(addressField);
 	inputArea.add(Lines.LineWithSpace('90%'));
 	background.add(inputArea);
 	background.add(rightView);
@@ -257,11 +261,14 @@ function SettingPad(win, myPad) {
 	buttons.add(logoutLabel);
 	buttons.add(logoutBtn);
 
-	userName.addEventListener('return', function() {
+	usernameField.addEventListener('return',function(){
 		phoneField.focus();
+	})
+	phoneField.addEventListener('return', function() {
+		addressField.focus();
 	});
 
-	phoneField.addEventListener('return', function(e) {
+	addressField.addEventListener('return', function(e) {
 		updateBtn.fireEvent('click');
 	});
 
@@ -270,13 +277,9 @@ function SettingPad(win, myPad) {
 		if (photoChanged) {
 			tmpUser.photo = avatar.blob;
 		}
-		if (userName.value != user.username) {
-			tmpUser.first_name = userName.value;
-			tmpUser.last_name = userName.value
-		}
-
-		if (emailField.value != user.email) {
-			tmpUser.email = emailField.value;
+		if (usernameField.value != user.username) {
+			tmpUser.first_name = usernameField.value;
+			tmpUser.last_name = usernameField.value
 		}
 
 		if (user.custom_fields) {
@@ -285,6 +288,7 @@ function SettingPad(win, myPad) {
 			tmpUser.custom_fields = {};
 		}
 		tmpUser.custom_fields.phone = phoneField.value;
+		tmpUser.custom_fields.address = addressField.value;
 		var actInd = Titanium.UI.createActivityIndicator({
 			center : {
 				x : '50%',

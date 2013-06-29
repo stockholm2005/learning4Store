@@ -21,17 +21,17 @@ Zookee = {
 	{
 		title:'list_priority',
 		content:'list_priority_content',
-		photo:''
+		photo:'/images/priority1.png'
 	},	
 	{
 		title:'area_priority',
 		content:'area_priority_content',
-		photo:''
+		photo:'/images/priority2.png'
 	},
 	{
 		title:'detail_priority',
 		content:'detail_priority_content',
-		photo:''
+		photo:'/images/priority3.png'
 	}],
 	User : {
 		CurrentUser : {},

@@ -118,12 +118,12 @@ function PeoplePad(myPad, page) {
 		segment1.font = page == 1 ? boldStyle : normalStyle;
 		segment2.color = page == 2 ? 'white' : Zookee.UI.COLOR.SEGMENT_FONT;
 		segment2.font = page == 2 ? boldStyle : normalStyle;
-		if (page == 1) {
-			addBtn.opacity = 0;
-			addBtn.touchEnabled = false;
-		}else{
+		if (page == 0) {
 			addBtn.opacity = 1;
-			addBtn.touchEnabled = true;			
+			addBtn.touchEnabled = true;
+		}else{
+			addBtn.opacity = 0;
+			addBtn.touchEnabled = false;			
 		}
 	}
 
