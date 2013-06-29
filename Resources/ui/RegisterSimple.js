@@ -170,27 +170,12 @@ function RegisterView() {
     inputArea.add(emailField);
     inputArea.add(Lines.LineWithSpace('90%'));
         
-    var userName = Ti.UI.createTextField({
+    var phoneField = Ti.UI.createTextField({
     		height:'30%',
         left : '5%',    	
         width : Ti.UI.FILL,
         backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
-        hintText : L('username_optional'),
-        font : Zookee.FONT.NORMAL_FONT,
-        keyboardType : Ti.UI.KEYBOARD_DEFAULT,
-        returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
-        borderStyle : Ti.UI.INPUT_BORDERSTYLE_NONE,
-        verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM
-    });
-    inputArea.add(userName);
-    inputArea.add(Lines.LineWithSpace('90%'));
-
-    var phoneField = Ti.UI.createTextField({
-    		height:'30%',
-        left : '5%',
-        backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
-        width : Ti.UI.FILL,
-        hintText : L('Phone'),
+        hintText : L('Phone','phone(optional)'),
         font : Zookee.FONT.NORMAL_FONT,
         keyboardType : Ti.UI.KEYBOARD_DEFAULT,
         returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
@@ -198,6 +183,21 @@ function RegisterView() {
         verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM
     });
     inputArea.add(phoneField);
+    inputArea.add(Lines.LineWithSpace('90%'));
+
+    var addressField = Ti.UI.createTextField({
+    		height:'30%',
+        left : '5%',
+        backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
+        width : Ti.UI.FILL,
+        hintText : L('address','address'),
+        font : Zookee.FONT.NORMAL_FONT,
+        keyboardType : Ti.UI.KEYBOARD_DEFAULT,
+        returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
+        borderStyle : Ti.UI.INPUT_BORDERSTYLE_NONE,
+        verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM
+    });
+    inputArea.add(addressField);
     inputArea.add(Lines.LineWithSpace('90%'));
     background.add(inputArea);
     background.add(rightView);
@@ -259,11 +259,11 @@ function RegisterView() {
 	buttons.add(loginLabel);
 	buttons.add(loginBtn);
 
-	userName.addEventListener('return', function() {
-		phoneField.focus();
+	phoneField.addEventListener('return', function() {
+		addressField.focus();
 	});
 
-	phoneField.addEventListener('return', function(e) {
+	addressField.addEventListener('return', function(e) {
 		registerBtn.fireEvent('click');
 	});
 
@@ -281,14 +281,10 @@ function RegisterView() {
         if (photoChanged) {
             tmpUser.photo = avatar.blob;
         }
-        if(userName.value.trim()==''){
         		var fullname = emailField.value.split('@')[0];
         		tmpUser.first_name = fullname;
         		tmpUser.last_name = fullname;
-        }else{
-        		tmpUser.first_name = userName.value;
-        		tmpUser.last_name = userName.value;
-        }
+
         if(Zookee.isAndroid){
         		tmpUser.password = Ti.Platform.id;
         }else{
@@ -296,6 +292,7 @@ function RegisterView() {
         }
         tmpUser.custom_fields = {};
         tmpUser.custom_fields.phone = phoneField.value;
+        tmpUser.custom_fields.address = addressField.value;
 		var actInd = Titanium.UI.createActivityIndicator({
 				center : {
 					x : '50%',

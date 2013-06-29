@@ -159,7 +159,7 @@ function Walkthrough(win) {
 			bottom : 0,
 			width : Ti.UI.FILL,
 			height : Zookee[60],
-			backgroundGradient : Zookee.UI.BackgroundGradient,
+			backgroundColor : Zookee.UI.COLOR.MYPAD_BACKGROUND,
 			bubbleParent : false
 		})
 		toolbar.add(rgBtn);

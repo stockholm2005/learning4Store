@@ -319,8 +319,16 @@ exports.resetPartyType=function(){
 };
 exports.queryParty = function(callback, failCallback, location) {
 	//TODO: construct query url like
+	var user = Zookee.User.CurrentUser;
 	if(!hasMore) return;
 	var op = "/posts/query.json?";
+		var radius = 0.00126;
+		for(var i=0,length=user.priority.length;i<length;i++){
+			if(user.priority[i].indexOf('area')>=0 && Util.isPriorityValid(user.priority[i], user.priorityStartTime[i])){
+				radius = 0.00126*3;
+				break;
+			}
+		}	
 	var filter = '';
 	if (partyType)
 		filter = '"title":"' + partyType + '",';
@@ -330,7 +338,7 @@ exports.queryParty = function(callback, failCallback, location) {
 	var areaRatio = 1;
 	// be careful, when you combine coordinates with other query conditions like
 	// title, content, tags_array, make sure put these conditions before coordinates.
-	var where = '&where={' + filter + dateFilter + '"coordinates":{"$nearSphere":[' + location.join(',') + '],"$maxDistance":0.00126}}';
+	var where = '&where={' + filter + dateFilter + '"coordinates":{"$nearSphere":[' + location.join(',') + '],"$maxDistance":'+radius+'}}';
 	var url = baseURL + op + basicParam + "&page=" + currentPartyPage + where;
 	Ti.API.info(url);
 	var xhr = Ti.Network.createHTTPClient();
