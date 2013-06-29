@@ -47,6 +47,42 @@ exports.isPriorityValid = function(priority,startTime){
 	}
 	return false;
 };
+exports.isValidPost = function(dateString){
+	var nums = dateString.split(/-|T|:/);
+	var currentTime = new Date();
+	var year = currentTime.getUTCFullYear();
+	var yearOfPost = parseFloat(nums[0]);
+	var month = currentTime.getUTCMonth() + 1;
+	var monthOfPost = parseFloat(nums[1]);
+	var hour = currentTime.getUTCHours();
+	var hourOfPost = parseFloat(nums[3]);
+	var date = currentTime.getUTCDate();
+	var dateOfPost = parseFloat(nums[2]);
+	var minutes = currentTime.getMinutes() + 1;
+	var minutesOfPost = parseFloat(nums[4]);
+	if(yearOfPost > year) return false;
+	else if(yearOfPost === year){
+		if(monthOfPost > month) return false;	
+		else if(monthOfPost === month){
+			if(dateOfPost > date) return false;
+			else if(dateOfPost === date){
+				if(hourOfPost > hour) return false;
+				else if(hourOfPost === hour){
+					if(minutesOfPost > minutes) return false;
+					else return true;
+				}else{
+					return true;
+				}
+			}else{
+				return true;
+			}
+		}else{
+			return true;
+		}
+	}else{
+		return true;
+	}
+}
 exports.postTime = function(dateString) {
 	var nums = dateString.split(/-|T|:/);
 	var currentTime = new Date();

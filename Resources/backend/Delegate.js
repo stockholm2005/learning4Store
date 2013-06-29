@@ -349,15 +349,22 @@ exports.queryParty = function(callback, failCallback, location) {
 		currentPartyPage = currentPartyPage + 1;
 		if(e.posts!=null && e.posts.length<Zookee.MaxLoadingRows) hasMore = false;
 		if (e.posts != null && e.posts.length > 0) {
+			var posts = [];
 			for (var i = 0; i < e.posts.length; i++) {
 				initializePost(e.posts[i]);
 				if(e.posts[i].ratings_summary && e.posts[i].ratings_summary['2'])
 					e.posts[i].attenders = e.posts[i].ratings_summary['2']+1;
 				else
 					e.posts[i].attenders = 1;
+
+				// in case the user fake the time to extend the priority
+				//,e.g, change the system time, the party will not be presented.				
+				if(Util.isValidPost(e.posts[i].created_at)){
+					posts.push(e.posts[i]);
+				}
 			}
 		}
-		callback(e.posts);
+		callback(posts);
 	}
 
 	xhr.onerror = function(e) {
