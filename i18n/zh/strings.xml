@@ -7,10 +7,10 @@
 	<string name="Phone">电话</string>
 	<string name="Your_faces_for_different_status">您不同状态的照片</string>
 	<string name="Register">注册</string>
-	<string name="register_implication">还不是Together的用户? 在此注册</string>
-	<string name="login_implication">已经是Together的用户? 在此登录</string>
-	<string name="logout_implication">想离开Together? 在此登出</string>
-	<string name="password_implication">您只能在一台设备上登录Together？\n如果您更换了设备，请使用密码登录。密码在您注册时或上次更换设备登录时Together发给你的邮件中</string>
+	<string name="register_implication">还不是ForTogether的用户? 在此注册</string>
+	<string name="login_implication">已经是ForTogether的用户? 在此登录</string>
+	<string name="logout_implication">想离开ForTogether? 在此登出</string>
+	<string name="password_implication">您只能在一台设备上登录ForTogether？\n如果您更换了设备，请使用密码登录。密码在您注册时或上次更换设备登录时ForTogether发给你的邮件中</string>
 	<string name="use_password">使用密码登录</string>
 	<string name="Login">登录</string>
 	<string name="Sign_Up">注册</string>
@@ -127,9 +127,9 @@
 	<string name="friend_approve_fail">好友请求批准失败</string>
 	<string name="joined_succ">您加入了聚会</string>
 	<string name="joined_fail">加入聚会不成功</string>
-	<string name="walkthrough1">当你和好朋友在一起的时候，用Together来记录美好的时光</string>
-	<string name="walkthrough2">和好朋友一起享受美好时光，而不是一个人</string>
-	<string name="walkthrough3">你创建了活动，你的好朋友就可以加入，大家一起开心吧</string>
+	<string name="walkthrough1">用ForTogether向正在发生的聚会发送广告</string>
+	<string name="walkthrough2">你创建广告，发送给周边聚会的人们</string>
+	<string name="walkthrough3">购买特定的优先权，使您的广告更加引入注意</string>
 	<string name="invitation_body">亲爱的朋友:\n 您的朋友%1$s要求您加入Together去分享他们的美好时光</string>
 	<string name="invitation_subject">来自%1$s一封邀请信</string>
 	<string name="ads_sent">已发送</string>
