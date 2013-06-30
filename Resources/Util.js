@@ -7,6 +7,42 @@ exports.postTimeForTitle = function(dateString) {
 	return nums[0] + '/' + nums[1] + '/' + nums[2];
 }
 
+exports.isPriorityValid4Party = function(partyTime,priorityStartTime){
+	var partyNums=partyTime.split(/-|T|:/);
+	var priorityNums=priorityStartTime.split(/-|T|:/);
+	var yearOfPost = partyNums[0];
+	var year = priorityNums[0];
+	var monthOfPost = partyNums[1];
+	var month = priorityNums[1];
+	var dateOfPost = partyNums[2];
+	var date = priorityNums[2];
+	var hourOfPost = partyNums[3];
+	var hour = priorityNums[3];
+	var minutesOfPost = partyNums[4];
+	var minutes = priorityNums[4];
+	if(yearOfPost < year) return false;
+	else if(yearOfPost === year){
+		if(monthOfPost < month) return false;	
+		else if(monthOfPost === month){
+			if(dateOfPost < date) return false;
+			else if(dateOfPost === date){
+				if(hourOfPost < hour) return false;
+				else if(hourOfPost === hour){
+					if(minutesOfPost < minutes) return false;
+					else return true;
+				}else{
+					return true;
+				}
+			}else{
+				return true;
+			}
+		}else{
+			return true;
+		}
+	}else{
+		return true;
+	}
+}
 exports.isPriorityValid = function(priority,startTime){
 	var nums=startTime.split(/-|T|:/);
 	var startYear = parseFloat(nums[0]);

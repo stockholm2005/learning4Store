@@ -179,6 +179,7 @@ exports.logout = function(callback, failCallback) {
 
 exports.createAd = function(post, parties, callback, failCallback) {
 	var tags = [];
+
 	for (var i = 0; i < parties.length; i++) {
 		tags.push(parties[i].id);
 	}
@@ -199,16 +200,21 @@ exports.createAd = function(post, parties, callback, failCallback) {
 	var listPriority=false;
 	var user=Zookee.User.CurrentUser;
 	for(var i=0,length=user.priority.length;i<length;i++){
-		if(user.priority[i].indexOf('list')>=0 && Util.isPriorityValid(user.priority[i],user.priorityStartTime[i])){
+		if(user.priority[i].indexOf('list')>=0 && Util.isPriorityValid(user.priority[i],user.priorityStartTime[i])
+			&& Util.isPriorityValid4Party(parties[0].created_at,user.priorityStartTime[i])){
 			listPriority = true;
 			break;
 		}
 	}
 	if(listPriority){
 		obj.custom_fields.listPriority='has';
+		// record the priority time, so the together can do some clarification that
+		// if the priorityTime doesn't equal to the ad created time, then it's a fake
+		// priority
 	}else{
 		obj.custom_fields.listPriority='';
 	}
+	
 	if (post.photo) {
 		obj.photo = Ti.Filesystem.getFile(post.photo).read();
 		var ratio = obj.photo.width / obj.photo.height;

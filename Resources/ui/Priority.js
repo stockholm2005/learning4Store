@@ -126,6 +126,8 @@ function PriorityList(win) {
 					delegate.updateUser({
 						custom_fields : {
 							priority : user.priority.concat([priorityType + e.source.buttonNames[e.index]]),
+							//TODO: when use paypal api, use the time in response instead of the local time
+							// to prevent the end user faking the system time
 							priority_startTime : user.priorityStartTime.concat([(new Date()).toISOString().split(/T/)[0] + 'T00:00:00+0000'])
 						}
 					}, function() {
