@@ -20,10 +20,10 @@ function SettingPad(win, myPad) {
 	});
 
 	var background = Ti.UI.createView({
-		backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
+		backgroundColor : 'white',
 		top : '25%',
-		left : '5%',
-		right : '5%',
+		left : 0,
+		right : 0,
 		height : SystemHeight * 0.25,
 		layout : 'horizontal',
 		horizontalWrap : false
@@ -145,7 +145,6 @@ function SettingPad(win, myPad) {
 		height : '30%',
 		left : '5%',
 		width : Ti.UI.FILL,
-		backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
 		value : user.username,
 		font : Zookee.FONT.NORMAL_FONT,
 		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
@@ -161,7 +160,6 @@ function SettingPad(win, myPad) {
 		value : user.custom_fields.phone,
 		left : '5%',
 		width : Ti.UI.FILL,
-		backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
 		hintText : L('Phone'),
 		font : Zookee.FONT.NORMAL_FONT,
 		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
@@ -178,7 +176,6 @@ function SettingPad(win, myPad) {
 	var addressField = Ti.UI.createTextField({
 		height : '30%',
 		left : '5%',
-		backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
 		width : Ti.UI.FILL,
 		hintText:L('address','address'),
 		//value:user.custom_fields.address,
@@ -201,9 +198,8 @@ function SettingPad(win, myPad) {
 		right : Zookee[5],
 		bottom : Zookee[10],
 		height : Zookee[40],
-		backgroundColor : Zookee.UI.COLOR.CONTROL_BACKGROUND,
-		backgroundSelectedColor : Zookee.UI.COLOR.MYPAD_BACKGROUND,
-		borderRadius : Zookee.UI.Border_Radius_Small
+		backgroundColor : Zookee.UI.COLOR.COLOR2,
+		backgroundSelectedColor : Zookee.UI.COLOR.MYPAD_BACKGROUND
 		//width : SystemHeight*0.15
 	});
 	rightView.add(registerBtn_bg);
@@ -239,10 +235,9 @@ function SettingPad(win, myPad) {
 
 	var logoutBtn = Ti.UI.createView({
 		left : Zookee[20],
-		borderRadius : Zookee.UI.Border_Radius_Small,
 		width : Ti.UI.SIZE,
 		height : SystemHeight * 0.05,
-		backgroundGradient : Zookee.UI.BackgroundGradient
+		backgroundColor : Zookee.UI.COLOR.COLOR3
 	});
 	var logoutBtn1 = Ti.UI.createButton({
 		title : L('Logout'),
@@ -250,9 +245,7 @@ function SettingPad(win, myPad) {
 		height : Ti.UI.FILL,
 		style : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
 		backgroundColor : 'transparent',
-		borderWidth : 0,
 		color : 'white',
-		borderRadius : Zookee.UI.Border_Radius_Small,
 		font : Zookee.FONT.SMALL_FONT
 	});
 	logoutBtn.button = logoutBtn1;
@@ -323,17 +316,7 @@ function SettingPad(win, myPad) {
 		});
 	});
 
-	//view.add(title);
-	//view.add(changeAvatar);
-	var shadow = Ti.UI.createView({
-		left : '6%',
-		width : '88%',
-		height : SystemHeight * 0.0125,
-		top : 0,
-		backgroundImage : Zookee.ImageURL.Shadow
-	});
 	view.add(background);
-	view.add(shadow);
 	view.add(buttons);
 
 	//background.add(buttons);

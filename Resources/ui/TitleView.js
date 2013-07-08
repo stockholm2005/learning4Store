@@ -8,8 +8,7 @@ exports.buildTitleView = function(win,text) {
 		height : Zookee.UI.HEIGHT_TITLE,
 		width : Ti.UI.FILL,
 		layout : 'horizontal',
-		//backgroundColor : Zookee.UI.COLOR.MYPAD_BACKGROUND
-        backgroundImage:Zookee.ImageURL.Title_Bg
+		backgroundColor : Zookee.UI.COLOR.MYPAD_BACKGROUND
 	});
 	var leftView = Ti.UI.createView({
 		left : 0,

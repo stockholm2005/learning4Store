@@ -354,8 +354,8 @@ exports.queryParty = function(callback, failCallback, location) {
 		var e = JSON.parse(this.responseText).response;
 		currentPartyPage = currentPartyPage + 1;
 		if(e.posts!=null && e.posts.length<Zookee.MaxLoadingRows) hasMore = false;
+		var posts = [];
 		if (e.posts != null && e.posts.length > 0) {
-			var posts = [];
 			for (var i = 0; i < e.posts.length; i++) {
 				initializePost(e.posts[i]);
 				if(e.posts[i].ratings_summary && e.posts[i].ratings_summary['2'])

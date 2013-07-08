@@ -158,4 +158,8 @@
 	<string name="detail_priority">详细信息优先权</string>
 	<string name="detail_priority_content">此优先权让您可以附加更多的详细信息在您推送给用户的广告中，比如说您的网站地址</string>
 	<string name="have_priority">你已有</string>
+	<string name="passcode_help">如果您设置了验证码，下次登录时您必须输入相同的验证码</string>
+	<string name="help">帮助</string>
+	<string name="save">保存</string>
+	<string name="about">关于</string>
 </resources>

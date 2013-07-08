@@ -120,7 +120,7 @@ function PartyRow(post, location) {
 			color : 'white',
 			backgroundColor : Zookee.UI.COLOR.MYPAD_BACKGROUND,
 			borderWidth : 0,
-			borderRadius : Zookee.UI.Border_Radius_Small,
+			//borderRadius : Zookee.UI.Border_Radius_Small,
 			style : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
 			center : {
 				x : '50%',

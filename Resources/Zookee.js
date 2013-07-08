@@ -212,7 +212,7 @@ Zookee = {
 			APP_BACKGROUND : '#FFFFF0',
 			ROW_BACKGROUND : '#EEEED1',
 			CONTROL_BACKGROUND : '#193221',
-			MYPAD_BACKGROUND : '#9fbc53',
+			MYPAD_BACKGROUND : '#2F4F4F',
 			MYPAD_BACKGROUND_END:'#8EBF3F',
 			TOP_STATUS : '#CD3700',
 			FONT : '#525252',
@@ -224,7 +224,11 @@ Zookee = {
 			SETTING_SEG_FONT:'#A2CD5A',
 			SHADOW_START_COLOR:'#B7B7B7',
 			SINGLE_LINE:'#CFCFCF',
-			PREFERENCE:'#b9b9b9'
+			PREFERENCE:'#b9b9b9',
+			COLOR1:'#8C5454',
+			COLOR2:'#7A378B',
+			COLOR3:'#2F4F4F',
+			COLOR4:'#9fbc53'			
 		},
 		BackgroundGradient : {
             type : 'linear',
@@ -301,7 +305,7 @@ Zookee = {
 			fontSize:22
 		},
 		SEGMENT_FONT_SELECTED:{
-			fontSize:26,
+			fontSize:22,
 			fontWeight:'bold'
 			//fontStyle:'italic'
 		},

@@ -1,6 +1,7 @@
 /**
  * @author Angela Deng
  */
+var Zookee=require('Zookee');
 
 function PopUp(okCB, opType,win) {
 	var scrollView = Ti.UI.createScrollView({
@@ -20,7 +21,7 @@ function PopUp(okCB, opType,win) {
 		width : '90%',
 		height : Ti.UI.SIZE,
 		backgroundColor : 'white',
-		borderRadius:Zookee.UI.Border_Radius_Normal,
+		//borderRadius:Zookee.UI.Border_Radius_Normal,
 		layout : 'vertical',
 		tag:'s'
 	})
@@ -30,7 +31,6 @@ function PopUp(okCB, opType,win) {
 			win.remove(scrollView);
 	})
 	var headerView = Ti.UI.createView({
-		layout : 'vertical',
 		height : Ti.UI.SIZE,
 		width : Ti.UI.FILL,
 		backgroundColor : Zookee.UI.COLOR.MYPAD_BACKGROUND,
@@ -39,14 +39,37 @@ function PopUp(okCB, opType,win) {
 	headerView.add(Ti.UI.createLabel({
 		textid : 'passcode',
 		left : Zookee[20],
-		top : Zookee[20],
-		bottom : Zookee[20],
-		height : Zookee[40],
+		top : Zookee[10],
+		bottom : Zookee[10],
+		height : Ti.UI.SIZE,
 		color : 'white',
 		font : Zookee.FONT.NORMAL_FONT,
 		tag:'s'
 	}));
-	headerView.add(Ti.UI.createView({
+	var help = Ti.UI.createLabel({
+		text:'?',
+		textAlign:'center',
+		right:Zookee[20],
+		top:Zookee[10],
+		bottom:Zookee[10],
+		width:Zookee[30],
+		height:Zookee[30],
+		borderRadius:Zookee[15],
+		borderWidth:Zookee[2],
+		borderColor:'white',
+		color:'white',
+		font:Zookee.FONT.NORMAL_FONT,
+		tag:'s'
+	})
+	help.addEventListener('click',function(e){
+		Ti.UI.createAlertDialog({
+			title:L('help'),
+			message:L('passcode_help')
+		}).show();
+	})
+	headerView.add(help);
+	container.add(headerView);
+	container.add(Ti.UI.createView({
 		left : 0,
 		right : 0,
 		top : 0,
@@ -54,7 +77,6 @@ function PopUp(okCB, opType,win) {
 		backgroundColor : Zookee.UI.COLOR.CONTROL_BACKGROUND,
 		tag:'s'
 	}))
-	container.add(headerView);
 
 	var pass_container = Ti.UI.createView({
 		top:Zookee[10],
@@ -66,7 +88,7 @@ function PopUp(okCB, opType,win) {
 	})
 	var pass_field = Ti.UI.createTextField({
 		left:Zookee[10],
-		height:Zookee[60],
+		height:Zookee[40],
 		passwordMask:true,
 		width:'60%',
 		borderStyle:Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
@@ -89,18 +111,20 @@ function PopUp(okCB, opType,win) {
 	var disable_pass_mask = Ti.UI.createView({
 		layout:'horizontal',
 		top:Zookee[10],
-		height:Ti.UI.SIZE,
+		height:Zookee[26],
 		width:Ti.UI.FILL,
 		tag:'s'
 	})
 	
 	var checkbox= Ti.UI.createView({
 		left:Zookee[10],
+		top:Zookee[2],
+		bottom:Zookee[2],
 		width:Zookee[20],
 		height:Zookee[20],
 		backgroundColor:'white',
-		borderWidth:Zookee[2],
-		borderColor:Zookee.UI.COLOR.CONTROL_BACKGROUND,
+		borderWidth:Zookee[1],
+		borderColor:Zookee.UI.COLOR.PARTY_CONTENT,
 		tag:'s'
 	})
 	
@@ -109,7 +133,9 @@ function PopUp(okCB, opType,win) {
 	disable_pass_mask.add(Ti.UI.createLabel({
 		left:Zookee[10],
 		textid:'show_char',
-		tag:'s'
+		tag:'s',
+		color:Zookee.UI.COLOR.PARTY_CONTENT,
+		font:Zookee.FONT.SMALL_FONT
 	}))
 	
 	checkbox.addEventListener('click',function(){
@@ -128,7 +154,8 @@ function PopUp(okCB, opType,win) {
 		textid : 'passcode_err',
 		color:'red',
 		opacity : 0,
-		tag:'s'
+		tag:'s',
+		font:Zookee.FONT.SMALL_FONT
 	})
 	container.add(errorLabel);
 

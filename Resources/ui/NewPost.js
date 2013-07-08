@@ -44,7 +44,7 @@ function NewPostWin(_mainView) {
 		//scrollType : 'vertical',
 		//scrollingEnabled : false,
 		//backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
-		backgroundImage : Zookee.ImageURL.Empty_Photo,
+		backgroundImage : Zookee.ImageURL.Background,
 		height : _height
 		//contentHeight : Ti.UI.FILL,
 		//layout : 'vertical'
@@ -106,50 +106,60 @@ function NewPostWin(_mainView) {
 	})
 	titleView.addView(sendButton);
 	var textArea = Ti.UI.createView({
-		top : Zookee[10],
-		left : '5%',
-		right : '5%',
+		top:0,
+		left : 0,
+		right : 0,
 		height : Ti.UI.SIZE,
 		layout:'vertical'
 	})
+
+	var pref = Ti.App.Properties.getString('pref');
 	var preferenceView = Ti.UI.createView({
 		top:0,
-		backgroundColor:'transparent',
 		width : Ti.UI.FILL,
 		height : Ti.UI.SIZE,
 		layout : 'horizontal'
 	})
-	
 	var preference = ['food', 'entertain', 'hotel', 'shopping', 'sports'];
 	var prefControl;
-	for (var i = 0; i < preference.length; i++) {
+	for (var i = 0, length = preference.length; i < length; i++) {
 		var label = Ti.UI.createLabel({
-			top : Zookee[10],
-			height:Zookee[30],
-			left : Zookee[10],
+			//top : Zookee[10],
+			//left : Zookee[10],
+			width : Ti.Platform.displayCaps.platformWidth / 5,
+			height : Zookee[40],
 			text : ' ' + L(preference[i], preference[i]) + ' ',
 			backgroundColor : Zookee.UI.COLOR.PREFERENCE,
-			borderRadius : Zookee.UI.Border_Radius_Small,
+			//borderRadius : Zookee.UI.Border_Radius_Small,
 			color : 'white',
 			tag : preference[i],
+			textAlign : 'center',
+			verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGN_CENTER,
 			font : Zookee.FONT.SMALL_FONT
 		});
+		if (preference[i] === pref) {
+			label.backgroundColor = Zookee.UI.COLOR.MYPAD_BACKGROUND;
+			//label.touchEnabled = false;
+			prefControl = label;
+		}
 		label.addEventListener('click', function(e) {
-			if(prefControl && prefControl.tag != e.source.tag){
+			if (prefControl && prefControl.tag === e.source.tag) {
 				prefControl.backgroundColor = Zookee.UI.COLOR.PREFERENCE;
-			}
-			if(prefControl && prefControl.tag === e.source.tag){
-				//click the same type to cancel the type filter
-				e.source.backgroundColor = Zookee.UI.COLOR.PREFERENCE;
 				post.type = null;
 				prefControl = null;
-				return;		
+				Ti.App.Properties.removeProperty('pref');
+			} else if (prefControl && prefControl.tag !== e.source.tag) {
+				prefControl.backgroundColor = Zookee.UI.COLOR.PREFERENCE;
+				e.source.backgroundColor = Zookee.UI.COLOR.MYPAD_BACKGROUND;
+				post.type = e.source.tag;
+				prefControl = e.source;
+				Ti.App.Properties.setString('pref',e.source.tag);
+			} else {
+				e.source.backgroundColor = Zookee.UI.COLOR.MYPAD_BACKGROUND;
+				prefControl = e.source;
+				post.type = e.source.tag;
+				Ti.App.Properties.setString('pref',e.source.tag);
 			}
-			
-			post.type = e.source.tag;
-			e.source.backgroundColor = Zookee.UI.COLOR.MYPAD_BACKGROUND;
-			prefControl = e.source;
-			
 		})
 		preferenceView.add(label);
 	}
@@ -157,14 +167,14 @@ function NewPostWin(_mainView) {
 	textArea.add(preferenceView);
 	
 	var title_fd = Ti.UI.createTextField({
-		top:Zookee[10],
 		hintText:L('ad_title','title:'),
 		width : Ti.UI.FILL,
+		height:Zookee[40],
 		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
 		enableReturnKey:false,
 		returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
 		softKeyboardOnFocus : Zookee.Soft_Input.SOFT_KEYBOARD_SHOW_ON_FOCUS,
-		verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM,
+		verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGNMENT_CENTER,
 		backgroundColor:'white',
 		borderStyle : Ti.UI.INPUT_BORDERSTYLE_NONE,
 		opacity:0.85
@@ -181,6 +191,7 @@ function NewPostWin(_mainView) {
 		verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGNMENT_TOP,
 		borderStyle : Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
 		opacity:0.85,
+		font:Zookee.FONT.NORMAL_FONT,
 		hintText:L('ad_desc','description:')
 	});	
 
@@ -200,11 +211,8 @@ function NewPostWin(_mainView) {
 		left : Zookee[12],
 		height : Zookee[50],
 		width : Zookee[50],
-		backgroundColor : 'black',
 		borderRadius : Zookee[25],
-		borderColor : 'white',
-		borderWidth : 2,
-		opacity : 0.85,
+		backgroundColor:Zookee.UI.COLOR.COLOR2,
 		zIndex : 1
 	})
 	cameraView.add(Ti.UI.createImageView({
@@ -221,11 +229,8 @@ function NewPostWin(_mainView) {
 		left : Zookee[12],
 		height : Zookee[50],
 		width : Zookee[50],
-		backgroundColor : 'black',
+		backgroundColor:Zookee.UI.COLOR.COLOR2,
 		borderRadius : Zookee[25],
-		borderColor : 'white',
-		borderWidth : 2,
-		opacity : 0.85,
 		zIndex : 1
 	})
 	galleryView.add(Ti.UI.createImageView({

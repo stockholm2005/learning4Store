@@ -158,4 +158,8 @@
 	<string name="detail_priority">Detail Priority</string>
 	<string name="detail_priority_content">With this priority, you can attach more detail information in your ad, e.g, your website. Then the user can click your ad and see more info.</string>
 	<string name="have_priority">you have</string>
+	<string name="passcode_help">if you set passcode, next time when you log in, you need to input the passcode</string>
+	<string name="help">Help</string>
+	<string name="save">save</string>
+	<string name="about">about</string>
 </resources>

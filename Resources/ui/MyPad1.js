@@ -13,7 +13,7 @@ function MyPad1(mainView) {
         top : 0,
         height : Zookee.UI.HEIGHT_MYPAD,
         width : Ti.UI.FILL,
-        backgroundImage:Zookee.ImageURL.Title_Bg
+        backgroundColor:Zookee.UI.COLOR.COLOR3
     });
     
     var that = this;
