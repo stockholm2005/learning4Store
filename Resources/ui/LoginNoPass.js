@@ -41,11 +41,10 @@ function LoginView(win) {
 		top:0
 	})
 	var background = Ti.UI.createView({
-		backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
+		backgroundColor : 'white',
 		top:'45%',
-		left : '5%',
-		right:'5%',
-		height : '10%'
+		width:Ti.UI.FILL,
+		height : Zookee[60]
 	});
 	// in case you login from another device, click here.
 	var needPassword = Ti.UI.createLabel({
@@ -85,23 +84,21 @@ function LoginView(win) {
 		//hintText : L('Password'),
 		//top : '10%',
 		width:Ti.UI.FILL,
-		backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
+		backgroundColor : 'white',
 		passwordMask : true,
 		font : Zookee.FONT.NORMAL_FONT,
 		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
 		returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
-		borderStyle : Ti.UI.INPUT_BORDERSTYLE_ROUNDED
+		borderStyle : Ti.UI.INPUT_BORDERSTYLE_NONE
 	});
 	passArea.add(passImplication);
 	passArea.add(password);
 	var username = Ti.UI.createTextField({
 		hintText : L('email') + ' ' + L('or') + ' ' + L('username'),
-		top : '10%',
-		left : SystemWidth * 0.05,
+		left : Zookee[10],
 		width : '60%',
 		height:Ti.UI.FILL,
 		verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_CENTER,
-		backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
 		font : Zookee.FONT.NORMAL_FONT,
 		keyboardType : Ti.UI.KEYBOARD_EMAIL,
 		enableReturnKey:false,
@@ -114,18 +111,17 @@ function LoginView(win) {
 
 	// the label and button take you to the register view
 	var buttons = Ti.UI.createView({
-		left : '5%',
-		right:'5%',
-		bottom:'3%',
+		left : '2%',
+		right:'2%',
+		bottom:Zookee[20],
 		height : Ti.UI.SIZE,
 		layout:'horizontal'
 	});
 
 	var loginBtn_bg = Ti.UI.createView({
 		right:0,
-		backgroundColor : Zookee.UI.COLOR.CONTROL_BACKGROUND,
+		backgroundColor : Zookee.UI.COLOR.COLOR2,
 		backgroundSelectedColor : Zookee.UI.COLOR.MYPAD_BACKGROUND,
-		borderRadius : Zookee.UI.Border_Radius_Small,
 		width : Zookee[80],
 		height : Ti.UI.FILL
 	});
@@ -152,13 +148,12 @@ function LoginView(win) {
 	})
 
 	var signupBtn = Ti.UI.createButton({
-		title : L('Sign_Up'),
+		title :' '+ L('Sign_Up','Signup')+' ',
 		left:Zookee[20],
 		style : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
 		backgroundColor : Zookee.UI.COLOR.MYPAD_BACKGROUND,
 		backgroundSelectedColor : Zookee.UI.COLOR.CONTROL_BACKGROUND,
 		color : 'white',
-		borderRadius : Zookee.UI.Border_Radius_Small,
 		width : Ti.UI.SIZE,
 		height : SystemHeight * 0.05,
 		font:Zookee.FONT.SMALL_FONT
@@ -252,22 +247,13 @@ function LoginView(win) {
 		win.open();
 	});
 
-	var shadow = Ti.UI.createView({
-		left : '6%',
-		width : '88%',
-		height : '1%',
-		top : '55%',
-		backgroundImage : Zookee.ImageURL.Shadow
-	});
-
 	setTimeout(function() {
 		background.add(username);
-	}, 300);
+	}, 150);
 
 	view.add(title);
 	view.add(scrollView);
 	scrollView.add(background);
-	scrollView.add(shadow);
 	if(!Ti.App.Properties.hasProperty('email')){
 		scrollView.add(needPassword);
 	}

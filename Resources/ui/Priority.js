@@ -78,7 +78,6 @@ function PriorityList(win) {
 				color : 'white',
 				font : Zookee.FONT.NORMAL_FONT,
 				backgroundColor : Zookee.UI.COLOR.MYPAD_BACKGROUND,
-				borderRadius : Zookee.UI.Border_Radius_Small,
 				tag : 'buy'
 			})
 			row.add(buyLabel);

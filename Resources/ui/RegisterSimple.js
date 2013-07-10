@@ -12,11 +12,7 @@ function RegisterView() {
 	var photoChanged = false;
 
 	view = Ti.UI.createView({
-		top : 0,
-		bottom : 0,
-		//backgroundColor : 'white',
-		//backgroundImage:Zookee.ImageURL.Background,
-		layout:'vertical'
+		height:Ti.UI.FILL
 	});
 
 	var title = Ti.UI.createLabel({
@@ -34,14 +30,14 @@ function RegisterView() {
 	var scrollView = Ti.UI.createScrollView({
 		left:0,
 		right:0,
-		top:0,
+		top:SystemHeight * 0.075,
+		bottom:Zookee[80],
 		layout:'vertical'
 	})
 	var background = Ti.UI.createView({
-		backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
-		top:'25%',
-		left : '5%',
-		right:'5%',
+		backgroundColor : 'white',
+		top:'40%',
+		width:Ti.UI.FILL,
 		height : SystemHeight*0.25,
 		layout:'horizontal',
 		horizontalWrap:false
@@ -159,7 +155,6 @@ function RegisterView() {
     		height:'30%',
         left : '5%',
         width : Ti.UI.FILL,
-        backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
         hintText : L('email'),
         font : Zookee.FONT.NORMAL_FONT,
         keyboardType : Ti.UI.KEYBOARD_EMAIL,
@@ -174,7 +169,6 @@ function RegisterView() {
     		height:'30%',
         left : '5%',    	
         width : Ti.UI.FILL,
-        backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
         hintText : L('Phone','phone(optional)'),
         font : Zookee.FONT.NORMAL_FONT,
         keyboardType : Ti.UI.KEYBOARD_DEFAULT,
@@ -188,7 +182,6 @@ function RegisterView() {
     var addressField = Ti.UI.createTextField({
     		height:'30%',
         left : '5%',
-        backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
         width : Ti.UI.FILL,
         hintText : L('address','address'),
         font : Zookee.FONT.NORMAL_FONT,
@@ -207,9 +200,8 @@ function RegisterView() {
 		right:Zookee[5],
 		top:Zookee[10],
 		height:Zookee[40],
-		backgroundColor : Zookee.UI.COLOR.CONTROL_BACKGROUND,
-		backgroundSelectedColor : Zookee.UI.COLOR.MYPAD_BACKGROUND,
-		borderRadius : Zookee.UI.Border_Radius_Small
+		backgroundColor : Zookee.UI.COLOR.COLOR2,
+		backgroundSelectedColor : Zookee.UI.COLOR.MYPAD_BACKGROUND
 		//width : SystemHeight*0.15
 	});
 	rightView.add(registerBtn_bg);
@@ -229,9 +221,9 @@ function RegisterView() {
 	//background.add(registerBtn_bg);
 
 	var buttons = Ti.UI.createView({
-		left : '5%',
-		right:'5%',
-		top:Zookee[140],
+		left : '2%',
+		right:'2%',
+		bottom:Zookee[20],
 		height : Ti.UI.SIZE,
 		layout:'horizontal'
 	});	
@@ -244,13 +236,12 @@ function RegisterView() {
 	})
 
 	var loginBtn = Ti.UI.createButton({
-		title : L('Login'),
+		title : ' '+L('Login','Login')+' ',
 		left:Zookee[20],
 		style : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
 		backgroundColor : Zookee.UI.COLOR.MYPAD_BACKGROUND,
 		backgroundSelectedColor : Zookee.UI.COLOR.CONTROL_BACKGROUND,
 		color : 'white',
-		borderRadius : Zookee.UI.Border_Radius_Small,
 		width : Ti.UI.SIZE,
 		height : SystemHeight * 0.05,
 		font:Zookee.FONT.SMALL_FONT
@@ -348,26 +339,10 @@ function RegisterView() {
         win.open();
     });
 
-
-	var shadow = Ti.UI.createView({
-		left : '6%',
-		width : '88%',
-		height : SystemHeight * 0.0125,
-		top : 0,
-		backgroundImage : Zookee.ImageURL.Shadow
-	});
-
 	view.add(title);
-	view.add(Ti.UI.createView({
-		width:Ti.UI.FILL,
-		top:0,
-		height:1,
-		backgroundColor:Zookee.UI.COLOR.PARTY_CONTENT
-	}))
 	view.add(scrollView);
 	scrollView.add(background);
-	scrollView.add(shadow);
-	scrollView.add(buttons);
+	view.add(buttons);
 	return view;
 };
 

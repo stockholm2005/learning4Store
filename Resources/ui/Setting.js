@@ -15,8 +15,7 @@ function SettingPad(win, myPad) {
 	var photoChanged = false;
 	var view = Ti.UI.createScrollView({
 		top : 0,
-		bottom : 0,
-		layout : 'vertical'
+		bottom : 0
 	});
 
 	var background = Ti.UI.createView({
@@ -208,12 +207,13 @@ function SettingPad(win, myPad) {
 			x : '50%',
 			y : '50%'
 		},
+		title:L('Update','Update'),
 		style : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
 		//backgroundColor : Zookee.UI.COLOR.MYPAD_BACKGROUND,
 		backgroundSelectedColor : Zookee.UI.COLOR.MYPAD_BACKGROUND,
-		width : Zookee[40],
+		width : Ti.UI.FILL,
 		height : Zookee[40],
-		image : Zookee.ImageURL.Send
+		font:Zookee.FONT.SMALL_FONT
 	});
 	registerBtn_bg.add(updateBtn);
 	//background.add(registerBtn_bg);
@@ -221,7 +221,7 @@ function SettingPad(win, myPad) {
 	var buttons = Ti.UI.createView({
 		left : '5%',
 		right : '5%',
-		top : Zookee[140],
+		bottom : Zookee[20],
 		height : Ti.UI.SIZE,
 		layout : 'horizontal'
 	});

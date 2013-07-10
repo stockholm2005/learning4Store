@@ -169,6 +169,10 @@ exports.logout = function(callback, failCallback) {
 			var ImageDelegate = require('backend/ImageDelegate');
 			var imageDelegate = new ImageDelegate();
 			imageDelegate.clearAll();
+			Ti.App.Properties.removeProperty('sessionid');
+			Ti.App.Properties.removeProperty('password');
+			Ti.App.Properties.removeProperty('pref');
+			Ti.App.Properties.removeProperty('pre_ads');
 			callback();
 		} else {
 			Util.handleError(e);
@@ -316,13 +320,6 @@ exports.resetHasMore = function(){
 	hasMore = true;
 };
 
-var partyType;
-exports.setPartyType = function(type){
-	partyType = type;
-};
-exports.resetPartyType=function(){
-	partyType=null;
-};
 exports.queryParty = function(callback, failCallback, location) {
 	//TODO: construct query url like
 	var user = Zookee.User.CurrentUser;
@@ -336,8 +333,8 @@ exports.queryParty = function(callback, failCallback, location) {
 			}
 		}	
 	var filter = '';
-	if (partyType)
-		filter = '"title":"' + partyType + '",';
+	if (Ti.App.Properties.hasProperty('pref'))
+		filter = '"title":"' + Ti.App.Properties.getString('pref') + '",';
 	var dateString = (new Date()).toISOString().split(/T/)[0]+'T00:00:00+0000';
 	var dateFilter = '"created_at":{"$gt":"'+dateString+'"},'
 	// according to user's priority, increase the search area
@@ -356,7 +353,7 @@ exports.queryParty = function(callback, failCallback, location) {
 		if(e.posts!=null && e.posts.length<Zookee.MaxLoadingRows) hasMore = false;
 		var posts = [];
 		if (e.posts != null && e.posts.length > 0) {
-			for (var i = 0; i < e.posts.length; i++) {
+			for (var i = 0,l=e.posts.length; i < l; i++) {
 				initializePost(e.posts[i]);
 				if(e.posts[i].ratings_summary && e.posts[i].ratings_summary['2'])
 					e.posts[i].attenders = e.posts[i].ratings_summary['2']+1;

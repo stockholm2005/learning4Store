@@ -109,7 +109,7 @@ function NewPostWin(_mainView) {
 		top:0,
 		left : 0,
 		right : 0,
-		height : Ti.UI.SIZE,
+		height : '90%',
 		layout:'vertical'
 	})
 
@@ -182,7 +182,7 @@ function NewPostWin(_mainView) {
 	
 	var description_fd = Ti.UI.createTextArea({
 		top : Zookee[10],
-		height:Zookee[100],
+		height:'50%',
 		width : Ti.UI.FILL,
 		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
 		enableReturnKey:false,
