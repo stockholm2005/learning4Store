@@ -17,6 +17,7 @@ var Zookee = require('Zookee');
 
 var mainView;
 Zookee.CurrentPage = 0;
+setTimeout(function(){
 if (Ti.App.Properties.hasProperty('email')) {
 	var sid = Ti.App.Properties.getString('sessionid');	
 	if(sid) {
@@ -70,6 +71,8 @@ if (Ti.App.Properties.hasProperty('email')) {
     win.add(walkThrough);
     win.open();
 }
+	
+},1500);
 
 
 
