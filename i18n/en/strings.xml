@@ -161,5 +161,4 @@
 	<string name="passcode_help">if you set passcode, next time when you log in, you need to input the passcode</string>
 	<string name="help">Help</string>
 	<string name="save">save</string>
-	<string name="about">about</string>
 </resources>

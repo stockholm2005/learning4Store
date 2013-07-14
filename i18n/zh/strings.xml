@@ -161,5 +161,4 @@
 	<string name="passcode_help">如果您设置了验证码，下次登录时您必须输入相同的验证码</string>
 	<string name="help">帮助</string>
 	<string name="save">保存</string>
-	<string name="about">关于</string>
 </resources>
