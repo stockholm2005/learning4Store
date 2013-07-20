@@ -316,8 +316,11 @@ exports.setNearPartyPage = function(index) {
 }
 
 var hasMore = true;
-exports.resetHasMore = function(){
-	hasMore = true;
+exports.getHasMore = function(){
+	return hasMore;
+};
+exports.setHasMore = function(_hasMore){
+	hasMore = _hasMore;
 };
 
 exports.queryParty = function(callback, failCallback, location) {
