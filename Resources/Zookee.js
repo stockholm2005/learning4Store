@@ -78,7 +78,7 @@ Zookee = {
 	},
 	MaxHttpRequests : 5,
 
-	MaxLoadingRows : 10,
+	MaxLoadingRows : 20,
 	
 	MediaPlayer:null,
 

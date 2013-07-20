@@ -2,11 +2,12 @@
  * @author kent hao
  */
 var Zookee = require('Zookee');
-var Util = require('Util');
-var delegate = require('backend/Delegate');
-var PopUp = require('ui/PopUp');
-var SystemWidth = Ti.Platform.displayCaps.platformWidth;
-var SystemHeight = Ti.Platform.displayCaps.platformHeight;
+	Util = require('Util'),
+	delegate = require('backend/Delegate'),
+	PopUp = require('ui/PopUp'),
+	SystemWidth = Ti.Platform.displayCaps.platformWidth,
+	SystemHeight = Ti.Platform.displayCaps.platformHeight,
+	preferenceView = require('ui/Preference');
 
 function LoginView(win) {
 	view = Ti.UI.createView({
@@ -201,17 +202,47 @@ function LoginView(win) {
 			win1.backClicked = 0;
 			Zookee.currentWindow = win1;
 
-			var MainView = require('ui/MainView').MainView;
-
-			mainView = new MainView(win1);
-			win1.add(mainView.view);
 			win1.addEventListener('android:back', function() {
 				Util.showExitInfo(win1);
 			})
 			win1.open();
 			actInd.hide();
-			mainView.refresh();
+			var mask = Ti.UI.createView({
+				width:Ti.UI.FILL,
+				height:Ti.UI.FILL,
+				backgroundColor:'black',
+				opacity:0.85
+			})
+			win1.add(mask);
+			mask.add(Ti.UI.createLabel({
+				text:L('what_u_provide','What kind of service you provide?'),
+				top:'40%',
+				color:'white',
+				font:Zookee.FONT.NORMAL_FONT
+			}))
+			var pref = new preferenceView({
+				top:'50%',
+				width:Zookee[60],
+				height:Ti.UI.SIZE
+			},function(){
+				pref.animate({
+					width:Zookee[60],
+					duration:300
+				});
+				setTimeout(function(){
+					win1.remove(mask);
+            			var MainView = require('ui/MainView').MainView;
 
+            			mainView = new MainView(win1);
+            			win1.add(mainView.view);
+					mainView.refresh();
+				},300);
+			});
+			mask.add(pref);
+			pref.animate({
+				width :Ti.Platform.displayCaps.platformWidth,
+				duration : 300
+			});
 		}, function() {
 			actInd.hide();
 			loginBtn_bg.remove(actInd)

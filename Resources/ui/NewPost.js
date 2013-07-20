@@ -109,7 +109,7 @@ function NewPostWin(_mainView) {
 		top:0,
 		left : 0,
 		right : 0,
-		height : '90%',
+		height : Ti.UI.FILL,
 		layout:'vertical'
 	})
 

@@ -1,12 +1,13 @@
 /**
  * @author kent hao
  */
-var Zookee = require('Zookee');
-var Util = require('Util');
-var Lines = require('ui/Lines');
-var delegate = require('backend/Delegate');
-var SystemWidth = Ti.Platform.displayCaps.platformWidth;
-var SystemHeight = Ti.Platform.displayCaps.platformHeight;
+var Zookee = require('Zookee'),
+	Util = require('Util'),
+	Lines = require('ui/Lines'),
+	delegate = require('backend/Delegate'),
+	preferenceView = require('ui/Preference'),
+	SystemWidth = Ti.Platform.displayCaps.platformWidth,
+	SystemHeight = Ti.Platform.displayCaps.platformHeight;
 
 function RegisterView() {
 	var photoChanged = false;
@@ -311,14 +312,46 @@ function RegisterView() {
             });
 			Zookee.currentWindow = win1;
             win1.open();
-            var MainView = require('ui/MainView').MainView;
-
-            mainView = new MainView(win1);
-            win1.add(mainView.view);
             win1.addEventListener('android:back', function() {
                 Util.showExitInfo(win1);
             })
-            mainView.refresh();
+			var mask = Ti.UI.createView({
+				width:Ti.UI.FILL,
+				height:Ti.UI.FILL,
+				backgroundColor:'black',
+				opacity:0.85
+			})
+			win1.add(mask);
+			mask.add(Ti.UI.createLabel({
+				text:L('what_u_provide','What kind of service you provide?'),
+				top:'40%',
+				color:'white',
+				font:Zookee.FONT.NORMAL_FONT
+			}))
+			var pref = new preferenceView({
+				top:'50%',
+				width:Zookee[60],
+				height:Ti.UI.SIZE
+			},function(){
+				pref.animate({
+					width:Zookee[60],
+					duration:300
+				});
+				setTimeout(function(){
+					win1.remove(mask);
+            			var MainView = require('ui/MainView').MainView;
+
+            			mainView = new MainView(win1);
+            			win1.add(mainView.view);
+					mainView.refresh();
+				},300);
+			});
+			mask.add(pref);
+			pref.animate({
+				width :Ti.Platform.displayCaps.platformWidth,
+				duration : 300
+			});
+            //mainView.refresh();
         }, function() {
             actInd.hide();
             registerBtn_bg.remove(actInd);

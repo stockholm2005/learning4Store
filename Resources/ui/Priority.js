@@ -1,8 +1,7 @@
 /**
  * @author Hao, Kent
  */
-var Zookee = require('Zookee');
-var Util = require('Util');
+var Zookee = require('Zookee'), Util = require('Util'), StoreKit = require('ui/StoreKit');
 
 function PriorityList(win) {
 	var user = Zookee.User.CurrentUser;
@@ -62,8 +61,8 @@ function PriorityList(win) {
 		})
 
 		var showBuy = true;
-		for(var i=0,length=user.priority.length;i<length;i++){
-			if(user.priority[i].indexOf(priority.title)>=0 && Util.isPriorityValid(user.priority[i], user.priorityStartTime[i])){
+		for (var i = 0, length = user.priority.length; i < length; i++) {
+			if (user.priority[i].indexOf(priority.title) >= 0 && Util.isPriorityValid(user.priority[i], user.priorityStartTime[i])) {
 				showBuy = false;
 				break;
 			}
@@ -81,18 +80,18 @@ function PriorityList(win) {
 				tag : 'buy'
 			})
 			row.add(buyLabel);
-		}else{
+		} else {
 			var buyLabel = Ti.UI.createLabel({
 				top : Zookee[10],
 				right : Zookee[10],
 				height : Ti.UI.SIZE,
-				text : ' '+L('have_priority','have it')+' ',
+				text : ' ' + L('have_priority', 'have it') + ' ',
 				color : Zookee.UI.COLOR.PARTY_CONTENT,
 				font : Zookee.FONT.NORMAL_FONT,
 				backgroundColor : 'transparent',
 				borderRadius : Zookee.UI.Border_Radius_Small
 			})
-			row.add(buyLabel);			
+			row.add(buyLabel);
 		}
 		row.add(avatar);
 		row.add(title);
@@ -121,21 +120,25 @@ function PriorityList(win) {
 					actInd = Util.actIndicator(L('buying', 'buying'), win, true);
 					actInd.show();
 					// hide indicator, update user priority
-					var delegate = require('backend/Delegate');
-					delegate.updateUser({
-						custom_fields : {
-							priority : user.priority.concat([priorityType + e.source.buttonNames[e.index]]),
-							//TODO: when use paypal api, use the time in response instead of the local time
-							// to prevent the end user faking the system time
-							priority_startTime : user.priorityStartTime.concat([(new Date()).toISOString().split(/T/)[0] + 'T00:00:00+0000'])
-						}
-					}, function() {
-						buyLabel.backgroundColor = 'transparent';
-						buyLabel.color=Zookee.UI.COLOR.PARTY_CONTENT;
-						buyLabel.text = ' '+L('have_priority','have it')+' ';
-						actInd.hide();
-					}, function() {
-						actInd.hide();
+					StoreKit.requestProduct('com.zookees.learning4store.detail_priority_month', function(product) {
+						StoreKit.purchaseProduct(product, function() {
+							var delegate = require('backend/Delegate');
+							delegate.updateUser({
+								custom_fields : {
+									priority : user.priority.concat([priorityType + e.source.buttonNames[e.index]]),
+									//TODO: when use paypal api, use the time in response instead of the local time
+									// to prevent the end user faking the system time
+									priority_startTime : user.priorityStartTime.concat([(new Date()).toISOString().split(/T/)[0] + 'T00:00:00+0000'])
+								}
+							}, function() {
+								buyLabel.backgroundColor = 'transparent';
+								buyLabel.color = Zookee.UI.COLOR.PARTY_CONTENT;
+								buyLabel.text = ' ' + L('have_priority', 'have it') + ' ';
+								actInd.hide();
+							}, function() {
+								actInd.hide();
+							})
+						});
 					})
 					setTimeout(function() {
 						actInd.hide();
