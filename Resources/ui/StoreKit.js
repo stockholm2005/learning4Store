@@ -48,19 +48,10 @@ exports.requestProduct = function(identifier, success) {
  * Purchases a product.
  * @param product A Ti.Storekit.Product (hint: use Storekit.requestProducts to get one of these!).
  */
+var succ;
 exports.purchaseProduct = function(product,succCB) {
-    Storekit.purchase(product, function (evt) {
-        switch (evt.state) {
-            case Storekit.FAILED:
-                alert('ERROR: Buying failed!');
-                break;
-            case Storekit.PURCHASED:
-            case Storekit.RESTORED:
-                markProductAsPurchased(product.identifier);
-                succCB();
-                break;
-        }
-    });
+	succ = succCB;
+    Storekit.purchase(product, 1);
 }
  
 /**
@@ -78,8 +69,18 @@ Storekit.addEventListener('restoredCompletedTransactions', function (evt) {
     }
     else {
         for (var i = 0; i < evt.transactions.length; i++) {
-            markProductAsPurchased(evt.transactions[i].identifier);
+            exports.markProductAsPurchased(evt.transactions[i].identifier);
         }
         alert('Restored ' + evt.transactions.length + ' purchases!');
+    }
+});
+
+Storekit.addEventListener('transactionState', function (evt) {
+    if (evt.state == Storekit.PURCHASED){
+        alert(" thanks for buy");
+        exports.markProductAsPurchased(evt.productIdentifier);
+        succ(evt.date); 
+    }else if(evt.state === Storekit.FAILED){
+    		alert(evt.message);
     }
 });

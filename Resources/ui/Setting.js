@@ -329,6 +329,11 @@ function SettingPad(win, myPad) {
 		delegate.logout(function() {
 			Ti.App.Properties.removeProperty('password');
 			Ti.App.Properties.removeProperty('User');
+			for(var i=0,length = Zookee.Priorities.length;i<length;i++){
+				for(var j=0,l=Zookee.Priorities[i].identifiers.length;i<l;i++){
+					Ti.App.Properties.removeProperty('Purchased-'+Zookee.Priorities[i].identifiers[j]);
+				}
+			}
 			Zookee.sentParties.release();
 			Zookee.User.setUser({});
 			Zookee.isLogin = false;

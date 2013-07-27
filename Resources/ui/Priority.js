@@ -105,6 +105,7 @@ function PriorityList(win) {
 	tableView.setData(data);
 	tableView.addEventListener('click', function(e) {
 		//buy priority
+		var _e = e;
 		if (e.source.tag === 'buy') {
 			var priorityType = e.row.priority.title;
 			var buyLabel = e.source;
@@ -120,15 +121,15 @@ function PriorityList(win) {
 					actInd = Util.actIndicator(L('buying', 'buying'), win, true);
 					actInd.show();
 					// hide indicator, update user priority
-					StoreKit.requestProduct('com.zookees.learning4store.detail_priority_month', function(product) {
-						StoreKit.purchaseProduct(product, function() {
+					StoreKit.requestProduct(_e.row.priority.identifiers[e.index], function(product) {
+						StoreKit.purchaseProduct(product, function(date) {
 							var delegate = require('backend/Delegate');
 							delegate.updateUser({
 								custom_fields : {
 									priority : user.priority.concat([priorityType + e.source.buttonNames[e.index]]),
 									//TODO: when use paypal api, use the time in response instead of the local time
 									// to prevent the end user faking the system time
-									priority_startTime : user.priorityStartTime.concat([(new Date()).toISOString().split(/T/)[0] + 'T00:00:00+0000'])
+									priority_startTime : user.priorityStartTime.concat([date.toISOString()])
 								}
 							}, function() {
 								buyLabel.backgroundColor = 'transparent';

@@ -14,7 +14,7 @@
     <property name="acs-oauth-secret-development" type="string">HphLwovnhbdT16crhhQ1jZFfSDIvLaYl</property>
     <property name="acs-oauth-key-development" type="string">wCfOUkn48HR0a7DlRrNkgwdPIze6bDlL</property>
     <property name="acs-api-key-development" type="string">ehsqa5V6pyeQ6chQ5lbkFkCM0WiXBe4P</property>
-    <id>com.zookees.learning4Store</id>
+    <id>com.zookees.learning4store</id>
     <name>ForTogether</name>
     <version>1.0</version>
     <publisher>Angela</publisher>
