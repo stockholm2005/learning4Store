@@ -178,9 +178,8 @@ exports.createAd = function(post, parties, callback, failCallback) {
 			phone:Zookee.User.CurrentUser.custom_fields.phone
 		}
 	};
-	if(post.type){
-		obj.custom_fields.type=post.type;
-	}
+	obj.custom_fields.type=Ti.App.Properties.getString('pref');
+	
 	var listPriority=false;
 	var user=Zookee.User.CurrentUser;
 	for(var i=0,length=user.priority.length;i<length;i++){
