@@ -94,9 +94,9 @@ function PartyRow(post, location) {
 	};
 	var distance = Util.getDistance(location, postLoc);
 	if (distance < 500) {
-		whereLabel.text = '(' + distance.toFixed(0) + L('m') + ')' + text;
+		whereLabel.text = '(' + distance.toFixed(0) + L('m','m') + ')' + text;
 	} else {
-		whereLabel.text = '(' + (distance / 1000).toFixed(1) + L('km') + ')' + text;
+		whereLabel.text = '(' + (distance / 1000).toFixed(1) + L('km','km') + ')' + text;
 	}
 	view.add(whereLabel);
 

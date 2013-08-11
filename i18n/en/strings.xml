@@ -127,7 +127,7 @@
 	<string name="friend_approve_fail">request approved fail</string>
 	<string name="joined_succ">you joined the party</string>
 	<string name="joined_fail">you failed to join</string>
-	<string name="walkthrough1">Use "ForTogether" to deliver your ad to the parties which are happening in "Together"</string>
+	<string name="walkthrough1">Use "ForTogether" to deliver your ad to the parties which are happening in "OurTime"</string>
 	<string name="walkthrough3">Buy the specific priority, make your ads more visible in the parties</string>
 	<string name="walkthrough2">You create ads, send them to the parties around</string>
 	<string name="invitation_body">hi friend:\n your friend %1$s is inviting you to join Together to enjoy their great moments</string>
@@ -161,4 +161,5 @@
 	<string name="passcode_help">if you set passcode, next time when you log in, you need to input the passcode</string>
 	<string name="help">Help</string>
 	<string name="save">save</string>
+	<string name="what_u_provide">What kind of service you provide?</string>
 </resources>

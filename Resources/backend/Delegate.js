@@ -33,6 +33,9 @@ exports.createUser = function(user, callback, failCallback) {
 	Cloud.Users.create(obj, function(e) {
 		if (e.success) {
 			Ti.App.Properties.setString('sessionid', e.meta.session_id);
+			var obj=Ti.App.Properties.getObject('password') || {};
+			obj[user.email]=user.password;
+			Ti.App.Properties.setObject('password', obj);
 			Cloud.Emails.send({
 				template : 'Register',
 				recipients : user.email,
@@ -58,43 +61,15 @@ exports.createUser = function(user, callback, failCallback) {
 
 };
 
-var getInvitations = function(email, callback) {
-	Cloud.Posts.query({
-		page : 1,
-		per_page : 60,
-		where : {
-			title : {
-				'$in' : [email]
-			},
-			tags_array : {
-				'$in' : ['invitation']
-			}
-		}
-	}, function(e) {
-		callback();
-		if (e.success) {
-			if (e.posts && e.posts.length > 0) {
-				var friends = [];
-				for (var i = 0; i < e.posts.length; i++) {
-					friends.push(e.posts[i].user.id);
-				}
-				this.addFriend(friends.join(','), callback);
-			}
-		} else {
-			callback();
-		}
-	});
-};
-
-exports.login = function(user, callback, failCallback) {
-	if (Zookee.PASSCODE_ENABLED && !user.password) {
-		if (Zookee.isAndroid)
-			user.password = Ti.Platform.id;
-		else
-			user.password = Ti.Platform.id.substr(0, 20);
+exports.login = function(user, callback, failCallback,tryAgain) {
+	var resetPassword = false;
+	if (!user.password) {
+		var obj = Ti.App.Properties.getObject('password');
+		if(obj && obj[user.email])
+			user.password = obj[user.email];
 	} else {
 		// user login from a different device
-		Zookee.resetPassword = true;
+		resetPassword = true;
 	}
 	Cloud.Users.login({
 		login : user.email,
@@ -102,10 +77,11 @@ exports.login = function(user, callback, failCallback) {
 	}, function(e) {
 		if (e.success) {
 			Ti.App.Properties.setString('sessionid', e.meta.session_id);
+			Zookee.isLogin=true;
 			initializeUser(e.users[0]);
 			var user = e.users[0];
 			Zookee.User.setUser(user);
-			var password = Zookee.isAndroid ? Ti.Platform.id : Ti.Platform.id.substr(0, 20);
+			var password = Util.randomUUID();
 			if (Zookee.resetPassword) {
 				Cloud.Users.update({
 					password : password,
@@ -126,8 +102,12 @@ exports.login = function(user, callback, failCallback) {
 			callback();
 			//queryEmotions(e.users[0], callback, failCallback);
 		} else {
-			Util.handleError(e);
-			failCallback();
+			if(tryAgain)
+				exports.login(user, callback, failCallback);
+			else{
+				Util.handleError(e);
+				failCallback();
+			}
 		}
 	});
 };
@@ -774,7 +754,7 @@ exports.subscribe = function(channel) {
 					var dialog = Ti.UI.createAlertDialog({
 						cancel : 1,
 						buttonNames : ['approve', 'cancel'],
-						message : L('request_be_friend'),
+						message : L('request_be_friend','request to be your friend'),
 						title : friend.username
 					});
 					dialog.addEventListener('click', function(e) {
@@ -801,9 +781,9 @@ exports.subscribe = function(channel) {
 					});
 					dialog.show();
 				} else if (e.data.party) {
-					Util.showStatus(Zookee.currentWindow, e.data.party.user.username + ' ' + L('create_party'));
+					Util.showStatus(Zookee.currentWindow, e.data.party.user.username + ' ' + L('create_party','create one party'));
 				} else if (e.data.approve) {
-					Util.showStatus(Zookee.currentWindow, e.data.approve.user.username + ' ' + L('request_approve'));
+					Util.showStatus(Zookee.currentWindow, e.data.approve.user.username + ' ' + L('request_approve',' has approved your request '));
 					user.friends.push(e.data.approve.user);
 					Zookee.User.setUser(user);
 				}
@@ -918,9 +898,9 @@ if (Ti.Platform.osname === 'android') {
 			});
 			dialog.show();
 		} else if (obj.party) {
-			Util.showStatus(Zookee.currentWindow, obj.party.user.username + ' ' + L('create_party'));
+			Util.showStatus(Zookee.currentWindow, obj.party.user.username + ' ' + L('create_party','create one party'));
 		} else if (obj.approve) {
-			Util.showStatus(Zookee.currentWindow, obj.approve.user.username + ' ' + L('request_approve'));
+			Util.showStatus(Zookee.currentWindow, obj.approve.user.username + ' ' + L('request_approve',' has approved your request '));
 			user.friends.push(obj.approve.user);
 			Zookee.User.setUser(user);
 		}

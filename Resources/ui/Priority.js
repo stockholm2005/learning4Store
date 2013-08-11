@@ -2,14 +2,17 @@
  * @author Hao, Kent
  */
 var Zookee = require('Zookee'), Util = require('Util'), StoreKit = require('ui/StoreKit');
+var TitleView = require('ui/TitleView');
 
 function PriorityList(win) {
 	var user = Zookee.User.CurrentUser;
 	var data = [];
+	var titleView = TitleView.buildTitleView(win,L('my_priority','Priority'));
 	var tableView = Ti.UI.createTableView({
 		data : data,
 		//top : Zookee[60],
 		//bottom:0,
+		bottom:0,
 		left : 0,
 		right : 0,
 		allowsSelection : true,
@@ -112,7 +115,7 @@ function PriorityList(win) {
 			var alertDialog = Ti.UI.createAlertDialog({
 				cancel : 3,
 				buttonNames : [L('month_priority'), L('quarter_priority'), L('year_priority'), L('cancel')],
-				title : L('buy') + ' ' + L(e.row.priority.title)
+				title : L('buy') + ' ' + L(e.row.priority.title,e.row.priority.title)
 			});
 			alertDialog.addEventListener('click', function(e) {
 				if (e.index === e.source.cancel) {
@@ -149,7 +152,11 @@ function PriorityList(win) {
 			alertDialog.show();
 		}
 	})
-	return tableView;
+	win.add(titleView);
+	win.add(tableView);
+	win.open({
+		modal:true
+	})	
 };
 
 module.exports = PriorityList;

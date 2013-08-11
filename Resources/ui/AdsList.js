@@ -2,9 +2,27 @@
  * @author Hao, Kent
  */
 var Zookee = require('Zookee');
+var TitleView = require('ui/TitleView');
+var NewPostWin = require('ui/NewPost');
 
-function AdsList() {
+function AdsList(win) {
 	var data = [];
+	var titleView = TitleView.buildTitleView(win,L('my_ad','My Ads'));
+	var addBtn = Ti.UI.createButton({
+		backgroundSelectedColor : Zookee.UI.COLOR.CONTROL_BACKGROUND,
+		image:Zookee.ImageURL.Add,
+		width : Zookee[40],
+		height : Zookee[40],
+		style : Ti.UI.iPhone.SystemButtonStyle.PLAIN
+	})
+
+	titleView.addView(addBtn);
+	addBtn.addEventListener('click', function() {
+			var win = new NewPostWin(tableView);
+			win.open({
+				modal : true
+			});
+	})
 	var tableView = Ti.UI.createTableView({
 		data : data,
 		//top : Zookee[60],
@@ -100,7 +118,12 @@ function AdsList() {
 		tableView.deleteRow(e.index, Ti.UI.iPhone.RowAnimationStyle.LEFT);
 		Ti.App.fireEvent('update_pre_row');
 	})
-	return tableView;
+	win.add(titleView);
+	win.add(tableView);
+
+	win.open({
+		modal:true
+	})
 };
 
 module.exports = AdsList;

@@ -7,14 +7,17 @@ var delegate = require('backend/Delegate');
 var Lines = require('ui/Lines');
 var LoginViewNoPass = require('ui/LoginNoPass');
 var ImageView = require('ui/ImageView');
-var PopUp = require('ui/PopUp');
 var SystemHeight = Ti.Platform.displayCaps.platformHeight;
 var SystemWidth = Ti.Platform.displayCaps.platformWidth;
+var TitleView = require('ui/TitleView');
+
 function SettingPad(win, myPad) {
 	var user = Zookee.User.CurrentUser
 	var photoChanged = false;
+	var titleView = TitleView.buildTitleView(win,L('profile','Profile'));
+	win.add(titleView);
 	var view = Ti.UI.createScrollView({
-		top : 0,
+		top : Zookee.UI.HEIGHT_TITLE,
 		bottom : 0
 	});
 
@@ -159,7 +162,7 @@ function SettingPad(win, myPad) {
 		value : user.custom_fields.phone,
 		left : '5%',
 		width : Ti.UI.FILL,
-		hintText : L('Phone'),
+		hintText : L('Phone','Phone'),
 		font : Zookee.FONT.NORMAL_FONT,
 		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
 		returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
@@ -218,41 +221,6 @@ function SettingPad(win, myPad) {
 	registerBtn_bg.add(updateBtn);
 	//background.add(registerBtn_bg);
 
-	var buttons = Ti.UI.createView({
-		left : '5%',
-		right : '5%',
-		bottom : Zookee[20],
-		height : Ti.UI.SIZE,
-		layout : 'horizontal'
-	});
-	var logoutLabel = Ti.UI.createLabel({
-		left : '5%',
-		textid : 'logout_implication',
-		font : Zookee.FONT.SMALL_FONT_ITALIC,
-		color : Zookee.UI.COLOR.PARTY_CONTENT,
-		width : Ti.UI.SIZE
-	})
-
-	var logoutBtn = Ti.UI.createView({
-		left : Zookee[20],
-		width : Ti.UI.SIZE,
-		height : SystemHeight * 0.05,
-		backgroundColor : Zookee.UI.COLOR.COLOR3
-	});
-	var logoutBtn1 = Ti.UI.createButton({
-		title : L('Logout'),
-		width : Ti.UI.FILL,
-		height : Ti.UI.FILL,
-		style : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-		backgroundColor : 'transparent',
-		color : 'white',
-		font : Zookee.FONT.SMALL_FONT
-	});
-	logoutBtn.button = logoutBtn1;
-	logoutBtn.add(logoutBtn1);
-
-	buttons.add(logoutLabel);
-	buttons.add(logoutBtn);
 
 	usernameField.addEventListener('return',function(){
 		phoneField.focus();
@@ -317,7 +285,67 @@ function SettingPad(win, myPad) {
 	});
 
 	view.add(background);
-	view.add(buttons);
+	var pref = Ti.App.Properties.getString('pref');
+	var implication = Ti.UI.createLabel({
+		bottom:Zookee[100],
+		text:L('what_u_provide','What kind of service you provide?'),
+		color:Zookee.UI.COLOR.COLOR3,
+		font:Zookee.FONT.NORMAL_FONT
+	})
+	var preferenceView = Ti.UI.createView({
+		bottom:Zookee[50],
+		width : Ti.UI.FILL,
+		height : Ti.UI.SIZE,
+		backgroundColor:'white',
+		layout : 'horizontal'
+	})
+	var preference = ['food', 'entertain', 'hotel', 'shopping', 'sports'];
+	var prefControl;
+	for (var i = 0, length = preference.length; i < length; i++) {
+		var label = Ti.UI.createLabel({
+			//top : Zookee[10],
+			//left : Zookee[10],
+			width : Ti.Platform.displayCaps.platformWidth / 5,
+			height : Zookee[40],
+			text : ' ' + L(preference[i], preference[i]) + ' ',
+			//backgroundColor : Zookee.UI.COLOR.PREFERENCE,
+			//borderRadius : Zookee.UI.Border_Radius_Small,
+			color : Zookee.UI.COLOR.PARTY_CONTENT,
+			tag : preference[i],
+			textAlign : 'center',
+			verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGN_CENTER,
+			font : Zookee.FONT.SMALL_FONT
+		});
+		if (preference[i] === pref) {
+			label.backgroundColor = Zookee.UI.COLOR.MYPAD_BACKGROUND;
+			//label.touchEnabled = false;
+			prefControl = label;
+		}
+		label.addEventListener('click', function(e) {
+			if (prefControl && prefControl.tag === e.source.tag) {
+				return;
+			} else if (prefControl && prefControl.tag !== e.source.tag) {
+				prefControl.color=Zookee.UI.COLOR.PARTY_CONTENT;
+				prefControl.backgroundColor = 'white';
+				e.source.backgroundColor = Zookee.UI.COLOR.MYPAD_BACKGROUND;
+				e.source.color='white';
+				prefControl = e.source;
+				Ti.App.Properties.setString('pref',e.source.tag);
+			} else {
+				prefControl.color=Zookee.UI.COLOR.PARTY_CONTENT;
+				e.source.backgroundColor = Zookee.UI.COLOR.MYPAD_BACKGROUND;
+				e.source.color='white';
+				prefControl = e.source;
+				Ti.App.Properties.setString('pref',e.source.tag);
+			}
+		})
+		preferenceView.add(label);
+	}
+
+	view.add(preferenceView);
+	view.add(implication);
+
+	//view.add(buttons);
 
 	//background.add(buttons);
 
@@ -325,79 +353,10 @@ function SettingPad(win, myPad) {
 
 	};
 
-	var logoutAction = function(callback) {
-		delegate.logout(function() {
-			Ti.App.Properties.removeProperty('password');
-			Ti.App.Properties.removeProperty('User');
-			for(var i=0,length = Zookee.Priorities.length;i<length;i++){
-				for(var j=0,l=Zookee.Priorities[i].identifiers.length;i<l;i++){
-					Ti.App.Properties.removeProperty('Purchased-'+Zookee.Priorities[i].identifiers[j]);
-				}
-			}
-			Zookee.sentParties.release();
-			Zookee.User.setUser({});
-			Zookee.isLogin = false;
-
-			var _win = Ti.UI.createWindow({
-				windowSoftInputMode : Zookee.Soft_Input.SOFT_INPUT_STATE_HIDDEN | Zookee.Soft_Input.SOFT_INPUT_ADJUST_PAN,
-				navBarHidden : true,
-				fullscreen : false,
-				exitOnClose : true,
-				backClicked : 0,
-				backgroundImage : Zookee.ImageURL.Background
-			});
-			_win.addEventListener('android:back', function() {
-				_win.close();
-				_win = null;
-			});
-			var loginView = new LoginViewNoPass(_win);
-
-			_win.add(loginView);
-			//callback();
-			//win.close();
-			//win = null;
-			_win.open();
-		}, function() {
-			callback();
-		});
-	}
-	var logoutFn = function() {
-		var actIndView = Ti.UI.createView({
-			left : Zookee[20],
-			width : Ti.UI.SIZE,
-			height : SystemHeight * 0.05,
-			backgroundColor : 'transparent'
-		});
-		buttons.remove(logoutBtn);
-		var actInd = Util.actIndicator('', actIndView,false,Zookee.isAndroid?Ti.UI.ActivityIndicatorStyle.DARK:Ti.UI.iPhone.ActivityIndicatorStyle.DARK);
-		buttons.add(actIndView);
-
-		actInd.show();
-		if (Zookee.Notification.Enabled) {
-			delegate.unSubscribe(Zookee.Notification.Friend_Channel, function() {
-				logoutAction(function() {
-					actInd.hide();
-					buttons.remove(actIndView);
-					buttons.add(logoutBtn);
-				});
-			})
-		} else {
-			logoutAction(function() {
-				actInd.hide();
-				buttons.remove(actIndView);
-				buttons.add(logoutBtn);
-			});
-		}
-	}
-	logoutBtn1.addEventListener('click', function() {
-		if (Zookee.PASSCODE_ENABLED) {
-			win.add(PopUp(logoutFn, 'logout', win));
-		} else {
-			logoutFn();
-		}
-	});
-
-	return view;
+	win.add(view);
+	win.open({
+		modal:true
+	})
 };
 
 module.exports = SettingPad;

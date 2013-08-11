@@ -1,7 +1,25 @@
 /**
  * @author kent hao
  */
-
+exports.randomUUID = function(){
+  var s = [], itoh = '0123456789ABCDEF';
+ 
+  // Make array of random hex digits. The UUID only has 32 digits in it, but we
+  // allocate an extra items to make room for the '-'s we'll be inserting.
+  for (var i = 0; i < 20; i++) s[i] = Math.floor(Math.random()*0x10);
+ 
+  // Conform to RFC-4122, section 4.4
+  s[14] = 4;  // Set 4 high bits of time_high field to version
+  s[19] = (s[19] & 0x3) | 0x8;  // Specify 2 high bits of clock sequence
+ 
+  // Convert to hex chars
+  for (var i = 0; i < 20; i++) s[i] = itoh[s[i]];
+ 
+  // Insert '-'s
+  s[8] = s[13] = s[18] = '-';
+ 
+  return s.join('');
+}
 exports.postTimeForTitle = function(dateString) {
 	var nums = dateString.split(/-|T|:/);
 	return nums[0] + '/' + nums[1] + '/' + nums[2];
@@ -135,23 +153,23 @@ exports.postTime = function(dateString) {
 	if (year > yearOfPost) {
 		var yearGap = year - yearOfPost;
 		if (yearGap > 1) {
-			return ' ' + yearGap + ' ' + L('years_ago');
+			return ' ' + yearGap + ' ' + L('years_ago',' years ago ');
 		}
 		if (month >= monthOfPost) {
-			return ' ' + 1 + ' ' + L('year_ago');
+			return ' ' + 1 + ' ' + L('year_ago',' year ago ');
 		} else {
 			if (12 - monthOfPost + month == 1) {
-				return ' ' + 1 + ' ' + L('month_ago');
+				return ' ' + 1 + ' ' + L('month_ago',' month ago ');
 			}
-			return ' ' + 12 - monthOfPost + month + ' ' + L('months_ago');
+			return ' ' + 12 - monthOfPost + month + ' ' + L('months_ago',' months ago ');
 		}
 
 	} else if (month > monthOfPost) {
 		if (month - monthOfPost > 1) {
-			return ' ' + (month - monthOfPost) + ' ' + L('months_ago');
+			return ' ' + (month - monthOfPost) + ' ' + L('months_ago',' months ago ');
 		}
 		if (date >= dateOfPost) {
-			return ' ' + 1 + ' ' + L('month_ago');
+			return ' ' + 1 + ' ' + L('month_ago',' month ago ');
 		} else {
 			var dateGap;
 			if (monthOfPost % 2 == 0 && monthOfPost != 8)
@@ -160,37 +178,37 @@ exports.postTime = function(dateString) {
 				dateGap = date + 31 - dateOfPost;
 
 			if (dateGap == 1)
-				return ' ' + 1 + ' ' + L('day_ago');
-			return ' ' + dateGap + ' ' + L('days_ago');
+				return ' ' + 1 + ' ' + L('day_ago',' day ago ');
+			return ' ' + dateGap + ' ' + L('days_ago',' days ago ');
 		}
 	} else if (date > dateOfPost) {
 		if (date - dateOfPost > 1) {
-			return ' ' + (date - dateOfPost) + ' ' + L('days_ago');
+			return ' ' + (date - dateOfPost) + ' ' + L('days_ago',' days ago ');
 		}
 		if (hour >= hourOfPost) {
-			return ' ' + 1 + ' ' + L('day_ago');
+			return ' ' + 1 + ' ' + L('day_ago',' day ago ');
 		} else {
 			var hourGap = 24 - hourOfPost + hour;
 			if (hourGap == 1)
-				return ' ' + hourGap + ' ' + L('hour_ago');
-			return ' ' + hourGap + ' ' + L('hours_ago');
+				return ' ' + hourGap + ' ' + L('hour_ago',' hour ago ');
+			return ' ' + hourGap + ' ' + L('hours_ago',' hours ago ');
 		}
 	} else if (hour > hourOfPost) {
 		if (hour - hourOfPost > 1) {
-			return ' ' + (hour - hourOfPost) + ' ' + L('hours_ago');
+			return ' ' + (hour - hourOfPost) + ' ' + L('hours_ago',' hours ago ');
 		}
 		if (minutes >= minutesOfPost) {
-			return ' ' + 1 + ' ' + L('hour_ago');
+			return ' ' + 1 + ' ' + L('hour_ago',' hour ago ');
 		} else {
 			var minutesGap = 60 - minutesOfPost + minutes;
 			if (minutesGap == 1)
-				return ' ' + minutesGap + ' ' + L('minute_ago');
-			return ' ' + minutesGap + ' ' + L('minutes_ago');
+				return ' ' + minutesGap + ' ' + L('minute_ago',' minute ago ');
+			return ' ' + minutesGap + ' ' + L('minutes_ago',' minutes ago ');
 		}
 	} else {
 		if (minutes - minutesOfPost <= 15)
-			return '   ' + L('right_now') + ' ';
-		return ' ' + minutes - minutesOfPost + ' ' + L('minutes_ago');
+			return '   ' + L('right_now','right now') + ' ';
+		return ' ' + minutes - minutesOfPost + ' ' + L('minutes_ago',' minutes ago');
 	}
 };
 
@@ -344,7 +362,7 @@ exports.showExitInfo = function(win) {
 			bottom : 10,
 			textAlign : 'center',
 			color : 'white',
-			text : L('android_backbutton_click'),
+			text : L('android_backbutton_click','Click again to quit'),
 			font : Zookee.FONT.NORMAL_FONT
 		});
 		maskView.add(infoLabel);
@@ -515,25 +533,25 @@ exports.handleError = function(e) {
 
 	if (errorString.indexOf('401') > 0) {
 		// be careful, you can not use number as a i18n key.
-		alert(L('loginerror'));
+		alert(L('loginerror','loing error'));
 		return;
 	} else if (errorString.indexOf('timeout') > 0) {
-		alert(L('timeout'));
+		alert(L('timeout','time out, please try again'));
 		return;
 	} else if (errorString.indexOf('timed out') > 0) {
-		alert(L('timeout'));
+		alert(L('timeout','time out, please try again'));
 		return;
 	} else if (errorString.indexOf('refused') > 0) {
-		alert(L('timeout'));
+		alert(L('timeout','time out, please try again'));
 		return;
 	} else if (errorString.indexOf('already taken') > 0) {
 		if (errorString.indexOf('Username') > 0)
-			alert(L('username_taken'));
+			alert(L('username_taken','username has been taken'));
 		else
-			alert(L('email_taken'));
+			alert(L('email_taken','email has been taken'));
 		return;
 	} else if (errorString.indexOf('api.cloud.appcelerator.com') > 0) {
-		alert(L('api_call_error'));
+		alert(L('api_call_error','time out, please try again'));
 		return;
 	}
 	alert(JSON.stringify(e));

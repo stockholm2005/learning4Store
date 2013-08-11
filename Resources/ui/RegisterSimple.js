@@ -156,7 +156,7 @@ function RegisterView() {
     		height:'30%',
         left : '5%',
         width : Ti.UI.FILL,
-        hintText : L('email'),
+        hintText : L('email','email'),
         font : Zookee.FONT.NORMAL_FONT,
         keyboardType : Ti.UI.KEYBOARD_EMAIL,
         returnKeyType : Ti.UI.RETURNKEY_DEFAULT,

@@ -127,7 +127,7 @@
 	<string name="friend_approve_fail">好友请求批准失败</string>
 	<string name="joined_succ">您加入了聚会</string>
 	<string name="joined_fail">加入聚会不成功</string>
-	<string name="walkthrough1">用ForTogether向正在发生的聚会发送广告</string>
+	<string name="walkthrough1">用ForTogether向正在'OurTime'发生的聚会发送广告</string>
 	<string name="walkthrough2">你创建广告，发送给周边聚会的人们</string>
 	<string name="walkthrough3">购买特定的优先权，使您的广告更加引入注意</string>
 	<string name="invitation_body">亲爱的朋友:\n 您的朋友%1$s要求您加入Together去分享他们的美好时光</string>
@@ -161,4 +161,5 @@
 	<string name="passcode_help">如果您设置了验证码，下次登录时您必须输入相同的验证码</string>
 	<string name="help">帮助</string>
 	<string name="save">保存</string>
+	<string name="what_u_provide">贵店提供什么种类的服务?</string>	
 </resources>

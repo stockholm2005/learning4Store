@@ -27,11 +27,6 @@ Zookee = {
 		content : 'area_priority_content',
 		identifiers : ['com.zookees.fortogether.area_priority_month', 'com.zookees.fortogether.area_priority_quarter', 'com.zookees.fortogether.area_priority_year'],
 		photo : '/images/priority2.png'
-	}, {
-		title : 'detail_priority',
-		content : 'detail_priority_content',
-		identifiers : ['com.zookees.fortogether.detail_priority_month', 'com.zookees.fortogether.detail_priority_quarter', 'com.zookees.fortogether.detail_priority_year'],
-		photo : '/images/priority3.png'
 	}],
 	User : {
 		CurrentUser : {},
@@ -183,13 +178,13 @@ Zookee = {
 		ORIGIN : 'photo_sizes[original]',
 		ORIGIN_SIZE : '800x640#',
 		PARTY_CACHE_WIDTH : Ti.Platform.displayCaps.platformWidth,
-		PARTY_CACHE_HEIGHT : 480,
+		PARTY_CACHE_HEIGHT : 120,
 		AVATAR_CACHE_WIDTH : 100,
 		AVATAR_CACHE_HEIGHT : 100,
 		THUMB_CACHE_WIDTH : 120,
 		THUMB_CACHE_HEIGHT : 150,
-		ORIGIN_CACHE_WIDTH : 800,
-		ORIGIN_CACHE_HEIGHT : 640
+		ORIGIN_CACHE_WIDTH : 10,
+		ORIGIN_CACHE_HEIGHT : 10
 	},
 
 	ImageType : {

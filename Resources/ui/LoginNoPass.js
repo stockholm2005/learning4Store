@@ -95,7 +95,7 @@ function LoginView(win) {
 	passArea.add(passImplication);
 	passArea.add(password);
 	var username = Ti.UI.createTextField({
-		hintText : L('email') + ' ' + L('or') + ' ' + L('username'),
+		hintText : L('email','email') + ' ' + L('or','or') + ' ' + L('username','username'),
 		left : Zookee[10],
 		width : '60%',
 		height:Ti.UI.FILL,
@@ -247,7 +247,7 @@ function LoginView(win) {
 			actInd.hide();
 			loginBtn_bg.remove(actInd)
 			loginBtn_bg.add(loginBtn);
-		});
+		},true);
 	}
 
 	loginBtn.addEventListener('click', function() {

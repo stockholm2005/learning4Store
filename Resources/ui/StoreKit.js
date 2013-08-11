@@ -69,7 +69,7 @@ Storekit.addEventListener('restoredCompletedTransactions', function (evt) {
     }
     else {
         for (var i = 0; i < evt.transactions.length; i++) {
-            exports.markProductAsPurchased(evt.transactions[i].identifier);
+            //exports.markProductAsPurchased(evt.transactions[i].identifier);
         }
         alert('Restored ' + evt.transactions.length + ' purchases!');
     }
@@ -78,7 +78,7 @@ Storekit.addEventListener('restoredCompletedTransactions', function (evt) {
 Storekit.addEventListener('transactionState', function (evt) {
     if (evt.state == Storekit.PURCHASED){
         alert(" thanks for buy");
-        exports.markProductAsPurchased(evt.productIdentifier);
+        //exports.markProductAsPurchased(evt.productIdentifier);
         succ(evt.date); 
     }else if(evt.state === Storekit.FAILED){
     		alert(evt.message);

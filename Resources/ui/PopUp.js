@@ -63,8 +63,8 @@ function PopUp(okCB, opType,win) {
 	})
 	help.addEventListener('click',function(e){
 		Ti.UI.createAlertDialog({
-			title:L('help'),
-			message:L('passcode_help')
+			title:L('help','Help'),
+			message:L('passcode_help','if you set passcode, next time when you log in, you need to input the passcode')
 		}).show();
 	})
 	headerView.add(help);

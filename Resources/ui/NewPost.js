@@ -17,8 +17,7 @@ function NewPostWin(_mainView) {
 	var win = Ti.UI.createWindow({
 		navBarHidden : true,
 		windowSoftInputMode : Zookee.Soft_Input.SOFT_INPUT_STATE_ALWAYS_VISIBLE,
-		backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
-		layout : 'vertical'
+		backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND
 	})
 	win.addEventListener('close', function() {
 		Util.removeChildren(win);
@@ -35,17 +34,19 @@ function NewPostWin(_mainView) {
 		win = null;
 	})
 	// iphone keyboard height: 234dip
-	var _height = '44%';
+	var _height = '48%';
 	if (Ti.Platform.displayCaps.platformHeight === 568) {
 		_height = '52%';
 	}
 	var view = Ti.UI.createView({
+		top:Zookee.UI.HEIGHT_TITLE,
+		bottom:0,
 		width : Ti.UI.FILL,
 		//scrollType : 'vertical',
 		//scrollingEnabled : false,
 		//backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
-		backgroundImage : Zookee.ImageURL.Background,
-		height : _height
+		backgroundColor:'white'
+		//height : _height
 		//contentHeight : Ti.UI.FILL,
 		//layout : 'vertical'
 	})
@@ -74,7 +75,7 @@ function NewPostWin(_mainView) {
 		//content,photo,location,voice
 		if ((!post.content || post.content.trim() == '' || post.content.trim() == L('say_something')) && !post.photo && !post.voiceurl)
 			return false;
-		if (!post.content || post.content.trim() == L('say_something')) {
+		if (!post.content || post.content.trim() == L('say_something','say something')) {
 			post.content = Zookee.EMPTY_POST_MARK;
 		}
 		return true;
@@ -110,62 +111,10 @@ function NewPostWin(_mainView) {
 		left : 0,
 		right : 0,
 		height : Ti.UI.FILL,
-		layout:'vertical'
+		layout:'vertical',
+		opacity:0.8
 	})
 
-	var pref = Ti.App.Properties.getString('pref');
-	var preferenceView = Ti.UI.createView({
-		top:0,
-		width : Ti.UI.FILL,
-		height : Ti.UI.SIZE,
-		layout : 'horizontal'
-	})
-	var preference = ['food', 'entertain', 'hotel', 'shopping', 'sports'];
-	var prefControl;
-	for (var i = 0, length = preference.length; i < length; i++) {
-		var label = Ti.UI.createLabel({
-			//top : Zookee[10],
-			//left : Zookee[10],
-			width : Ti.Platform.displayCaps.platformWidth / 5,
-			height : Zookee[40],
-			text : ' ' + L(preference[i], preference[i]) + ' ',
-			backgroundColor : Zookee.UI.COLOR.PREFERENCE,
-			//borderRadius : Zookee.UI.Border_Radius_Small,
-			color : 'white',
-			tag : preference[i],
-			textAlign : 'center',
-			verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGN_CENTER,
-			font : Zookee.FONT.SMALL_FONT
-		});
-		if (preference[i] === pref) {
-			label.backgroundColor = Zookee.UI.COLOR.MYPAD_BACKGROUND;
-			//label.touchEnabled = false;
-			prefControl = label;
-		}
-		label.addEventListener('click', function(e) {
-			if (prefControl && prefControl.tag === e.source.tag) {
-				prefControl.backgroundColor = Zookee.UI.COLOR.PREFERENCE;
-				post.type = null;
-				prefControl = null;
-				Ti.App.Properties.removeProperty('pref');
-			} else if (prefControl && prefControl.tag !== e.source.tag) {
-				prefControl.backgroundColor = Zookee.UI.COLOR.PREFERENCE;
-				e.source.backgroundColor = Zookee.UI.COLOR.MYPAD_BACKGROUND;
-				post.type = e.source.tag;
-				prefControl = e.source;
-				Ti.App.Properties.setString('pref',e.source.tag);
-			} else {
-				e.source.backgroundColor = Zookee.UI.COLOR.MYPAD_BACKGROUND;
-				prefControl = e.source;
-				post.type = e.source.tag;
-				Ti.App.Properties.setString('pref',e.source.tag);
-			}
-		})
-		preferenceView.add(label);
-	}
-
-	textArea.add(preferenceView);
-	
 	var title_fd = Ti.UI.createTextField({
 		hintText:L('ad_title','title:'),
 		width : Ti.UI.FILL,
@@ -177,11 +126,11 @@ function NewPostWin(_mainView) {
 		verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGNMENT_CENTER,
 		backgroundColor:'white',
 		borderStyle : Ti.UI.INPUT_BORDERSTYLE_NONE,
-		opacity:0.85
+		opacity:0.85,
+		maxLength:50
 	});
 	
 	var description_fd = Ti.UI.createTextArea({
-		top : Zookee[10],
 		height:'50%',
 		width : Ti.UI.FILL,
 		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
@@ -192,20 +141,27 @@ function NewPostWin(_mainView) {
 		borderStyle : Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
 		opacity:0.85,
 		font:Zookee.FONT.NORMAL_FONT,
-		hintText:L('ad_desc','description:')
+		hintText:L('ad_desc','description:'),
+		maxLength:200
 	});	
 
 	textArea.add(title_fd);
-
+	textArea.add(Ti.UI.createView({
+		width:Ti.UI.FILL,
+		height:2,
+		backgroundColor:Zookee.UI.COLOR.PARTY_CONTENT
+	}))
 	textArea.add(description_fd);
 	view.add(textArea);
+	
 	var iconArea = Ti.UI.createView({
 		layout : 'horizontal',
-		top : Zookee[10],
+		bottom : Zookee[8],
 		//right:Zookee[10],
 		left : '35%',
 		width : '65%',
-		height : Ti.UI.SIZE
+		height : Ti.UI.SIZE,
+		zIndex:1
 	})
 	var cameraView = Ti.UI.createView({
 		left : Zookee[12],
@@ -244,7 +200,7 @@ function NewPostWin(_mainView) {
 	}));
 	iconArea.add(galleryView);
 	iconArea.add(cameraView);
-	textArea.add(iconArea);
+	win.add(iconArea);
 
 	cameraView.addEventListener('click', function(e) {
 		Ti.Media.showCamera({
@@ -283,8 +239,52 @@ function NewPostWin(_mainView) {
 		});
 	});
 
+	title_fd.addEventListener('focus',function(){
+		if(iconArea.atBottom){
+			iconArea.animate({
+				bottom:_height,
+				duration:300
+			});
+			iconArea.atBottom = false;
+		}
+	})
+
+	title_fd.addEventListener('blur',function(){
+		if(!iconArea.atBottom){
+			iconArea.animate({
+				bottom:Zookee[8],
+				duration:300
+			});
+			iconArea.atBottom = true;
+		}
+	})	
+	
+	description_fd.addEventListener('focus',function(){
+		if(iconArea.atBottom){
+			iconArea.animate({
+				bottom:_height,
+				duration:300
+			});
+			iconArea.atBottom = false;
+		}
+	})
+
+	description_fd.addEventListener('blur',function(){
+		if(!iconArea.atBottom){
+			iconArea.animate({
+				bottom:Zookee[8],
+				duration:300
+			});
+			iconArea.atBottom = true;
+		}
+	})		
 	win.addEventListener('open', function() {
 		title_fd.focus();
+		iconArea.animate({
+			bottom:_height,
+			duration:300
+		});
+		iconArea.atBottom = false;
 	})
 	return win;
 }
