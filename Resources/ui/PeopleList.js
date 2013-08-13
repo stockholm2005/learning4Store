@@ -31,15 +31,15 @@ function PeoplePad(myPad, win) {
 	var slogon = Ti.UI.createLabel({
 		text:L('product_name','ForTogether'),
 		color:Zookee.UI.COLOR.COLOR3,
-		font:Zookee.FONT.LARGE_FONT,
-		top:Zookee[30],
-		left:Zookee[10]
+		font:Zookee.FONT.LARGE_FONT
 	})
 	
 	var opBg = Ti.UI.createView({
-		top:Zookee[150],
-		left:Zookee[40],
-		layout:'vertical'
+		layout:'vertical',
+		center:{
+			x:'50%',
+			y:'50%'
+		}		
 	})
 	var settingLabel = Ti.UI.createLabel({
 		color:'white',

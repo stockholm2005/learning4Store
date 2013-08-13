@@ -144,9 +144,6 @@ function PriorityList(win) {
 							})
 						});
 					})
-					setTimeout(function() {
-						actInd.hide();
-					}, 5000);
 				}
 			});
 			alertDialog.show();
