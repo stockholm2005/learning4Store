@@ -2,6 +2,7 @@
  * 
  */
 var Storekit = require('ti.storekit');
+var Util = require('Util');
 
 /*
  Now let's define a couple utility functions. We'll use these throughout the app.
@@ -30,7 +31,9 @@ exports.checkIfProductPurchased = function(identifier) {
  * @param success A callback function.
  * @return A Ti.Storekit.Product.
  */
-exports.requestProduct = function(identifier, success) {
+exports.requestProduct = function(identifier, success,win) {
+	actInd = Util.actIndicator(L('buying', 'buying'), win, true);
+	actInd.show();
     Storekit.requestProducts([identifier], function (evt) {
         if (!evt.success) {
             alert('ERROR: We failed to talk to Apple!');
@@ -81,6 +84,7 @@ Storekit.addEventListener('transactionState', function (evt) {
         //exports.markProductAsPurchased(evt.productIdentifier);
         succ(evt.date); 
     }else if(evt.state === Storekit.FAILED){
-    		alert(evt.message);
+    		if(evt.message)
+    			alert(evt.message);
     }
 });

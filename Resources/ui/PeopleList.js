@@ -23,6 +23,7 @@ function PeoplePad(myPad, win) {
 	//win.add(titleView);
 	view = Ti.UI.createView({
 		top : 0,
+		bottom:0,
 		backgroundColor:'#332e28',
 		left : 0,
 		right : Zookee[40]
@@ -35,11 +36,13 @@ function PeoplePad(myPad, win) {
 	})
 	
 	var opBg = Ti.UI.createView({
-		layout:'vertical',
 		center:{
 			x:'50%',
 			y:'50%'
-		}		
+		},
+		width:Ti.UI.SIZE,
+		height:Ti.UI.SIZE,
+		layout:'vertical'
 	})
 	var settingLabel = Ti.UI.createLabel({
 		color:'white',

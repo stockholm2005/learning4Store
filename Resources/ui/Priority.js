@@ -143,7 +143,7 @@ function PriorityList(win) {
 								actInd.hide();
 							})
 						});
-					})
+					},win)
 				}
 			});
 			alertDialog.show();
