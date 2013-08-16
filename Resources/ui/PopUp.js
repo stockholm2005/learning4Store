@@ -11,6 +11,7 @@ function PopUp(okCB, opType,win) {
 		disableBounce:true,
 		opacity:0.8
 	})
+	scrollView.bubbleParent = false;
 
 	var container = Ti.UI.createView({
 		center : {
@@ -25,7 +26,8 @@ function PopUp(okCB, opType,win) {
 		layout : 'vertical',
 		tag:'s'
 	})
-
+	container.bubbleParent=false;
+	
 	scrollView.addEventListener('singletap', function(e) {
 		if(!e.source.tag)
 			win.remove(scrollView);
@@ -83,9 +85,10 @@ function PopUp(okCB, opType,win) {
 		width : Ti.UI.FILL,
 		height : Ti.UI.SIZE,
 		layout:'horizontal',
-		bubbleParent:false,
 		tag:'s'
 	})
+	pass_container.bubbleParent=false;
+	
 	var pass_field = Ti.UI.createTextField({
 		left:Zookee[10],
 		height:Zookee[40],
