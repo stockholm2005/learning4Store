@@ -121,8 +121,7 @@ function PriorityList(win) {
 				if (e.index === e.source.cancel) {
 
 				} else {
-					actInd = Util.actIndicator(L('buying', 'buying'), win, true);
-					actInd.show();
+					StoreKit.setWin(win);
 					// hide indicator, update user priority
 					StoreKit.requestProduct(_e.row.priority.identifiers[e.index], function(product) {
 						StoreKit.purchaseProduct(product, function(date) {
@@ -138,12 +137,12 @@ function PriorityList(win) {
 								buyLabel.backgroundColor = 'transparent';
 								buyLabel.color = Zookee.UI.COLOR.PARTY_CONTENT;
 								buyLabel.text = ' ' + L('have_priority', 'have it') + ' ';
-								actInd.hide();
+								//actInd.hide();
 							}, function() {
-								actInd.hide();
+								//actInd.hide();
 							})
 						});
-					},win)
+					})
 				}
 			});
 			alertDialog.show();

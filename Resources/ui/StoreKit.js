@@ -4,6 +4,33 @@
 var Storekit = require('ti.storekit');
 var Util = require('Util');
 
+var win;
+exports.setWin = function(_win){
+	win=_win;
+}
+var loading = Ti.UI.createActivityIndicator({
+	bottom:10, height:50, width:50,
+	backgroundColor:'black', borderRadius:10,
+	style:Ti.UI.iPhone.ActivityIndicatorStyle.BIG
+});
+var loadingCount = 0;
+function showLoading()
+{
+	loadingCount += 1;
+	if (loadingCount == 1) {
+		loading.show();
+	}
+}
+function hideLoading()
+{
+	if (loadingCount > 0) {
+		loadingCount -= 1;
+		if (loadingCount == 0) {
+			loading.hide();
+		}
+	}
+}
+win.add(loading);
 /*
  Now let's define a couple utility functions. We'll use these throughout the app.
  */
@@ -31,10 +58,11 @@ exports.checkIfProductPurchased = function(identifier) {
  * @param success A callback function.
  * @return A Ti.Storekit.Product.
  */
-exports.requestProduct = function(identifier, success,win) {
-	actInd = Util.actIndicator(L('buying', 'buying'), win, true);
-	actInd.show();
+exports.requestProduct = function(identifier, success) {
+	showLoading();
+
     Storekit.requestProducts([identifier], function (evt) {
+		hideLoading();
         if (!evt.success) {
             alert('ERROR: We failed to talk to Apple!');
         }
@@ -53,6 +81,7 @@ exports.requestProduct = function(identifier, success,win) {
  */
 var succ;
 exports.purchaseProduct = function(product,succCB) {
+	showLoading();
 	succ = succCB;
     Storekit.purchase(product, 1);
 }
@@ -61,9 +90,11 @@ exports.purchaseProduct = function(product,succCB) {
  * Restores any purchases that the current user has made in the past, but we have lost memory of.
  */
 exports.restorePurchases = function() {
+	showLoading();
     Storekit.restoreCompletedTransactions();
 }
 Storekit.addEventListener('restoredCompletedTransactions', function (evt) {
+	hideLoading();
     if (evt.error) {
         alert(evt.error);
     }
@@ -79,6 +110,7 @@ Storekit.addEventListener('restoredCompletedTransactions', function (evt) {
 });
 
 Storekit.addEventListener('transactionState', function (evt) {
+	hideLoading();
     if (evt.state == Storekit.PURCHASED){
         alert(" thanks for buy");
         //exports.markProductAsPurchased(evt.productIdentifier);
