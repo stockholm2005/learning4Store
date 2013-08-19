@@ -1,7 +1,7 @@
 /**
  * 
  */
-var Storekit = require('ti.storekit');
+var Storekit = Zookee.isAndroid?require('ti.inappbilling'):require('ti.storekit');
 var Util = require('Util');
 
 var win;
