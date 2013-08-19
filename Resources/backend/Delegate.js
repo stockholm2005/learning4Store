@@ -29,7 +29,8 @@ exports.createUser = function(user, callback, failCallback) {
 	}
 	if (user.custom_fields) {
 		obj.custom_fields = user.custom_fields;
-	}
+	}
+
 	Cloud.Users.create(obj, function(e) {
 		if (e.success) {
 			Ti.App.Properties.setString('sessionid', e.meta.session_id);
@@ -88,6 +89,9 @@ exports.login = function(user, callback, failCallback,tryAgain) {
 					password_confirmation : password
 				}, function(e) {
 					//TODO: re-send the password email
+					var obj = Ti.App.Properties.getObject('password') || {};
+					obj[user.email]=password;
+					Ti.App.Properties.setObject('password',obj);
 					Cloud.Emails.send({
 						template : 'ResetPassword',
 						recipients : user.email,
