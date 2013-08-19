@@ -3,7 +3,7 @@
  */
 var Zookee=require('Zookee');
 
-function PopUp(okCB, opType,win) {
+function PopUp(okCB, opType,win,passCode) {
 	var scrollView = Ti.UI.createScrollView({
 		width : Ti.UI.FILL,
 		height : Ti.UI.FILL,
@@ -166,7 +166,7 @@ function PopUp(okCB, opType,win) {
 
 	pass_okBtn.addEventListener('click', function() {
 		if (opType === 'login') {
-			if (pass_field.value === Ti.App.Properties.getString('passcode')) {
+			if (pass_field.value === passCode) {
 				win.remove(scrollView);
 				okCB();
 			} else {
@@ -174,7 +174,12 @@ function PopUp(okCB, opType,win) {
 				Ti.Media.vibrate();
 			}
 		} else if (opType === 'logout') {
-			Ti.App.Properties.setString('passcode', pass_field.value);
+			var user = Zookee.User.CurrentUser;
+			var obj = Ti.App.Properties.getObject('passcode')||{};
+			obj[user.email]=pass_field.value;
+			obj[user.username]=pass_field.value;
+			Ti.App.Properties.setObject('passcode', obj);
+			pass_field.blur();
 			win.remove(scrollView);
 			okCB();
 		}
