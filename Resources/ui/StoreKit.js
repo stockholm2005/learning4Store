@@ -5,9 +5,7 @@ var Storekit = Zookee.isAndroid?require('ti.inappbilling'):require('ti.storekit'
 var Util = require('Util');
 
 var win;
-exports.setWin = function(_win){
-	win=_win;
-}
+
 var loading = Ti.UI.createActivityIndicator({
 	bottom:10, height:50, width:50,
 	backgroundColor:'black', borderRadius:10,
@@ -30,7 +28,10 @@ function hideLoading()
 		}
 	}
 }
-win.add(loading);
+exports.setWin = function(_win){
+	win=_win;
+	win.add(loading);
+}
 /*
  Now let's define a couple utility functions. We'll use these throughout the app.
  */

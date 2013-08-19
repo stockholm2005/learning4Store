@@ -104,7 +104,7 @@ function PeoplePad(myPad, win) {
 
 	var logoutAction = function(callback) {
 		delegate.logout(function() {
-			Ti.App.Properties.removeProperty('password');
+			//Ti.App.Properties.removeProperty('password');
 			Ti.App.Properties.removeProperty('User');
 			for(var i=0,length = Zookee.Priorities.length;i<length;i++){
 				for(var j=0,l=Zookee.Priorities[i].identifiers.length;j<l;j++){
@@ -145,13 +145,11 @@ function PeoplePad(myPad, win) {
 
 		actInd.show();
 		if (Zookee.Notification.Enabled) {
-			delegate.unSubscribe(Zookee.Notification.Friend_Channel, function() {
 				logoutAction(function() {
 					actInd.hide();
 					logoutBtn.remove(actInd);
 					logoutBtn.add(logoutBtn.button);
 				});
-			})
 		} else {
 			logoutAction(function() {
 					actInd.hide();

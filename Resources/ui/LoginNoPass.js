@@ -84,6 +84,7 @@ function LoginView(win) {
 	var password = Ti.UI.createTextField({
 		//hintText : L('Password'),
 		//top : '10%',
+		height:Zookee[40],
 		width:Ti.UI.FILL,
 		backgroundColor : 'white',
 		passwordMask : true,
@@ -190,7 +191,7 @@ function LoginView(win) {
 		delegate.login(user, function() {
 			var _user = Zookee.User.CurrentUser
 			Ti.App.Properties.setString('email', username.value);
-			Ti.App.Properties.setString('password', password.value);
+			//Ti.App.Properties.setString('password', password.value);
 
 			var win1 = Ti.UI.createWindow({
 				windowSoftInputMode : Zookee.Soft_Input.SOFT_INPUT_ADJUST_PAN,
@@ -251,15 +252,14 @@ function LoginView(win) {
 	}
 
 	loginBtn.addEventListener('click', function() {
+		var obj = Ti.App.Properties.getObject('passcode')||{};
 		if (!username.value) {
-			alert('User name is mandatroy');
+			alert('User name or Email is mandatroy');
 			return;
-		} else if (Zookee.PASSCODE_ENABLED &&
-			Ti.App.Properties.hasProperty('passcode')&&
-			 Ti.App.Properties.getString('passcode')!='') {
-			win.add(new PopUp(loginFn,'login',win));
+		} else if (obj[username.value] &&  obj[username.value]!= '') {
+			win.add(new PopUp(loginFn, 'login', win,obj[username.value]));
 			return;
-		} 
+		}
 
 		loginFn();
 	});
@@ -285,9 +285,7 @@ function LoginView(win) {
 	view.add(title);
 	view.add(scrollView);
 	scrollView.add(background);
-	if(!Ti.App.Properties.hasProperty('email')){
-		scrollView.add(needPassword);
-	}
+	scrollView.add(needPassword);
 	view.add(buttons);
 	return view;
 };
