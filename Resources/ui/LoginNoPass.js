@@ -224,10 +224,10 @@ function LoginView(win) {
 			}))
 			var pref = new preferenceView({
 				top:'50%',
-				width:Zookee.isAndroid?Ti.UI.FILL:Zookee[60],
-				height:Ti.UI.SIZE
+				width:Zookee[60],
+				height:Zookee[40],
+				layout:'horizontal'
 			},function(){
-				if(!Zookee.isAndroid)
 				pref.animate({
 					width:Zookee[60],
 					duration:300
@@ -242,7 +242,6 @@ function LoginView(win) {
 				},300);
 			});
 			mask.add(pref);
-			if(!Zookee.isAndroid)
 			pref.animate({
 				width :Ti.Platform.displayCaps.platformWidth,
 				duration : 300

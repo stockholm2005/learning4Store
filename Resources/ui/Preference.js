@@ -4,12 +4,8 @@
 var Zookee = require('Zookee');
 
 function Preference(param,action){
-	var preferenceView = Ti.UI.createView({
-		layout : 'horizontal'
-	})
-	for(var key in param){
-		preferenceView[key] = param[key];
-	}
+	var preferenceView = Ti.UI.createView(param);
+
 	var pref = Ti.App.Properties.getString('pref')||'';
 
 	var preference = ['food', 'entertain', 'hotel', 'shopping', 'sports'];
