@@ -161,6 +161,7 @@ function RegisterView() {
         keyboardType : Ti.UI.KEYBOARD_EMAIL,
         returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
         borderStyle : Ti.UI.INPUT_BORDERSTYLE_NONE,
+		backgroundColor:'white',
         verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM
     });
     inputArea.add(emailField);
@@ -175,6 +176,7 @@ function RegisterView() {
         keyboardType : Ti.UI.KEYBOARD_DEFAULT,
         returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
         borderStyle : Ti.UI.INPUT_BORDERSTYLE_NONE,
+		backgroundColor:'white',
         verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM
     });
     inputArea.add(phoneField);
@@ -189,6 +191,7 @@ function RegisterView() {
         keyboardType : Ti.UI.KEYBOARD_DEFAULT,
         returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
         borderStyle : Ti.UI.INPUT_BORDERSTYLE_NONE,
+		backgroundColor:'white',
         verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM
     });
     inputArea.add(addressField);

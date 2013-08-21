@@ -46,19 +46,22 @@ function PeoplePad(myPad, win) {
 	})
 	var settingLabel = Ti.UI.createLabel({
 		color:'white',
-		text:L('my_profile','My Profile')
+		text:L('my_profile','My Profile'),
+		font:Zookee.FONT.LARGE_FONT
 	})
 	
 	var adsLabel = Ti.UI.createLabel({
 		top:Zookee[30],
 		color:'white',
-		text:L('my_label','My Ads')
+		text:L('my_label','My Ads'),
+		font:Zookee.FONT.LARGE_FONT
 	})
 	
 	var priLabel = Ti.UI.createLabel({
 		top:Zookee[30],
 		color:'white',
-		text:L('my_priority','My Priority')
+		text:L('my_priority','My Priority'),
+		font:Zookee.FONT.LARGE_FONT
 	})
 
 	var logoutBtn = Ti.UI.createView({

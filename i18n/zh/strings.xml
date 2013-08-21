@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-	<string name="product_name">在一起</string>
+	<string name="product_name">ForTogether</string>
 	<string name="welcome">Welcome to %s!</string>
 	<string name="email">电子邮件</string>
 	<string name="Password">密码</string>
@@ -28,7 +28,7 @@
 	<string name="hour_ago">小时前</string>
 	<string name="minutes_ago">分钟前</string>
 	<string name="minute_ago">分钟前</string>
-	<string name="Zookee">Together</string>
+	<string name="Zookee">ForTogether</string>
 	<string name="Local">本地</string>
 	<string name="Remove">移除</string>
 	<string name="Invite">邀请</string>

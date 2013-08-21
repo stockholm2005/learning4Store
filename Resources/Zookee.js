@@ -378,7 +378,7 @@ if (Ti.Platform.osname === 'android') {
 	Ti.API.info('Ti.Platform.displayCaps.ydpi: ' + Ti.Platform.displayCaps.ydpi);
 	Ti.API.info('Ti.Platform.displayCaps.logicalDensityFactor: ' + Ti.Platform.displayCaps.logicalDensityFactor);
 }
-for (var i = 0; i < 400; i++) {
+for (var i = 0; i < 401; i++) {
 	Zookee[i] = i / 400 * Ti.Platform.displayCaps.platformWidth;
 }
 

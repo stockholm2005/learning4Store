@@ -30,16 +30,16 @@ function LoginView(win) {
 		font : Zookee.FONT.TITLE_FONT
 	})
 	
-	view.add(Ti.UI.createView({
-		width:Ti.UI.FILL,
-		top:SystemHeight * 0.075,
-		height:1,
-		backgroundColor:Zookee.UI.COLOR.PARTY_CONTENT
-	}))
+	// view.add(Ti.UI.createView({
+		// width:Ti.UI.FILL,
+		// top:SystemHeight * 0.075,
+		// height:1,
+		// backgroundColor:Zookee.UI.COLOR.PARTY_CONTENT
+	// }))
 	var scrollView = Ti.UI.createScrollView({
 		left:0,
 		right:0,
-		top:0
+		top:SystemHeight * 0.075
 	})
 	var background = Ti.UI.createView({
 		backgroundColor : 'white',
@@ -105,7 +105,8 @@ function LoginView(win) {
 		keyboardType : Ti.UI.KEYBOARD_EMAIL,
 		enableReturnKey:false,
 		returnKeyType : Ti.UI.RETURNKEY_DONE,
-		borderStyle:Ti.UI.INPUT_BORDERSTYLE_NONE
+		borderStyle:Ti.UI.INPUT_BORDERSTYLE_NONE,
+		backgroundColor:'white'
 	});
 	if (Ti.App.Properties.hasProperty('email')) {
 		username.setValue(Ti.App.Properties.getString('email'));
@@ -223,9 +224,10 @@ function LoginView(win) {
 			}))
 			var pref = new preferenceView({
 				top:'50%',
-				width:Zookee[60],
+				width:Zookee.isAndroid?Ti.UI.FILL:Zookee[60],
 				height:Ti.UI.SIZE
 			},function(){
+				if(!Zookee.isAndroid)
 				pref.animate({
 					width:Zookee[60],
 					duration:300
@@ -240,6 +242,7 @@ function LoginView(win) {
 				},300);
 			});
 			mask.add(pref);
+			if(!Zookee.isAndroid)
 			pref.animate({
 				width :Ti.Platform.displayCaps.platformWidth,
 				duration : 300
