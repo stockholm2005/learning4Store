@@ -20,12 +20,12 @@ Zookee = {
 	Priorities : [{
 		title : 'list_priority',
 		content : 'list_priority_content',
-		identifiers : ['com.zookees.fortogether.list_priority_month', 'com.zookees.fortogether.list_priority_quarter', 'com.zookees.fortogether.list_priority_year'],
+		identifiers : ['com.zookees.fortogether.listpriority_month', 'com.zookees.fortogether.listpriority_quarter', 'com.zookees.fortogether.listpriority_year'],
 		photo : '/images/priority1.png'
 	}, {
 		title : 'area_priority',
 		content : 'area_priority_content',
-		identifiers : ['com.zookees.fortogether.area_priority_month', 'com.zookees.fortogether.area_priority_quarter', 'com.zookees.fortogether.area_priority_year'],
+		identifiers : ['com.zookees.fortogether.areapriority_month', 'com.zookees.fortogether.areapriority_quarter', 'com.zookees.fortogether.areapriority_year'],
 		photo : '/images/priority2.png'
 	}],
 	User : {
