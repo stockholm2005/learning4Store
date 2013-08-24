@@ -27,7 +27,19 @@ function RegisterView() {
 		color : 'white',
 		font : Zookee.FONT.TITLE_FONT
 	})
-
+	var loginBtn = Ti.UI.createButton({
+		title :' '+ L('Login','Login')+' ',
+		top:0,
+		right:Zookee[20],
+		style : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
+		backgroundColor : 'transparent',
+		backgroundSelectedColor : 'white',
+		color : 'white',
+		width : Ti.UI.SIZE,
+		height : SystemHeight * 0.075,
+		verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_CENTER,
+		font:Zookee.FONT.SMALL_FONT
+	});
 	var scrollView = Ti.UI.createScrollView({
 		left:0,
 		right:0,
@@ -239,21 +251,6 @@ function RegisterView() {
 		color:Zookee.UI.COLOR.PARTY_CONTENT
 	})
 
-	var loginBtn = Ti.UI.createButton({
-		title : ' '+L('Login','Login')+' ',
-		left:Zookee[20],
-		style : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-		backgroundColor : Zookee.UI.COLOR.MYPAD_BACKGROUND,
-		backgroundSelectedColor : Zookee.UI.COLOR.CONTROL_BACKGROUND,
-		color : 'white',
-		width : Ti.UI.SIZE,
-		height : SystemHeight * 0.05,
-		font:Zookee.FONT.SMALL_FONT
-	});
-
-	buttons.add(loginLabel);
-	buttons.add(loginBtn);
-
 	phoneField.addEventListener('return', function() {
 		addressField.focus();
 	});
@@ -331,10 +328,13 @@ function RegisterView() {
 				color:'white',
 				font:Zookee.FONT.NORMAL_FONT
 			}))
+			var _width = Zookee[60];
+			if(Zookee.isAndroid) _width = Zookee[400];
 			var pref = new preferenceView({
 				top:'50%',
-				width:Zookee[60],
-				height:Ti.UI.SIZE
+				width:_width,
+				height:Ti.UI.SIZE,
+				layout:'horizontal'
 			},function(){
 				pref.animate({
 					width:Zookee[60],
@@ -350,6 +350,7 @@ function RegisterView() {
 				},300);
 			});
 			mask.add(pref);
+			if(!Zookee.isAndroid)
 			pref.animate({
 				width :Ti.Platform.displayCaps.platformWidth,
 				duration : 300
@@ -376,9 +377,10 @@ function RegisterView() {
     });
 
 	view.add(title);
+	view.add(loginBtn);
 	view.add(scrollView);
 	scrollView.add(background);
-	view.add(buttons);
+	//view.add(buttons);
 	return view;
 };
 

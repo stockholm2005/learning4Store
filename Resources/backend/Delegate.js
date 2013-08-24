@@ -662,6 +662,9 @@ var initializeUser = function(user) {
 	if (user.custom_fields.phone) {
 		user.phone = user.custom_fields.phone;
 	}
+	if(user.custom_fields.address){
+		user.address=user.custom_fields.address;
+	}
 	if(user.custom_fields.priority && user.custom_fields.priority_startTime){
 		user.priority=user.custom_fields.priority;
 		user.priorityStartTime = user.custom_fields.priority_startTime;

@@ -18,7 +18,8 @@ function SettingPad(win, myPad) {
 	win.add(titleView);
 	var view = Ti.UI.createScrollView({
 		top : Zookee.UI.HEIGHT_TITLE,
-		bottom : 0
+		bottom : 0,
+		layout:'vertical'
 	});
 
 	var background = Ti.UI.createView({
@@ -152,6 +153,7 @@ function SettingPad(win, myPad) {
 		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
 		returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
 		borderStyle : Ti.UI.INPUT_BORDERSTYLE_NONE,
+		backgroundColor:'white',
 		verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM
 	});
 	inputArea.add(usernameField);
@@ -167,6 +169,7 @@ function SettingPad(win, myPad) {
 		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
 		returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
 		borderStyle : Ti.UI.INPUT_BORDERSTYLE_NONE,
+		backgroundColor:'white',
 		verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM
 	});
 	if(user.custom_fields.phone){
@@ -185,6 +188,7 @@ function SettingPad(win, myPad) {
 		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
 		returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
 		borderStyle : Ti.UI.INPUT_BORDERSTYLE_NONE,
+		backgroundColor:'white',
 		verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM
 	});
 	if (user.custom_fields.address) {
@@ -287,13 +291,13 @@ function SettingPad(win, myPad) {
 	view.add(background);
 	var pref = Ti.App.Properties.getString('pref');
 	var implication = Ti.UI.createLabel({
-		bottom:Zookee[100],
+		top:Zookee[100],
 		text:L('what_u_provide','What kind of service you provide?'),
 		color:Zookee.UI.COLOR.COLOR3,
 		font:Zookee.FONT.NORMAL_FONT
 	})
 	var preferenceView = Ti.UI.createView({
-		bottom:Zookee[50],
+		top:Zookee[10],
 		width : Ti.UI.FILL,
 		height : Ti.UI.SIZE,
 		backgroundColor:'white',
@@ -342,8 +346,8 @@ function SettingPad(win, myPad) {
 		preferenceView.add(label);
 	}
 
-	view.add(preferenceView);
 	view.add(implication);
+	view.add(preferenceView);
 
 	//view.add(buttons);
 

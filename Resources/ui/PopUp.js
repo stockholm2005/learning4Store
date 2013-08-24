@@ -94,7 +94,8 @@ function PopUp(okCB, opType,win,passCode) {
 		height:Zookee[40],
 		passwordMask:true,
 		width:'60%',
-		borderStyle:Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
+		borderStyle:Ti.UI.INPUT_BORDERSTYLE_NONE,
+		backgroundColor:'white',
 		tag:'s'
 	})
 	var pass_okBtn = Ti.UI.createButton({
@@ -103,7 +104,7 @@ function PopUp(okCB, opType,win,passCode) {
 		height:Zookee[40],
 		titleid : 'ok',
 		color:'white',
-		backgroundColor:Zookee.UI.COLOR.MYPAD_BACKGROUND,
+		backgroundColor:Zookee.UI.COLOR.COLOR2,
 		style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
 		tag:'s'
 	})

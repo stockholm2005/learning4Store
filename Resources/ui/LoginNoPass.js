@@ -30,16 +30,25 @@ function LoginView(win) {
 		font : Zookee.FONT.TITLE_FONT
 	})
 	
-	// view.add(Ti.UI.createView({
-		// width:Ti.UI.FILL,
-		// top:SystemHeight * 0.075,
-		// height:1,
-		// backgroundColor:Zookee.UI.COLOR.PARTY_CONTENT
-	// }))
+	var signupBtn = Ti.UI.createButton({
+		title :' '+ L('Sign_Up','Signup')+' ',
+		top:0,
+		right:Zookee[20],
+		style : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
+		backgroundColor : 'transparent',
+		backgroundSelectedColor : 'white',
+		color : 'white',
+		width : Ti.UI.SIZE,
+		height : SystemHeight * 0.075,
+		verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_CENTER,
+		font:Zookee.FONT.SMALL_FONT
+	});
 	var scrollView = Ti.UI.createScrollView({
 		left:0,
 		right:0,
-		top:SystemHeight * 0.075
+		top:SystemHeight * 0.075,
+		bottom:Zookee[80],
+		layout:'vertical'
 	})
 	var background = Ti.UI.createView({
 		backgroundColor : 'white',
@@ -51,7 +60,7 @@ function LoginView(win) {
 	var needPassword = Ti.UI.createLabel({
 		left:'7%',
 		right:'7%',
-		top:'57%',
+		top:Zookee[40],
 		height:Ti.UI.SIZE,
 		textid:'use_password',
 		font:Zookee.FONT.SMALL_FONT,
@@ -67,7 +76,7 @@ function LoginView(win) {
 	})
 
 	var passArea = Ti.UI.createView({
-		top:'62%',
+		top:Zookee[10],
 		layout:'vertical',
 		left:'5%',
 		right:'5%',
@@ -141,30 +150,11 @@ function LoginView(win) {
 		image:Zookee.ImageURL.Send
 	});
 	loginBtn_bg.add(loginBtn);
-	
-	var registerLabel = Ti.UI.createLabel({
-		left:'5%',
-		textid:'register_implication',
-		font:Zookee.FONT.SMALL_FONT_ITALIC,
-		width:Ti.UI.SIZE,
-		color:Zookee.UI.COLOR.PARTY_CONTENT
-	})
 
-	var signupBtn = Ti.UI.createButton({
-		title :' '+ L('Sign_Up','Signup')+' ',
-		left:Zookee[20],
-		style : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-		backgroundColor : Zookee.UI.COLOR.MYPAD_BACKGROUND,
-		backgroundSelectedColor : Zookee.UI.COLOR.CONTROL_BACKGROUND,
-		color : 'white',
-		width : Ti.UI.SIZE,
-		height : SystemHeight * 0.05,
-		font:Zookee.FONT.SMALL_FONT
-	});
 	background.add(loginBtn_bg);
 
-	buttons.add(registerLabel);
-	buttons.add(signupBtn);
+	//buttons.add(registerLabel);
+	//buttons.add(signupBtn);
 
 	password.addEventListener('return', function(e) {
 		loginBtn.fireEvent('click');
@@ -222,9 +212,11 @@ function LoginView(win) {
 				color:'white',
 				font:Zookee.FONT.NORMAL_FONT
 			}))
+			var _width = Zookee[60];
+			if(Zookee.isAndroid) _width = Zookee[400];
 			var pref = new preferenceView({
 				top:'50%',
-				width:Zookee[60],
+				width:_width,
 				height:Zookee[40],
 				layout:'horizontal'
 			},function(){
@@ -242,10 +234,11 @@ function LoginView(win) {
 				},300);
 			});
 			mask.add(pref);
+			if(!Zookee.isAndroid)
 			pref.animate({
-				width :Ti.Platform.displayCaps.platformWidth,
-				duration : 300
-			});
+				width:Zookee[400],
+				duration:300
+			})
 		}, function() {
 			actInd.hide();
 			loginBtn_bg.remove(actInd)
@@ -285,10 +278,11 @@ function LoginView(win) {
 	}, 150);
 
 	view.add(title);
+	view.add(signupBtn);
 	view.add(scrollView);
 	scrollView.add(background);
 	scrollView.add(needPassword);
-	view.add(buttons);
+	//view.add(buttons);
 	return view;
 };
 
