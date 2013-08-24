@@ -41,7 +41,7 @@ exports.buildTitleView = function(win,text) {
 			y:'50%'
 		},
 		height : '80%',
-		textid : 'Zookee',
+		text : L('product_name','ForTogether'),
 		textAlign : 'center',
 		verticalAlign : Ti.UI.TEXT_VERTICAL_ALIGNMENT_CENTER,
 		width : Ti.UI.SIZE,

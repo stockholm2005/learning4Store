@@ -25,7 +25,6 @@ function NewPostWin(_mainView) {
 		post = null;
 		titleView = null;
 		sendButton = null;
-		fieldValidated = null;
 		photo_view = null;
 		cameraView = null;
 		galleryView = null;
@@ -70,17 +69,7 @@ function NewPostWin(_mainView) {
 		backgroundImage : Zookee.ImageURL.Send,
 		backgroundSelectedColor : Zookee.UI.COLOR.CONTROL_BACKGROUND
 	})
-
-	var fieldValidated = function(post) {
-		//content,photo,location,voice
-		if ((!post.content || post.content.trim() == '' || post.content.trim() == L('say_something')) && !post.photo && !post.voiceurl)
-			return false;
-		if (!post.content || post.content.trim() == L('say_something','say something')) {
-			post.content = Zookee.EMPTY_POST_MARK;
-		}
-		return true;
-	};
-
+	
 	sendButton.addEventListener('click', function(e) {
 		if(!title_fd.value || title_fd.value.trim()===''){
 			alert(String.format(L('mandatory_field'),L('ad_title','Ad\'title')));

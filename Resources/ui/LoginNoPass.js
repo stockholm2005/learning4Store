@@ -19,7 +19,7 @@ function LoginView(win) {
 	});
 
 	var title = Ti.UI.createLabel({
-		textid : 'product_name',
+		text : L('product_name','ForTogether'),
 		top : 0,
 		left : 0,
 		width : Ti.UI.FILL,
@@ -62,7 +62,7 @@ function LoginView(win) {
 		right:'7%',
 		top:Zookee[40],
 		height:Ti.UI.SIZE,
-		textid:'use_password',
+		text:L('use_password','use password'),
 		font:Zookee.FONT.SMALL_FONT,
 		color:Zookee.UI.COLOR.PARTY_CONTENT
 	});
@@ -86,7 +86,7 @@ function LoginView(win) {
 	var passImplication = Ti.UI.createLabel({
 		width:Ti.UI.FILL,
 		height:Ti.UI.SIZE,
-		textid:'password_implication',
+		text:L('password_implication','you can login to ForTogether only from one device.\nif you login from the device other than the one you logged in last time, please use the password in the mail ForTogether sent to you when you registered or logged in last time.'),
 		font:Zookee.FONT.SMALL_FONT_ITALIC,
 		color:Zookee.UI.COLOR.PARTY_CONTENT
 	})
@@ -105,7 +105,7 @@ function LoginView(win) {
 	passArea.add(passImplication);
 	passArea.add(password);
 	var username = Ti.UI.createTextField({
-		hintText : L('email','email') + ' ' + L('or','or') + ' ' + L('username','username'),
+		hintText : L('email','email'),
 		left : Zookee[10],
 		width : '60%',
 		height:Ti.UI.FILL,

@@ -39,7 +39,7 @@ function PopUp(okCB, opType,win,passCode) {
 		tag:'s'
 	});
 	headerView.add(Ti.UI.createLabel({
-		textid : 'passcode',
+		text : L('passcode','passcode'),
 		left : Zookee[20],
 		top : Zookee[10],
 		bottom : Zookee[10],
@@ -102,7 +102,7 @@ function PopUp(okCB, opType,win,passCode) {
 		left:Zookee[30],
 		width:Zookee[80],
 		height:Zookee[40],
-		titleid : 'ok',
+		title : L('ok','Ok'),
 		color:'white',
 		backgroundColor:Zookee.UI.COLOR.COLOR2,
 		style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
@@ -136,7 +136,7 @@ function PopUp(okCB, opType,win,passCode) {
 	
 	disable_pass_mask.add(Ti.UI.createLabel({
 		left:Zookee[10],
-		textid:'show_char',
+		text:L('show_char','show characters'),
 		tag:'s',
 		color:Zookee.UI.COLOR.PARTY_CONTENT,
 		font:Zookee.FONT.SMALL_FONT
@@ -155,7 +155,7 @@ function PopUp(okCB, opType,win,passCode) {
 	container.add(disable_pass_mask);
 	
 	var errorLabel = Ti.UI.createLabel({
-		textid : 'passcode_err',
+		text : L('passcode_err','wrong passcode'),
 		color:'red',
 		opacity : 0,
 		tag:'s',

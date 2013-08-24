@@ -17,7 +17,7 @@ function RegisterView() {
 	});
 
 	var title = Ti.UI.createLabel({
-		textid : 'product_name',
+		text : L('product_name','ForTogether'),
 		top : 0,
 		left : 0,
 		width : Ti.UI.FILL,
@@ -243,13 +243,6 @@ function RegisterView() {
 		height : Ti.UI.SIZE,
 		layout:'horizontal'
 	});	
-	var loginLabel = Ti.UI.createLabel({
-		left:'5%',
-		textid:'login_implication',
-		font:Zookee.FONT.SMALL_FONT_ITALIC,
-		width:Ti.UI.SIZE,
-		color:Zookee.UI.COLOR.PARTY_CONTENT
-	})
 
 	phoneField.addEventListener('return', function() {
 		addressField.focus();

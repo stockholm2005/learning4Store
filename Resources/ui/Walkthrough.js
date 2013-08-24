@@ -17,7 +17,7 @@ function Walkthrough(win) {
 	});
 	
 	var slogon = Ti.UI.createLabel({
-		textid:'Zookee',
+		text:L('product_name','ForTogether'),
 		font:Zookee.FONT.LARGE_FONT_ITALIC,
 		color:Zookee.UI.COLOR.MYPAD_BACKGROUND,
 		left:Zookee[50],
@@ -38,7 +38,7 @@ function Walkthrough(win) {
 		top:Zookee[10],
 		left:Zookee[50],
 		right:Zookee[50],
-		textid:'walkthrough1',
+		text:L('walkthrough1','Use "ForTogether" to deliver your ad to the parties which are happening in "OurTime"'),
 		font:Zookee.FONT.NORMAL_FONT_ITALIC,
 		color:Zookee.UI.COLOR.PARTY_CONTENT
 	}))
@@ -52,7 +52,7 @@ function Walkthrough(win) {
 		top:Zookee[10],
 		left:Zookee[50],
 		right:Zookee[50],
-		textid:'walkthrough2',
+		text:L('walkthrough2','You create ads, send them to the parties around'),
 		font:Zookee.FONT.NORMAL_FONT_ITALIC,
 		color:Zookee.UI.COLOR.PARTY_CONTENT
 	}))
@@ -66,7 +66,7 @@ function Walkthrough(win) {
 		top:Zookee[10],
 		left:Zookee[50],
 		right:Zookee[50],
-		textid:'walkthrough3',
+		text:L('walkthrough3','Buy the specific priority, make your ads more visible in the parties'),
 		font:Zookee.FONT.NORMAL_FONT_ITALIC,
 		color:Zookee.UI.COLOR.PARTY_CONTENT
 	}))
@@ -129,7 +129,7 @@ function Walkthrough(win) {
 		color:'white',
 		borderWidth:0,
 		width:Ti.UI.SIZE,
-		titleid:'Register',
+		title:L('Register','Create Account'),
 		backgroundColor:'transparent',
 		font:Zookee.FONT.NORMAL_FONT,
 		style:Ti.UI.iPhone.SystemButtonStyle.PLAIN	
@@ -144,7 +144,7 @@ function Walkthrough(win) {
 		color:'white',
 		borderWidth:0,
 		width:Ti.UI.SIZE,
-		titleid:'Login',
+		title:L('Login','Login'),
 		font:Zookee.FONT.NORMAL_FONT,
 		backgroundColor:'transparent',
 		style:Ti.UI.iPhone.SystemButtonStyle.PLAIN	

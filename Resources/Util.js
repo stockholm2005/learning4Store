@@ -396,7 +396,7 @@ exports.handleOffLine = function(view) {
 				x : '50%',
 				y : '50%'
 			},
-			textid : 'offline'
+			text : L('offline','you are not online')
 		})
 		view.offLine = offLine;
 		view.add(offLine);
@@ -533,7 +533,7 @@ exports.handleError = function(e) {
 
 	if (errorString.indexOf('401') > 0) {
 		// be careful, you can not use number as a i18n key.
-		alert(L('loginerror','loing error'));
+		alert(L('loginerror','login error'));
 		return;
 	} else if (errorString.indexOf('timeout') > 0) {
 		alert(L('timeout','time out, please try again'));
@@ -551,7 +551,7 @@ exports.handleError = function(e) {
 			alert(L('email_taken','email has been taken'));
 		return;
 	} else if (errorString.indexOf('api.cloud.appcelerator.com') > 0) {
-		alert(L('api_call_error','time out, please try again'));
+		alert(L('timeout','time out, please try again'));
 		return;
 	}
 	alert(JSON.stringify(e));
