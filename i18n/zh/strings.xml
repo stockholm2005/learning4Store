@@ -57,9 +57,9 @@
 	<string name="about">关于</string>
 	<string name="buy">购买</string>
 	<string name="buying">正在购买...</string>
-	<string name="month_priority">有效期一个月 10$</string>
-	<string name="quarter_priority">有效期一个季度 25$</string>
-	<string name="year_priority">有效期一年 90$</string>
+	<string name="month_priority">有效期一个月</string>
+	<string name="quarter_priority">有效期一个季度</string>
+	<string name="year_priority">有效期一年</string>
 	<string name="list_priority">列表优先权</string>
 	<string name="list_priority_content">此优先权让您的广告显示在其它没有购买此优先权的商户的广告的前面</string>
 	<string name="area_priority">区域优先权</string>
