@@ -21,6 +21,7 @@
 	<string name="minute_ago">分钟前</string>
 	<string name="Update">更新</string>
 	<string name="Logout">注销</string>
+	<string name="right_now">现在</string>
 	<string name="android_backbutton_click">再按一次退出程序</string>
 	<string name="send">发送</string>
 	<string name="ok">确定</string>
@@ -40,8 +41,6 @@
 	<string name="walkthrough1">用ForTogether向正在'OurTime'发生的聚会发送广告</string>
 	<string name="walkthrough2">你创建广告，发送给周边聚会的人们</string>
 	<string name="walkthrough3">购买特定的优先权，使您的广告更加引入注意</string>
-	<string name="invitation_body">亲爱的朋友:\n 您的朋友%1$s要求您加入Together去分享他们的美好时光</string>
-	<string name="invitation_subject">来自%1$s一封邀请信</string>
 	<string name="ads_sent">已发送</string>
 	<string name="send_ad">发送广告</string>
 	<string name="my_ads">我的广告</string>
