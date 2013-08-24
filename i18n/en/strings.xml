@@ -57,9 +57,9 @@
 	<string name="about">about</string>
 	<string name="buy">buy</string>
 	<string name="buying">buying...</string>
-	<string name="month_priority">For one Month 10$</string>
-	<string name="quarter_priority">For one Quarter 25$</string>
-	<string name="year_priority">For one Year 90$</string>
+	<string name="month_priority">For one Month</string>
+	<string name="quarter_priority">For one Quarter</string>
+	<string name="year_priority">For one Year</string>
 	<string name="list_priority">List Priority</string>
 	<string name="list_priority_content">With this priority, your ads will be listed before the other ads which are not prioritized</string>
 	<string name="area_priority">Area Priority</string>

@@ -7,27 +7,10 @@ var Util = require('Util');
 var win;
 
 var loading = Ti.UI.createActivityIndicator({
-	bottom:10, height:50, width:50,
-	backgroundColor:'black', borderRadius:10,
-	style:Ti.UI.iPhone.ActivityIndicatorStyle.BIG
+	center:{x:'50%',y:'50%'}, height:50, width:50,
+	style:Ti.UI.iPhone.ActivityIndicatorStyle.DARK
 });
-var loadingCount = 0;
-function showLoading()
-{
-	loadingCount += 1;
-	if (loadingCount == 1) {
-		loading.show();
-	}
-}
-function hideLoading()
-{
-	if (loadingCount > 0) {
-		loadingCount -= 1;
-		if (loadingCount == 0) {
-			loading.hide();
-		}
-	}
-}
+
 exports.setWin = function(_win){
 	win=_win;
 	win.add(loading);
@@ -60,10 +43,10 @@ exports.checkIfProductPurchased = function(identifier) {
  * @return A Ti.Storekit.Product.
  */
 exports.requestProduct = function(identifier, success) {
-	showLoading();
+	loading.show();
 
     Storekit.requestProducts([identifier], function (evt) {
-		hideLoading();
+		loading.hide();
         if (!evt.success) {
             alert('ERROR: We failed to talk to Apple!');
         }
@@ -82,7 +65,7 @@ exports.requestProduct = function(identifier, success) {
  */
 var succ;
 exports.purchaseProduct = function(product,succCB) {
-	showLoading();
+	loading.show();
 	succ = succCB;
     Storekit.purchase(product, 1);
 }
@@ -91,11 +74,11 @@ exports.purchaseProduct = function(product,succCB) {
  * Restores any purchases that the current user has made in the past, but we have lost memory of.
  */
 exports.restorePurchases = function() {
-	showLoading();
+	loading.show();
     Storekit.restoreCompletedTransactions();
 }
 Storekit.addEventListener('restoredCompletedTransactions', function (evt) {
-	hideLoading();
+	loading.hide();
     if (evt.error) {
         alert(evt.error);
     }
@@ -111,7 +94,7 @@ Storekit.addEventListener('restoredCompletedTransactions', function (evt) {
 });
 
 Storekit.addEventListener('transactionState', function (evt) {
-	hideLoading();
+	loading.hide();
     if (evt.state == Storekit.PURCHASED){
         alert(" thanks for buy");
         //exports.markProductAsPurchased(evt.productIdentifier);

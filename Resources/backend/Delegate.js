@@ -116,7 +116,7 @@ exports.login = function(user, callback, failCallback,tryAgain) {
 	});
 };
 
-exports.updateUser = function(user, callback, failCallback) {
+exports.updateUser = function(user, callback, failCallback,tryAgain) {
 	var _user = Zookee.User.CurrentUser;
 	if (user.photo) {
 		var ratio = user.photo.width / user.photo.height;
@@ -141,8 +141,12 @@ exports.updateUser = function(user, callback, failCallback) {
 			Zookee.User.setUser(_user);
 			callback(_user);
 		} else {
-			Util.handleError(e);
-			failCallback();
+			if(tryAgain){
+				exports.updateUser(user, callback, failCallback);
+			}else{
+				Util.handleError(e);
+				failCallback();
+			}
 		}
 	});
 };

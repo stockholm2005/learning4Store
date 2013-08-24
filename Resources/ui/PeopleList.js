@@ -101,7 +101,7 @@ function PeoplePad(myPad, win) {
 		new PriorityList(
 			Ti.UI.createWindow({
 				navBarHidden:true,
-				layout:'vertical',
+				//layout:'vertical',
 				backgroundImage:Zookee.ImageURL.Background}));
 	})
 

@@ -12,6 +12,7 @@ function PriorityList(win) {
 		data : data,
 		//top : Zookee[60],
 		//bottom:0,
+		top:Zookee.UI.HEIGHT_TITLE,
 		bottom:0,
 		left : 0,
 		right : 0,
@@ -140,7 +141,7 @@ function PriorityList(win) {
 								//actInd.hide();
 							}, function() {
 								//actInd.hide();
-							})
+							},true)
 						});
 					})
 				}
