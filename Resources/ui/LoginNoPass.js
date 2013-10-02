@@ -47,8 +47,7 @@ function LoginView(win) {
 		left:0,
 		right:0,
 		top:SystemHeight * 0.075,
-		bottom:Zookee[80],
-		layout:'vertical'
+		bottom:Zookee[60]
 	})
 	var background = Ti.UI.createView({
 		backgroundColor : 'white',
@@ -58,49 +57,78 @@ function LoginView(win) {
 	});
 	// in case you login from another device, click here.
 	var needPassword = Ti.UI.createLabel({
-		left:'7%',
-		right:'7%',
-		top:Zookee[40],
-		height:Ti.UI.SIZE,
-		text:L('use_password','use password'),
-		font:Zookee.FONT.SMALL_FONT,
-		color:Zookee.UI.COLOR.PARTY_CONTENT
+		left : '7%',
+		right : '7%',
+		top : '57%',
+		height : Ti.UI.SIZE,
+		text : L('use_password','Click here if you login from a new device'),
+		font : Zookee.FONT.SMALL_FONT,
+		color : Zookee.UI.COLOR.COLOR3
 	});
-	
-	needPassword.addEventListener('click',function(e){
-		scrollView.add(passArea);
-		passArea.animate({
-			opacity:1,
-			duration:500
-		});
-	})
 
+	var passwordShown = false;
+	needPassword.addEventListener('click', function(e) {
+		if (!passwordShown) {
+			scrollView.add(passArea);
+			passArea.animate({
+				opacity : 1,
+				duration : 300
+			});
+			passwordShown = true;
+		} else {
+			var b = Ti.UI.createAnimation({
+				opacity : 0,
+				duration : 300
+			})
+			if (!Zookee.isAndroid)
+				passArea.animate(b, function(e) {
+					scrollView.remove(passArea);
+				});
+			else {
+				passArea.animate(b);
+				b.addEventListener('complete', function(e) {
+					scrollView.remove(passArea);
+				})
+			}
+			passwordShown = false;
+		}
+	})
 	var passArea = Ti.UI.createView({
-		top:Zookee[10],
-		layout:'vertical',
-		left:'5%',
-		right:'5%',
-		opacity:0,
-		height:Ti.UI.SIZE
+		top : '62%',
+		layout : 'horizontal',
+		left : 0,
+		right : 0,
+		opacity : 0,
+		height : Ti.UI.SIZE
 	})
 	var passImplication = Ti.UI.createLabel({
-		width:Ti.UI.FILL,
-		height:Ti.UI.SIZE,
-		text:L('password_implication','you can login to ForTogether only from one device.\nif you login from the device other than the one you logged in last time, please use the password in the mail ForTogether sent to you when you registered or logged in last time.'),
-		font:Zookee.FONT.SMALL_FONT_ITALIC,
-		color:Zookee.UI.COLOR.PARTY_CONTENT
+		left:0,
+		width : Zookee[80],
+		height : Zookee[40],
+		backgroundColor:Zookee.UI.COLOR.COLOR3,
+		textAlign:'center',
+		verticalAlign:Ti.UI.TEXT_VERTICAL_ALIGNMENT_CENTER,
+		text : '?',
+		font : Zookee.FONT.NORMAL_FONT_BOLD,
+		color : 'white'
 	})
+	passImplication.addEventListener('click',function(){
+		alert(L('password_implication','you can login to OurTime only from one device.\nif you login from a new device, please use the password in the mail OurTime sent to you when you registered or logged in last time.'));
+	})
+
 	var password = Ti.UI.createTextField({
 		//hintText : L('Password'),
 		//top : '10%',
+		width : Zookee[320],
 		height:Zookee[40],
-		width:Ti.UI.FILL,
-		backgroundColor : 'white',
+		backgroundColor : Zookee.UI.COLOR.ROW_BACKGROUND,
 		passwordMask : true,
 		font : Zookee.FONT.NORMAL_FONT,
 		keyboardType : Ti.UI.KEYBOARD_DEFAULT,
-		returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
-		borderStyle : Ti.UI.INPUT_BORDERSTYLE_NONE
+		enableReturnKey:false,
+		//returnKeyType : Ti.UI.RETURNKEY_DEFAULT,
+		backgroundColor : 'white',
+		borderStyle : Ti.UI.INPUT_BORDERSTYLE_PLAIN
 	});
 	passArea.add(passImplication);
 	passArea.add(password);

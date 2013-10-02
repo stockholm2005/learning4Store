@@ -64,10 +64,17 @@ function PopUp(okCB, opType,win,passCode) {
 		tag:'s'
 	})
 	help.addEventListener('click',function(e){
-		Ti.UI.createAlertDialog({
-			title:L('help','Help'),
-			message:L('passcode_help','if you set passcode, next time when you log in, you need to input the passcode')
-		}).show();
+		if(opType === 'login'){
+			Ti.UI.createAlertDialog({
+				title:L('help','Help'),
+				message:L('passcode_help_login','if you set the passcode last time when you logged out, you need to input the passcode now')
+			}).show();			
+		}else{
+			Ti.UI.createAlertDialog({
+				title:L('help','Help'),
+				message:L('passcode_help_logout','if you set passcode, next time when you log in, you need to input the passcode')
+			}).show();
+		}
 	})
 	headerView.add(help);
 	container.add(headerView);
