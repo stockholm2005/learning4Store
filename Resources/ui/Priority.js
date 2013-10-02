@@ -116,7 +116,7 @@ function PriorityList(win) {
 			var alertDialog = Ti.UI.createAlertDialog({
 				cancel : 3,
 				buttonNames : [L('month_priority'), L('quarter_priority'), L('year_priority'), L('cancel')],
-				title : L('buy') + ' ' + L(e.row.priority.title,e.row.priority.title)
+				title : L('buy','buy') + ' ' + L(e.row.priority.title,e.row.priority.title)
 			});
 			alertDialog.addEventListener('click', function(e) {
 				if (e.index === e.source.cancel) {
