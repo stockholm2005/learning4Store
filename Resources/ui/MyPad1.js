@@ -40,9 +40,6 @@ function MyPad1(mainView) {
         defaultImage : Zookee.ImageURL.No_Avatar,
         width : Zookee.SystemWidth*0.12,
         height : Zookee.SystemWidth*0.12,
-        borderColor : 'white',
-        borderWidth : Zookee.SystemWidth*0.005,
-        borderRadius:Zookee.UI.Border_Radius_Small,
         loadStatus:'starting',
         url:user.photo.urls.avatar,
         image:user.photo.avatarImage
