@@ -8,7 +8,7 @@ var Util = require('Util');
 
 Cloud.debug = true;
 var baseURL = "https://api.cloud.appcelerator.com/v1";
-var togetherKey = "yLk03d0Fmkanoi0aQ5tM3OxezbiwAirm";
+var togetherKey = "LTmtU182n16s31YpXfOhgI6dCfN0olZD";
 var basicParam = "key=" + togetherKey + "&per_page=" + Zookee.MaxLoadingRows + "&order=-created_at&response_json_depth=1";
 
 exports.createUser = function(user, callback, failCallback) {
